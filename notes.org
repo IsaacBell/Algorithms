@@ -2,20 +2,47 @@
 
 * TODO Data Structures
 ** [x] Sparse Tables
-** [ ] Segment Trees
-** [ ] Monotonic Stacks/Queues
+** [x] Segment Trees
+** [x] Monotonic Stacks/Queues
+** [ ] Heavy/Light Decompositions
 
 * TODO Algorithms
 ** [ ] Kosaraju's
-** [ ] Djikstra's
-** [ ] Tarjan's
+** [x] Djikstra's
+** [x] Tarjan's
 ** [ ] Kruskal's
-** [ ] Rabin-Karp
+** [x] Rabin-Karp
+
+* TODO Study
+** [ ] Segment Tree Beats
+** [ ] Network Flows
+*** [ ] Dinic's
+*** [ ] Floyd-Warshall
+*** [ ] Edmonds-Karp
+** Combinatorics
+*** [x] Basics/Intro Problems
+*** [ ] Intermediate
+*** [ ] Advanced
+** Number Theory
+*** [x] Sieve of Eratosthenes
+*** [ ] Prime Number Theory
+*** [ ] Factorialization Concepts
+** Range Queries
+*** [ ] Lazy Segment Trees
+*** [ ] "Beats"
+** Geometry
+*** [x] Bounding Boxes
+*** [x] Cross Product
+*** [x] Computing Area of a Triangle
+*** [ ] Maximal Rectangle
+*** [ ] Histograms
 
 * PROJ Segment Trees
 ** Padding tree with 0's to make a power of two
 
 #+begin_src C++ :includes <stdio.h>
+  int n; cin >> n;
+  vector<int> tree;
   // Padding tree - don't need to pad A
   while(__builtin_popcount(n) != 1)
     n++;
@@ -27,22 +54,28 @@
 ** Add the update val to the two nodes which comprise the entire range
 *** Ask our children to provide us a sum of their data, I add my own, and we keep heading down towards root.
 ** #+begin_src C++ :includes <stdio.h>
-ll query(int node, int lo, int hi, int a, int b, int val) {
-    if (a <= lo && b <= b) {
-        if (val != 1)
-            tree[node] += val;
+ll query(ll node, ll lo, ll hi, ll a, ll b, ll val) {
+    // If node range within query range,
+    // first update the value if this is an update query,
+    // then return the value at the given node
+    if (a <= lo && b >= hi) {
+        if (val != 1) tree[node] = val;
         return tree[node];
     }
 
+    // Check if node range and query range are disjoint
     if (hi < a || b < lo)
         return 0;
 
-    int mid = (lo + hi) / 2;
+    // Logarithmetically, recursively sum child nodes
+    ll mid = (lo + hi) / 2;
 
-    auto sum = query(1, 0, n - 1, lo, hi, val);
+    auto sum = query(2*node,  lo, mid, a, b, val)
+             + query(2*node+1, mid+1, hi, a, b, val);
 
+    // Handle updates
     tree[node] = tree[node * 2] + tree[node * 2 + 1];
-    return sum + tree[node];
+    return sum;
 }
 
 int main() {
@@ -63,5 +96,3 @@ int main() {
     }
 }
 #+end_src
-*** change() - recursively checks childre, myself, etc.
-** Range Update Queries
