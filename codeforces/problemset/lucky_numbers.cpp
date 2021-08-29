@@ -102,15 +102,18 @@ bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
 void solution() {
   int n; cin >> n;
+  ll out = 0, k = 2;
+  for (ll i = 1; i <= n; i++) {
+    out += k;
+    k *= 2LL;
+  }
+  cout << out << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  int t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

@@ -101,7 +101,10 @@ bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
 void solution() {
-  int n; cin >> n;
+  int l, r; cin >> l >> r;
+  if (l * 2 < r)
+    cout << r - l;  << nl;
+  else cout << (r - l) / 2 << nl;
 }
 
 int main() {

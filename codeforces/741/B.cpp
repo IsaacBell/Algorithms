@@ -96,18 +96,56 @@ const int N = 3e5;
 
 vi v[N];
 int a[N];
+bitset<10007> bs;
 
 bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
+void dfs(int i, vi A, int n, int k) {
+  if (!k) return;
+  A.erase(A.begin() + i);
+  int x = n;
+  fo(i, min(k - 1, (int) A.sz())) {
+    x -= A[i] * pow(10, i);
+    if (bs[x]) cout << A.sz() << nl << x << nl;
+    dfs(i, A, n, k - 1);
+    x += A[i] * pow(10, i);
+  }
+}
+
 void solution() {
-  int n; cin >> n;
+  int n, k; cin >> n >> k;
+  int x = n;
+  vi A;
+  while (x) {
+    int rem = x % 10;
+    x /= 10;
+    A.pb(rem);
+  }
+  int y = 0;
+  if (bs[n]) {
+    cout << A.sz() << nl << n << nl;
+  }
+  fo(i, A.sz()) {
+    dfs(i, A, n, k - 1);
+  }
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   int t; cin >> t;
+
+  fo(i,10007) {
+    bs[i] = true;
+    if (i > 1) {
+      while (i*i < 10007) {
+        i *= i;
+        bs[i] = true;
+      }
+
+    }
+  }
 
   while(t--)
     solution();

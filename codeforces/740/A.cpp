@@ -101,7 +101,13 @@ bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
 void solution() {
-  int n; cin >> n;
+  int a, b; cin >> a >> b;
+  int server = 0;
+  vvi dp(max(a, b), vi(2));
+
+  fo (i, dp.size()) {
+
+  }
 }
 
 int main() {

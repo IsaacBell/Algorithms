@@ -96,12 +96,43 @@ const int N = 3e5;
 
 vi v[N];
 int a[N];
+vi tree;
 
 bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
+int query(int i, int lo, int hi, int a, int b, int v = -1) {
+  if (a <= lo && b >= hi) {
+    if (v != -1) tree[i] = v;
+    return tree[i];
+  }
+  if (hi < a || b < lo) {
+    return 0;
+  }
+
+  int mid = (hi + lo) / 2;
+  int sum = query(2*i, lo, mid, a, b)
+          + query(2*i+1, mid+1, hi, a, b);
+  if (v != -1) tree[i] = tree[2*i] + tree[2*i+1];
+  return sum;
+}
+
 void solution() {
-  int n; cin >> n;
+  int t, q; cin >> t >> q;
+  string s; cin >> s;
+  int n = t;
+  while(__builtin_popcount(n) != 1) n++;
+  tree.rsz(2*n);
+
+  fo (i, s.sz()) tree[i+n] = s[i] == '+' ? 1 : -1;
+  for (int i = (int) s.sz(); i < n; i++) tree[i+n] = 0;
+
+  ford1(i, n) tree[i] = tree[2*i] + tree[2*i+1];
+
+  while(q--) {
+    int l, r; cin >> l >> r;
+    cout << abs(query(1, 0, n-1, l, r)) << nl;
+  }
 }
 
 int main() {

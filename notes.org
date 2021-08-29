@@ -1,0 +1,67 @@
+#+TITLE: Notes
+
+* TODO Data Structures
+** [x] Sparse Tables
+** [ ] Segment Trees
+** [ ] Monotonic Stacks/Queues
+
+* TODO Algorithms
+** [ ] Kosaraju's
+** [ ] Djikstra's
+** [ ] Tarjan's
+** [ ] Kruskal's
+** [ ] Rabin-Karp
+
+* PROJ Segment Trees
+** Padding tree with 0's to make a power of two
+
+#+begin_src C++ :includes <stdio.h>
+  // Padding tree - don't need to pad A
+  while(__builtin_popcount(n) != 1)
+    n++;
+  tree.resize(2 * n);
+#+end_src
+
+* Range Query Updates
+** How to increase each value in a range by u?
+** Add the update val to the two nodes which comprise the entire range
+*** Ask our children to provide us a sum of their data, I add my own, and we keep heading down towards root.
+** #+begin_src C++ :includes <stdio.h>
+ll query(int node, int lo, int hi, int a, int b, int val) {
+    if (a <= lo && b <= b) {
+        if (val != 1)
+            tree[node] += val;
+        return tree[node];
+    }
+
+    if (hi < a || b < lo)
+        return 0;
+
+    int mid = (lo + hi) / 2;
+
+    auto sum = query(1, 0, n - 1, lo, hi, val);
+
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
+    return sum + tree[node];
+}
+
+int main() {
+    ...
+    for (i, q) {
+        int type; cin >> type;
+        if (type == 1) { // update
+            int lo, hi, u;
+            cin >> lo >> hi >> u;
+            lo --;
+            hi--;
+            query(1, 0, n - 1, lo, hi, u);
+        } else {
+            int k; cin >> k;
+            k--;
+            cout << change(1, 0, n-1, k, k, -1) << "\n";
+        }
+    }
+}
+#+end_src
+*** change() - recursively checks childre, myself, etc.
+** Range Update Queries

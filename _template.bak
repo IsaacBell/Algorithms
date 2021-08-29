@@ -32,11 +32,13 @@ using namespace std;
 
 #define nl "\n"
 #define sz size
+#define rsz resize
 #define IMAX INT_MAX
 #define IMIN INT_MIN
 #define gc getchar_unlocked
 #define ll long long
 #define PI 3.1415926535897932384626
+#define INF 2000000000
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
@@ -46,13 +48,15 @@ using namespace std;
 #define br printf("\n")
 #define traverse(a, x) for (auto &a : x)
 #define fo(i, n) for(int i=0;i<n;i++)
-#define ford(i, n) for(int i = n -1; i >= 0; i--)
+#define ford(i, n) for(int i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(int i = n - 1; i; i--)
 #define Fo(i, k, n) for(int i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define pb push_back
 #define mp make_pair
+#define mt make_tuple
 #define F first
 #define S second
 #define all(x) x.begin(), x.end()

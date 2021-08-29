@@ -101,13 +101,22 @@ bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
 void solution() {
-  int n; cin >> n;
+  ll a, b; cin >> a >> b;
+  bitset<1'900'001> bs;
+  fo(i,b+1) bs[a ^ i] = true;
+  fo(i,b+1) {
+    if (!bs[i]) {
+      cout << i << nl;
+      return;
+    }
+  }
+  cout << b + 1 << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  int t; cin >> t;
+  ll t; cin >> t;
 
   while(t--)
     solution();

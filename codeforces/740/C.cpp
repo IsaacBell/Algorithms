@@ -102,6 +102,21 @@ bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
 
 void solution() {
   int n; cin >> n;
+  vvi A(n, vi {}); fo (i, n) {
+    int k; cin >> k;
+    A[i].rsz(k);
+    fo (i, k) cin >> A[n][i];
+  }
+  vi dp (n);
+  mpq<pii> pq;
+  fo (i, n) {
+    dp[i] = *minmax_element(A[i]);
+
+    pq.push(dp[i]);
+
+  }
+
+  int out;
 }
 
 int main() {
