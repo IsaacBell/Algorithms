@@ -88,6 +88,10 @@ int rng(int lim) {
   return uid(rang);
 }
 
+temmplate<typename T> T mod(T x) { return ((x % mod + mod) % mod);  }
+temmplate<typename T> T add_mod(T a, T b)  { return mod(mod(a) + mod(b));  }
+temmplate<typename T> T mult_mod(T a, T b) { return mod(mod(a) * mod(b));  }
+
 template<class T> using pq = priority_queue<T>;
 template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
