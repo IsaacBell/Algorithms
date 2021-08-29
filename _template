@@ -88,21 +88,23 @@ int rng(int lim) {
   return uid(rang);
 }
 
-temmplate<typename T> T mod(T x) { return ((x % mod + mod) % mod);  }
-temmplate<typename T> T add_mod(T a, T b)  { return mod(mod(a) + mod(b));  }
-temmplate<typename T> T mult_mod(T a, T b) { return mod(mod(a) * mod(b));  }
-
 template<class T> using pq = priority_queue<T>;
 template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
 const int mod = 1'000'000'007;
 const int N = 3e5;
 
+template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
+template<typename T> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
+
 vi v[N];
 int a[N];
 
 bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
 bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
+
+/* Solution starts here */
 
 void solution() {
   int n; cin >> n;
