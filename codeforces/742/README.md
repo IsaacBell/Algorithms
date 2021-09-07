@@ -4,16 +4,12 @@
 
 - RECALL finding MEX w/ binary search
 - LEARN how to represent carry operations programmatically.
-
+- TODO write a SegTree template
   
 
 # Problems
 
-  
-
 ## A - Domino Disaster
-
-  
 
 ### Strings, Implementation
 
@@ -25,8 +21,6 @@ Solved successfully.
   
 
 ## B - MEXor Mixup
-
-  
 
 ### Greedy, Math (XOR)
 
