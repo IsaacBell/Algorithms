@@ -46,15 +46,16 @@ using namespace std;
 #define pl(x) printf("%lld\n", x)
 #define ps(s) printf("%s\n", s)
 #define br printf("\n")
-#define traverse(a, x) for (auto &a : x)
-#define fo(i, n) for(int i=0;i<n;i++)
-#define ford(i, n) for(int i = n - 1; i >= 0; i--)
-#define ford1(i, n) for(int i = n - 1; i; i--)
-#define Fo(i, k, n) for(int i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
+#define trav(a, x) for (auto &a : x)
+#define fo(i, n) for(ll i=0;i<n;i++)
+#define ford(i, n) for(ll i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(ll i = n - 1; i; i--)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define pb push_back
+#define ppb pop_back
 #define mp make_pair
 #define mt make_tuple
 #define F first
@@ -70,6 +71,7 @@ typedef long double ld;
 typedef complex<ld> cd;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pl;
+typedef tuple<ll,ll,ll> tll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
@@ -91,23 +93,30 @@ int rng(int lim) {
 template<class T> using pq = priority_queue<T>;
 template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-const int mod = 1'000'000'007;
-const int N = 3e5;
+const ll mod = 1'000'000'007;
+const ll N = 3e5;
 
 template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
 template<typename T> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
 template<typename T> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
 
-vi v[N];
-int a[N];
+vl v(N);
+vl par(N, -1);
+vl szz(N);
+vl anc(N);
+bitset<N> vis;
 
-bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
-bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
+template<typename T> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+
+ll timer = 0, tin = 0, tout = 0;
+
+ll n, m, q, k;
 
 /* Solution starts here */
 
 void solution() {
-  int n; cin >> n;
+  cin >> n;
 }
 
 int main() {

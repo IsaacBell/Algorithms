@@ -1,19 +1,20 @@
 #+TITLE: Notes
 
-* TODO Data Structures
+TODO Data Structures
 ** [x] Sparse Tables
 ** [x] Segment Trees
 ** [x] Monotonic Stacks/Queues
 ** [ ] Heavy/Light Decompositions
 
-* TODO Algorithms
+TODO Algorithms
 ** [ ] Kosaraju's
 ** [x] Djikstra's
 ** [x] Tarjan's
 ** [ ] Kruskal's
 ** [x] Rabin-Karp
 
-* TODO Study
+TODO Study
+
 ** [ ] Segment Tree Beats
 ** [ ] Network Flows
 *** [ ] Dinic's
@@ -37,7 +38,7 @@
 *** [ ] Maximal Rectangle
 *** [ ] Histograms
 
-* PROJ Segment Trees
+PROJ Segment Trees
 ** Padding tree with 0's to make a power of two
 
 #+begin_src C++ :includes <stdio.h>
