@@ -15,22 +15,28 @@ TODO Algorithms
 
 TODO Study
 
+** [ ] Trees
+*** [x] LCA
+*** [ ] Heavy-Light Decompositions
+*** [ ] Sparse Table
+*** [ ] General Practice (LC Probs, etc.)
 ** [ ] Segment Tree Beats
 ** [ ] Network Flows
 *** [ ] Dinic's
 *** [ ] Floyd-Warshall
 *** [ ] Edmonds-Karp
 ** Combinatorics
-*** [x] Basics/Intro Problems
 *** [ ] Intermediate
 *** [ ] Advanced
 ** Number Theory
 *** [x] Sieve of Eratosthenes
 *** [ ] Prime Number Theory
 *** [ ] Factorialization Concepts
-** Range Queries
-*** [ ] Lazy Segment Trees
+** Range Queries/Segment Trees
+*** [x] Lazy Propagation
+*** [x] Static vs. Dynamic
 *** [ ] "Beats"
+*** [ ] 2D SegTrees
 ** Geometry
 *** [x] Bounding Boxes
 *** [x] Cross Product
