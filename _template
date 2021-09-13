@@ -90,17 +90,17 @@ int rng(int lim) {
   return uid(rang);
 }
 
-template<class T> using pq = priority_queue<T>;
-template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
+template<class T=ll> using pq = priority_queue<T>;
+template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
-template<typename T> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
-template<typename T> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
+template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T=ll> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
+template<typename T=ll> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
 
-template<typename T>
+template<typename T = ll>
 T fac(T x) {
   T o = 1;
   if (x > 0)
@@ -115,13 +115,14 @@ vl szz(N);
 vl anc(N);
 bitset<N> vis;
 
-template<typename T> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
-template<typename T> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
 
 ll timer = 0;
 // vl tin, tout;
 
-ll n, m, q, k;
+ll a, b, n, m, q, k;
+string s = "";
 
 /* Solution starts here */
 
