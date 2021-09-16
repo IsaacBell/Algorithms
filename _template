@@ -1,5 +1,6 @@
 // #include<bits/stdc++.h>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -90,18 +91,65 @@ int rng(int lim) {
   return uid(rang);
 }
 
-template<class T=ll> using pq = priority_queue<T>;
-template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
-
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
+template<class T=ll> using pq = priority_queue<T>;
+template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+
+// Modulo operators
 template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
 template<typename T=ll> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
 template<typename T=ll> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
 
+// General functions
+template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
+template<class T=ll> T lcm(T a, T b) { return a*(b/gcd(a,b)); }
+template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+
+template<class T=ll> T maxpow2(T n) { return (n & (~(n - 1))); }
+template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
+template<class T=ll> T sum_digit(T n) {
+  T sum = 0;
+  while (n != 0) {
+    sum = sum + n % 10;
+    n = n / 10;
+  }
+  return sum;
+}
+
+template<class T=ll>
+T sum_digit_string(T str)
+{
+    T sum = 0;
+    for (T i = 0; i < str.length(); i++)
+    {
+        sum = sum + str[i] - 48;
+    }
+    return sum;
+}
+
+template<class T=ll> string dec2bin(T n)
+{
+    const T size=sizeof(n)*8;
+    string s = "00000000000000000000000000000000";
+    for (T a=0;a<32;a++)
+    {
+        if(n==0)
+            return s;
+        else
+        {
+            if(n%2!=0)
+                s[31-a]='1';
+            n/=2;
+        }
+    }
+    return s;
+}
+
 template<typename T = ll>
-T fac(T x) {
+T fac(T x) { // factorial
   T o = 1;
   if (x > 0)
     for(T i = 1; i <= x; ++i)
@@ -114,9 +162,6 @@ vl par(N, -1);
 vl szz(N);
 vl anc(N);
 bitset<N> vis;
-
-template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
-template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
 
 ll timer = 0;
 // vl tin, tout;
