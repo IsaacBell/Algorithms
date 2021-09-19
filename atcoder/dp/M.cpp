@@ -97,8 +97,9 @@ const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
 template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
-template<typename T> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
-template<typename T> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
+template<typename T> T addM(T a, T b)  { return M(M(a) + M(b)); }
+template<typename T> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
+template<typename T> T multM(T a, T b) { return M(M(a) * M(b)); }
 
 template<typename T>
 T fac(T x) {
@@ -124,18 +125,42 @@ ll timer = 0;
 ll n, m, q, k;
 
 /* Solution starts here */
+// O(N * K^2)
 
 void solution() {
-  cin >> n;
+  cin >> n >> k;
+
+  vl dp(k+1);
+  dp[0] = 1;
+  fo(child,n) {
+    ll upto; cin >> upto;
+    vl fake(k+1);
+    ford(used, k+1) {
+      ll tmp = dp[used];
+      ll L = used + 1,
+         R = used + min(upto, k - used);
+      if (L <= R) {
+        fake[L] = addM(fake[L], tmp);
+        if (R + 1 <= k) {
+          fake[R+1] = subM(fake[R+1], tmp);
+        }
+      }
+    }
+
+    ll pfs = 0; // prefix sum
+    fo(i, k+1) {
+      pfs = addM(pfs, fake[i]);
+      dp[i] = addM(dp[i], pfs);
+    }
+  }
+
+  cout << dp[k] << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

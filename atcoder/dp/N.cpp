@@ -127,15 +127,37 @@ ll n, m, q, k;
 
 void solution() {
   cin >> n;
+  vl A(n);
+  A.rsz(n);
+  vvl dp(n, vl(n));
+  fo (i, n) cin >> A[i];
+
+  auto sum = [&](ll L, ll R) {
+    ll s = 0;
+    Fo(i,L,R+1) s += A[i];
+    return s;
+  };
+
+  ford(L, n) {
+    Fo(R, L, n) {
+      if (L == R)
+        dp[L][R] = 0;
+      else {
+        dp[L][R] = mod;
+        ll s = sum(L, R);
+        Fo(i, L, R)
+          dp[L][R] = min(dp[L][R], dp[L][i] + dp[i+1][R] + s);
+      }
+    }
+  }
+
+  cout << dp[0][n-1] << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
