@@ -127,15 +127,21 @@ ll n, m, q, k;
 
 void solution() {
   cin >> n;
+  vl A(n);
+  fo(i,n) cin >> A[i];
+  vvl dp(n, vl(n));
+
+  ford(L,n)
+    Fo(R,L,n)
+      dp[L][R] = L == R ? A[L] : max(A[L] - dp[L+1][R], A[R] - dp[L][R-1]);
+
+  cout << dp[0][n-1] << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

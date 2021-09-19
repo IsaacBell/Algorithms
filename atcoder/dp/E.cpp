@@ -125,8 +125,25 @@ ll n, m, q, k;
 
 /* Solution starts here */
 
+ll w;
+
+vl wt;
+
 void solution() {
-  cin >> n;
+  cin >> n >> w;
+  ll sum = 0;
+  fo(i,n) {
+    cin >> wt[i] >> v[i];
+    sum += v[i];
+  }
+  vl dp(sum+1, mod);
+  fo(i, n) {
+    ford(j, sum - v[i])
+      ckmin(dp[j+v[i]], dp[j] + wt[i]);
+
+  ll maxx = 0;
+  trav(x, dp) if (x <= w) ckmax(maxx, x);
+  cout << maxx << nl;
 }
 
 int main() {

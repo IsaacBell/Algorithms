@@ -1,5 +1,6 @@
 // #include<bits/stdc++.h>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -11,6 +12,7 @@
 #include <list>
 #include <stack>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <complex>
 #include <chrono>
@@ -29,12 +31,15 @@
 
 using namespace std;
 
+#define nl "\n"
 #define sz size
+#define rsz resize
 #define IMAX INT_MAX
 #define IMIN INT_MIN
 #define gc getchar_unlocked
-#define ll long long
+#define ll int64_t
 #define PI 3.1415926535897932384626
+#define INF 2000000000
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
@@ -42,15 +47,18 @@ using namespace std;
 #define pl(x) printf("%lld\n", x)
 #define ps(s) printf("%s\n", s)
 #define br printf("\n")
-#define traverse(a, x) for (auto &a : x)
-#define fo(i, n) for(int i=0;i<n;i++)
-#define ford(i, n) for(int i = n -1; i >= 0; i--)
-#define Fo(i, k, n) for(int i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
+#define trav(a, x) for (auto &a : x)
+#define fo(i, n) for(ll i=0;i<n;i++)
+#define ford(i, n) for(ll i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(ll i = n - 1; i; i--)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define pb push_back
+#define ppb pop_back
 #define mp make_pair
+#define mt make_tuple
 #define F first
 #define S second
 #define all(x) x.begin(), x.end()
@@ -64,6 +72,7 @@ typedef long double ld;
 typedef complex<ld> cd;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pl;
+typedef tuple<ll,ll,ll> tll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
@@ -82,30 +91,108 @@ int rng(int lim) {
   return uid(rang);
 }
 
-template<class T> using pq = priority_queue<T>;
-template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
+const ll mod = 1e9 + 7;
+const ll N = 3e5;
 
-const int mod = 1'000'000'007;
-const int N = 3e5;
+template<class T=ll> using pq = priority_queue<T>;
+template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-vi v[N];
-int a[N];
+// Modulo operators
+template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T> T addM(T a, T b)  { return M(M(a) + M(b)); }
+template<typename T> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
+template<typename T> T multM(T a, T b) { return M(M(a) * M(b)); }
 
-bool ckmin(int& a, int b){ return b < a ? a = b, true : false; }
-bool ckmax(int& a, int b){ return b > a ? a = b, true : false; }
+// General functions
+template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
+template<class T=ll> T lcm(T a, T b) { return a*(b/gcd(a,b)); }
+template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+
+template<class T=ll> T maxpow2(T n) { return (n & (~(n - 1))); }
+template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
+template<class T=ll> T sum_digit(T n) {
+  T sum = 0;
+  while (n != 0) {
+    sum = sum + n % 10;
+    n = n / 10;
+  }
+  return sum;
+}
+
+template<class T=ll>
+T sum_digit_string(T str)
+{
+    T sum = 0;
+    for (T i = 0; i < str.length(); i++)
+    {
+        sum = sum + str[i] - 48;
+    }
+    return sum;
+}
+
+template<class T=ll> string dec2bin(T n)
+{
+    const T size=sizeof(n)*8;
+    string s = "00000000000000000000000000000000";
+    for (T a=0;a<32;a++)
+    {
+        if(n==0)
+            return s;
+        else
+        {
+            if(n%2!=0)
+                s[31-a]='1';
+            n/=2;
+        }
+    }
+    return s;
+}
+
+template<typename T = ll>
+T fac(T x) { // factorial
+  T o = 1;
+  if (x > 0)
+    for(T i = 1; i <= x; ++i)
+        o = multM<T>(o,i);
+  return o;
+}
+
+vl v(N);
+vl par(N, -1);
+vl szz(N);
+vl anc(N);
+bitset<N> vis;
+bitset<N> bs;
+
+ll timer = 0;
+// vl tin, tout;
+
+ll a, b, n, m, q, k, w;
+string s = "";
+
+/* Solution starts here */
 
 void solution() {
-  uint32_t n; cin >> n;
-  vu64 A(n); fo(i, n) cin >> A[i];
+  cin >> n;
+  char M[n][n];
+  vvl dp(n, vl(n));
+
+  fo(i,n) fo(j,n) cin >> M[i][j];
+
+  dp[0][0] = M[0][0] == '.' ? 1 : 0;
+  fo(i,n)
+    fo(j,n)
+      if (M[i][j] == '.')
+        (dp[i][j] += (!i?0:dp[i-1][j]) + (!j?0:dp[i][j-1])) %= mod;
+
+  cout << dp[n-1][n-1] << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  uint32_t t;
-  cin >> t;
-  while(t--) {
-    solution();
-  }
+  solution();
+
   return 0;
 }

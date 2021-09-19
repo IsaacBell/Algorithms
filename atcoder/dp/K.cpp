@@ -113,6 +113,7 @@ vl v(N);
 vl par(N, -1);
 vl szz(N);
 vl anc(N);
+bitset<N> bs;
 bitset<N> vis;
 
 template<typename T> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
@@ -126,16 +127,24 @@ ll n, m, q, k;
 /* Solution starts here */
 
 void solution() {
-  cin >> n;
+  cin >> n >> k;
+  vl dp(k+1);
+  v.rsz(n);
+  fo (i,n) cin >> v[i];
+
+  fo (stones,k+1)
+    trav(x, v)
+      if (stones >= x && !dp[stones-x])
+        dp[stones] = true;
+
+  cout << (dp[k] ? "First" : "Second") << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
 
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
