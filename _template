@@ -98,9 +98,10 @@ template<class T=ll> using pq = priority_queue<T>;
 template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
 // Modulo operators
-template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
-template<typename T=ll> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
-template<typename T=ll> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
+template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T> T addM(T a, T b)  { return M(M(a) + M(b)); }
+template<typename T> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
+template<typename T> T multM(T a, T b) { return M(M(a) * M(b)); }
 
 // General functions
 template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
@@ -162,11 +163,12 @@ vl par(N, -1);
 vl szz(N);
 vl anc(N);
 bitset<N> vis;
+bitset<N> bs;
 
 ll timer = 0;
 // vl tin, tout;
 
-ll a, b, n, m, q, k;
+ll a, b, n, m, q, k, w;
 string s = "";
 
 /* Solution starts here */
