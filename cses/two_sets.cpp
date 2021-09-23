@@ -103,16 +103,6 @@ template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
 template<typename T> T addM(T a, T b)  { return M(M(a) + M(b)); }
 template<typename T> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
 template<typename T> T multM(T a, T b) { return M(M(a) * M(b)); }
-template <typename T=ll> T powM(T x, T y) {
-  T o = 1;
-  x %= mod;
-  while (y) {
-    if (y & 1) (o *= x) %= mod;
-    y >>= 1;
-    (x *= x) %= mod;
-  }
-  return o;
-}
 
 // General functions
 template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
@@ -186,15 +176,38 @@ string s;
 
 void solution() {
   cin >> n;
+  // Sum of first n natural #s is
+  // n⋅(n+1)/2
+  ll x = n * (n+1) / 2;
+  if (x & 1) {
+    cout << "NO" << nl;
+    return;
+  }
+
+  cout << "YES" << nl;
+  vl a1, a2;
+  x /= 2;
+
+  while (n) {
+    if (x - n >= 0) {
+      a1.pb(n);
+      x -= n;
+    } else {
+      a2.pb(n);
+    }
+    n--;
+  }
+
+  cout << a1.sz() << nl;
+  trav(num, a1) cout << num << " ";
+  cout << nl << a2.sz() << nl;
+  trav(num, a2) cout << num << " ";
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

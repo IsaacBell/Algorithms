@@ -186,15 +186,29 @@ string s;
 
 void solution() {
   cin >> n;
+  vl A(n);
+  fo(i,n) cin >> A[i];
+
+  vl dp(n+1, mod);
+  dp[0] = -mod;
+
+  fo(i,n)
+    Fo(j,1,n+1)
+      if (dp[j-1] < A[i] && A[i] < dp[j])
+        dp[j] = A[i];
+
+  ll o = 0;
+  fo(i,n+1)
+    if (dp[i] < mod)
+      o = i;
+
+  cout << o << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
