@@ -169,7 +169,7 @@ ll timer = 0;
 // vl tin, tout;
 
 ll a, b, n, m, q, k, w;
-string s = "";
+string s;
 
 /* Solution starts here */
 
