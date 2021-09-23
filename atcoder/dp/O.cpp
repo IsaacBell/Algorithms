@@ -114,6 +114,7 @@ vl par(N, -1);
 vl szz(N);
 vl anc(N);
 bitset<N> vis;
+bitset<N> bs;
 
 template<typename T> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
 template<typename T> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
@@ -127,15 +128,32 @@ ll n, m, q, k;
 
 void solution() {
   cin >> n;
+  short int in;
+  vector< bitset<N> > can(n); // "M" => Matrix
+  fo(i,n) {
+    fo(j,n) {
+      cin >> in;
+      if (in) can[i][j] = 1;
+    }
+  }
+  vl dp(1 << n);
+  dp[0] = 1;
+    fo(mask, (1 << n) - 1) {
+      ll a = __builtin_popcount(mask);
+      fo(b,n)
+        if(can[a][b] && !(mask & (1 << b))) {
+          ll m2 = mask ^ (1 << b);
+          (dp[m2] += dp[mask]) %= mod;
+        }
+    }
+
+  cout << dp[(1 << n) - 1] << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

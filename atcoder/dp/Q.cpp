@@ -124,18 +124,43 @@ ll timer = 0;
 ll n, m, q, k;
 
 /* Solution starts here */
+vl tree;
 
 void solution() {
   cin >> n;
+  vl A(n), H(n);
+
+  ll base = 1;
+  while (base <= n) base *= 2;
+  tree.rsz(2*base);
+
+  fo(i,n) cin >> H[i];
+  fo(i,n) cin >> A[i];
+
+  vl dp(n+1);
+
+  fo(i,n) {
+    ll x = H[i] + base;
+    ll best = 0;
+    while (x > 1) {
+      if (x & 1) ckmax(best, tree[x-1]);
+      x /= 2;
+    }
+    dp[H[i]] = best + A[i];
+    for(ll j = base + H[i]; j; j /= 2)
+      ckmax(tree[i], dp[H[i]]);
+  }
+
+  ll o = 0;
+  fo(i,n+1) ckmax(o, dp[i]);
+
+  cout << o << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

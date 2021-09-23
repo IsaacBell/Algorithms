@@ -124,18 +124,39 @@ ll timer = 0;
 ll n, m, q, k;
 
 /* Solution starts here */
+vvl Adj;
+
+pl dfs(ll i, ll p) {
+  ll wht = 1;
+  ll blk = 0;
+  for (ll nei: Adj[i])
+    if (nei != p) {
+      pl p = dfs(nei, i);
+      ll wht_bak = wht;
+      (wht *= p.S) %= mod;
+      blk = (wht_bak*p.F)%mod + (blk*(p.F+p.S)%mod) % mod;
+    }
+
+  return {wht, (wht + blk) % mod};
+}
 
 void solution() {
   cin >> n;
+  Adj.rsz(n+1, vl {});
+  fo(i,n) {
+    pl p; cin >> p.F >> p.S;
+    Adj[p.F].pb(p.S);
+    Adj[p.S].pb(p.F);
+  }
+
+  auto p = dfs(1, -1);
+  cout << (p.F + p.S) % mod << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
