@@ -14,6 +14,7 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <unordered_set>
 #include <complex>
 #include <chrono>
 #include <functional>
@@ -102,6 +103,16 @@ template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
 template<typename T> T addM(T a, T b)  { return M(M(a) + M(b)); }
 template<typename T> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
 template<typename T> T multM(T a, T b) { return M(M(a) * M(b)); }
+template <typename T=ll> T powM(T x, T y) {
+  T o = 1;
+  x %= mod;
+  while (y) {
+    if (y & 1) (o *= x) %= mod;
+    y >>= 1;
+    (x *= x) %= mod;
+  }
+  return o;
+}
 
 // General functions
 template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
@@ -169,21 +180,33 @@ ll timer = 0;
 // vl tin, tout;
 
 ll a, b, n, m, q, k, w;
-string s = "";
+string s;
 
 /* Solution starts here */
 
 void solution() {
-  cin >> n >> w;
-  vl dp(w+1);
-
+  cin >> n;
+  vl A(n);
+  ll sum = 0;
   fo(i,n) {
-    ll wt, val; cin >> wt >> val;
-    ford(j, w - wt + 1)
-      ckmax(dp[j + wt], dp[j] + val);
+    cin >> A[i];
+    sum += A[i];
   }
+  if (n == 1) {
+    cout << A[0] << nl;
+    return;
+  }
+  vvl dp(n+1, vl(n));
 
-  cout << *max_element(dp.begin(), dp.end()) << nl;
+  ford(L,n)
+    Fo(R,L,n)
+      if (L == R) dp[L][R] = A[L];
+      else dp[L][R] = max(
+        A[L] - dp[L+1][R],
+        A[R] - dp[L][R-1]
+      );
+
+  cout << (sum + dp[0][n-1]) / 2 << nl;
 }
 
 int main() {
