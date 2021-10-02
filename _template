@@ -169,6 +169,16 @@ T fac(T x) { // factorial
   return o;
 }
 
+void buildAdj(vvl& A, size_t nn = 0) {
+  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
+  A.rsz(nn+1, vl {});
+  fo(i,nn) {
+    pl p; cin >> p.F >> p.S;
+    A[p.F].pb(p.S);
+    A[p.S].pb(p.F);
+  }
+}
+
 vl v(N);
 vl par(N, -1);
 vl szz(N);
