@@ -138,14 +138,14 @@ void solution() {
   }
   vl dp(1 << n);
   dp[0] = 1;
-    fo(mask, (1 << n) - 1) {
-      ll a = __builtin_popcount(mask);
-      fo(b,n)
-        if(can[a][b] && !(mask & (1 << b))) {
-          ll m2 = mask ^ (1 << b);
-          (dp[m2] += dp[mask]) %= mod;
-        }
-    }
+  fo(mask, (1 << n) - 1) {
+    ll a = __builtin_popcount(mask);
+    fo(b,n)
+      if(can[a][b] && !(mask & (1 << b))) {
+        ll m2 = mask ^ (1 << b);
+        (dp[m2] += dp[mask]) %= mod;
+      }
+  }
 
   cout << dp[(1 << n) - 1] << nl;
 }

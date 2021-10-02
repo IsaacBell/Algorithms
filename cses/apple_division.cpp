@@ -169,7 +169,17 @@ T fac(T x) { // factorial
   return o;
 }
 
-vl v(N);
+void buildAdj(vvl& A, size_t nn = 0) {
+  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
+  A.rsz(nn+1, vl {});
+  fo(i,nn) {
+    pl p; cin >> p.F >> p.S;
+    A[p.F].pb(p.S);
+    A[p.S].pb(p.F);
+  }
+}
+
+vl v(N, 0);
 vl par(N, -1);
 vl szz(N);
 vl anc(N);
@@ -184,24 +194,32 @@ string s;
 
 /* Solution starts here */
 
+ll mn(ll r, ll d) {
+  if (!r) return abs((q-d) - d);
+  return min(
+    mn(r-1, d),
+    mn(r-1, d+v[r-1])
+  );
+}
+
 void solution() {
   cin >> n;
-  vl A(n); fo(i,n) cin >> A[i];
-
-  vl dp(n, mod);
-  dp[0] = 0;
-
-  fo(i,n)
-    for(ll j: vl {i+1, i+2})
-      if (j<n) ckmin(dp[j], dp[i] + abs(A[i] - A[j]));
-
-  cout << dp[n-1] << nl;
+  v.rsz(n);
+  q = 0;
+  fo(i,n) {
+    cin >> v[i];
+    q += v[i];
+  }
+  cout << mn(n,0) << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  // ll t; cin >> t;
+
+  // while(t--)
+    solution();
 
   return 0;
 }

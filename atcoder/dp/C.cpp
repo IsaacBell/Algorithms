@@ -1,5 +1,6 @@
 // #include<bits/stdc++.h>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -13,6 +14,7 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <unordered_set>
 #include <complex>
 #include <chrono>
 #include <functional>
@@ -47,10 +49,10 @@ using namespace std;
 #define ps(s) printf("%s\n", s)
 #define br printf("\n")
 #define trav(a, x) for (auto &a : x)
-#define fo(i, n) for(ll i=0;i<n;i++)
-#define ford(i, n) for(ll i = n - 1; i >= 0; i--)
-#define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
+#define fo(i, n) for(size_t i=0;i<n;i++)
+#define ford(i, n) for(size_t i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(size_t i = n - 1; i; i--)
+#define Fo(i, k, n) for(size_t i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -90,18 +92,76 @@ int rng(int lim) {
   return uid(rang);
 }
 
-template<class T> using pq = priority_queue<T>;
-template<class T> using mpq = priority_queue<T, vector<T>, greater<T>>;
-
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<typename T> T M(T x) { return ((x % mod + mod) % mod);  }
-template<typename T> T addM(T a, T b)  { return mod(mod(a) + mod(b));  }
-template<typename T> T multM(T a, T b) { return mod(mod(a) * mod(b));  }
+template<class T=ll> using pq = priority_queue<T>;
+template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-template<typename T>
-T fac(T x) {
+// Modulo operators
+template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T=ll> T addM(T a, T b)  { return M(M(a) + M(b)); }
+template<typename T=ll> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
+template<typename T=ll> T multM(T a, T b) { return M(M(a) * M(b)); }
+template<typename T=ll> T powM(T x, T y) {
+  T o = 1;
+  x %= mod;
+  while (y) {
+    if (y & 1) (o *= x) %= mod;
+    y >>= 1;
+    (x *= x) %= mod;
+  }
+  return o;
+}
+
+// General functions
+template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
+template<class T=ll> T lcm(T a, T b) { return a*(b/gcd(a,b)); }
+template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+
+template<class T=ll> T maxpow2(T n) { return (n & (~(n - 1))); }
+template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
+template<class T=ll> T sum_digit(T n) {
+  T sum = 0;
+  while (n != 0) {
+    sum = sum + n % 10;
+    n = n / 10;
+  }
+  return sum;
+}
+
+template<class T=ll>
+T sum_digit_string(T str)
+{
+    T sum = 0;
+    for (T i = 0; i < str.length(); i++)
+    {
+        sum = sum + str[i] - 48;
+    }
+    return sum;
+}
+
+template<class T=ll> string dec2bin(T n)
+{
+    const T size=sizeof(n)*8;
+    string s = "00000000000000000000000000000000";
+    for (T a=0;a<32;a++)
+    {
+        if(n==0)
+            return s;
+        else
+        {
+            if(n%2!=0)
+                s[31-a]='1';
+            n/=2;
+        }
+    }
+    return s;
+}
+
+template<typename T = ll>
+T fac(T x) { // factorial
   T o = 1;
   if (x > 0)
     for(T i = 1; i <= x; ++i)
@@ -109,46 +169,55 @@ T fac(T x) {
   return o;
 }
 
-vl v(N);
+void buildAdj(vvl& A, size_t nn = 0) {
+  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
+  A.rsz(nn+1, vl {});
+  fo(i,nn) {
+    pl p; cin >> p.F >> p.S;
+    A[p.F].pb(p.S);
+    A[p.S].pb(p.F);
+  }
+}
+
+vl v(N, 0);
 vl par(N, -1);
 vl szz(N);
 vl anc(N);
 bitset<N> vis;
-
-template<typename T> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
-template<typename T> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+bitset<N> bs;
 
 ll timer = 0;
 // vl tin, tout;
 
-ll n, m, q, k;
+ll a, b, c, n, m, q, w;
+string s;
 
 /* Solution starts here */
 
 void solution() {
   cin >> n;
   vl dp(3);
+  vl A(3);
 
-  fo(i,n) {
+  fo (i,n) {
     vl dp2(3);
-    vl c(3);
-    cin >> c[0] >> c[1] >> c[2];
-    
-    fo(i,3)
-      fo(j,3)
-        if (i != j)
-          ckmax(dp2[j], dp[i]+c[j]);
-
+    cin >> A[0] >> A[1] >> A[2];
+    fo(j,3)
+      fo(k,3)
+        if (j != k)
+          ckmax(dp2[k], dp[j] + A[k]);
     dp = dp2;
   }
-
   cout << *max_element(dp.begin(), dp.end()) << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  // ll t; cin >> t;
+
+  // while(t--)
+    solution();
 
   return 0;
 }

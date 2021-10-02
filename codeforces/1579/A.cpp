@@ -183,25 +183,30 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
-
+ll k;
 void solution() {
-  cin >> n;
-  vl A(n); fo(i,n) cin >> A[i];
+  cin >> s;
+  const ll n = s.sz();
+  vl hm(256);
 
-  vl dp(n, mod);
-  dp[0] = 0;
+  trav(c,s) hm[(int) c-'0']++;
 
-  fo(i,n)
-    for(ll j: vl {i+1, i+2})
-      if (j<n) ckmin(dp[j], dp[i] + abs(A[i] - A[j]));
+  a = hm[(int) 'A'-'0'];
+  b = hm[(int) 'B'-'0'];
+  c = hm[(int) 'C'-'0'];
 
-  cout << dp[n-1] << nl;
+  if (b != a + c)
+    cout << "NO" << nl;
+  else cout << "YES" << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+  
+  while (t--)
+    solution();
 
   return 0;
 }

@@ -185,23 +185,44 @@ string s;
 /* Solution starts here */
 
 void solution() {
-  cin >> n;
-  vl A(n); fo(i,n) cin >> A[i];
+  cin >> n >> m >> q;
+  char M[n][m];
+  stack<tuple<ll,ll,ll>> stk;
+  fo(i,n) fo(j,m) {
+    cin >> M[i][j];
+    if (i && j && M[i][j] == '*') stk.push({i,j,1});
+  }
 
-  vl dp(n, mod);
-  dp[0] = 0;
+  while (!stk.empty()) {
+    auto [i,j,d] = stk.top();
+    stk.pop();
+    ll j2 = j, j3 = j;
+    ford(i2, i) {
+      j2 += 1;
+      j3 -= 1;
+      if (M[i2][j2] != '*' || M[i2][j3] != '*') break;
 
-  fo(i,n)
-    for(ll j: vl {i+1, i+2})
-      if (j<n) ckmin(dp[j], dp[i] + abs(A[i] - A[j]));
+      if (++d >= q) {
+        cout << "YES" << nl;
+        return;
+      }
+    }
+    // if (i && j && M[i-1][j-1] == '*' && M[i-1][j+1] == '*') {
+    //   stk.push({i-1, j-1, d+1});
+    //   stk.push({i-1, j+1, d+1});
+    // }
+  }
 
-  cout << dp[n-1] << nl;
+  cout << "NO" << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+
+  while(t--)
+    solution();
 
   return 0;
 }

@@ -183,25 +183,33 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+set<string> st;
+
+void permute(ll l, ll r) {
+  if (l == r) st.insert(s);
+  Fo(i,l,r+1) {
+    swap(s[i],s[l]);
+    permute(l+1,r);
+    swap(s[i],s[l]);
+  }
+}
 
 void solution() {
-  cin >> n;
-  vl A(n); fo(i,n) cin >> A[i];
+  cin >> s;
+  n = s.sz();
 
-  vl dp(n, mod);
-  dp[0] = 0;
-
-  fo(i,n)
-    for(ll j: vl {i+1, i+2})
-      if (j<n) ckmin(dp[j], dp[i] + abs(A[i] - A[j]));
-
-  cout << dp[n-1] << nl;
+  permute(0, n - 1);
+  cout << st.sz() << nl;
+  trav(x,st) cout << x << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  // ll t; cin >> t;
+
+  // while(t--)
+    solution();
 
   return 0;
 }
