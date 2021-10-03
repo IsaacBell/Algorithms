@@ -11,26 +11,32 @@ TODO Algorithms
 ** [x] Djikstra's
 ** [x] Tarjan's
 ** [ ] Kruskal's
+** [ ] KMP
 ** [x] Rabin-Karp
 
 TODO Study
 
-** [ ] Trees
+** [x] Greedy
+*** [x] Beginner
+*** [ ] Intermediate
+*** [ ] Advanced
+** [x] Trees
 *** [x] LCA
 *** [ ] Heavy-Light Decompositions
 *** [ ] Sparse Table
-*** [ ] General Practice (LC Probs, etc.)
 ** [ ] Segment Tree Beats
 ** [ ] Network Flows
+*** [ ] Max Flow
 *** [ ] Dinic's
 *** [ ] Floyd-Warshall
 *** [ ] Edmonds-Karp
-** Combinatorics
+** Combinatorial Theory
+*** [x] Beginner
 *** [ ] Intermediate
 *** [ ] Advanced
 ** Number Theory
 *** [x] Sieve of Eratosthenes
-*** [ ] Prime Number Theory
+*** [x] Prime Number Theory
 *** [ ] Factorialization Concepts
 ** Range Queries/Segment Trees
 *** [x] Lazy Propagation
@@ -43,9 +49,21 @@ TODO Study
 *** [x] Computing Area of a Triangle
 *** [ ] Maximal Rectangle
 *** [ ] Histograms
-
-PROJ Segment Trees
-** Padding tree with 0's to make a power of two
+** Dynamic Programming
+*** [x] Knapsack
+*** [x] Coins
+*** [x] LCS
+**** [ ] Print Back Optimal String
+*** [x] LIS
+*** [x] Probability
+*** [x] Bitmasks
+*** [ ] Graph
+*** [x] Tree
+*** [x] 2-Layer 1D DP
+*** [x] 2D DP (General Concepts)
+*** [x] 3D DP
+*** [x] Tiling/Dominoes (2x1 Grid)
+*** [x] Tiling/Dominoes (4x1 Grid)
 
 #+begin_src C++ :includes <stdio.h>
   int n; cin >> n;
