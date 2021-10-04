@@ -62,6 +62,14 @@ using namespace std;
 #define mt make_tuple
 #define F first
 #define S second
+#define FR front
+#define BK back
+#define qt(x,y) auto [x,y] = q.top(); q.pop();
+#define qf(x,y) auto [x,y] = q.front(); q.pop();
+#define qp(args...) q.push(args)
+#define qe q.empty()
+#define wqe while(!q.empty())
+#define begend(x) all(x)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define clr(x) memset(x, 0, sizeof(x))
@@ -95,8 +103,21 @@ int rng(int lim) {
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<class T=ll> using pq = priority_queue<T>;
-template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+template<typename T=ll> using qp = queue<pair<T,T>>;
+template<typename T=ll> using qt = queue<tuple<T,T>>;
+template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
+template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
+template<typename T=ll> using pq = priority_queue<T>;
+template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+
+using qpl = qp<ll>;
+using qtl = qt<ll>;
+using qtl3 = qt3<ll>;
+using qtl4 = qt4<ll>;
+using qpd = qp<double>;
+using qtd = qt<double>;
+using qtd3 = qt3<double>;
+using qtd4 = qt4<double>;
 
 // Modulo operators
 template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
