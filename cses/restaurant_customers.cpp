@@ -216,29 +216,20 @@ string s;
 /* Solution starts here */
 
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
-  fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
-  sortall(A);
-  sortall(B);
-
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
-      o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
-    }
+  cin >> n;
+  vpl A;
+  fo(i,n) {
+    cin >> a >> b;
+    A.pb({a, 1});
+    A.pb({b, -1});
   }
-
-  cout << o << nl;
+  sortall(A);
+  ll o = 0, best = 0;
+  trav(a,A) {
+    o += a.S;
+    ckmax(best,o);
+  }
+  cout << best << nl;
 }
 
 int main() {

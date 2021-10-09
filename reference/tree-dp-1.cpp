@@ -93,6 +93,9 @@ typedef vector<ld> vd;
 typedef vector<cd> vcd;
 typedef vector<uint32_t> vu32;
 typedef vector<uint64_t> vu64;
+typedef map<ll, ll> mll;
+typedef map<ll, string> mls;
+typedef map<string, ll> msl;
 
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim) {
@@ -190,6 +193,8 @@ T fac(T x) { // factorial
   return o;
 }
 
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
 void buildAdj(vvl& A, size_t nn = 0) {
   if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
   A.rsz(nn+1, vl {});
@@ -214,37 +219,39 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+vvl Adj;
+vl C(n), dp(N), dp2(N);
+
+void dfs(ll i, ll p) {
+  ll sum1 = 0, sum2 = 0;
+  trav(nei, Adj[i]) {
+    if (nei == p) continue;
+    sum1 += dp2[i];
+    sum2 += max(dp[i], dp2[i]);
+  }
+  dp[i] = C[i] + sum1;
+  dp2[i] = sum2;
+}
 
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
-  fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
-  sortall(A);
-  sortall(B);
-
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
-      o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
-    }
+  cin >> n;
+  Adj.rsz(n, vl {});
+  fo(i,n) {
+    cin >> a >> b;
+    Adj[a].pb(b);
+    Adj[b].pb(a);
   }
-
-  cout << o << nl;
+  dfs(1,0);
+  cout << max(dp[1],dp2[1]) << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+
+  while(t--)
+    solution();
 
   return 0;
 }

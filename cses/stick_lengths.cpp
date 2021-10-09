@@ -93,6 +93,9 @@ typedef vector<ld> vd;
 typedef vector<cd> vcd;
 typedef vector<uint32_t> vu32;
 typedef vector<uint64_t> vu64;
+typedef map<ll, ll> mll;
+typedef map<ll, string> mls;
+typedef map<string, ll> msl;
 
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim) {
@@ -190,6 +193,8 @@ T fac(T x) { // factorial
   return o;
 }
 
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
 void buildAdj(vvl& A, size_t nn = 0) {
   if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
   A.rsz(nn+1, vl {});
@@ -216,27 +221,13 @@ string s;
 /* Solution starts here */
 
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
+  cin >> n;
+  vl A(n);
   fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
   sortall(A);
-  sortall(B);
 
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
-      o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
-    }
-  }
+  ll mid = A[n/2], o = 0;
+  fo(i,n) o += abs(A[i]-mid);
 
   cout << o << nl;
 }

@@ -216,29 +216,25 @@ string s;
 /* Solution starts here */
 
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
-  fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
-  sortall(A);
-  sortall(B);
-
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
-      o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
-    }
+  cin >> n >> m;
+  multiset<ll> Ti;
+  ll tmp;
+  fo(i,n) {
+    cin >> tmp;
+    Ti.insert(tmp);
   }
 
-  cout << o << nl;
+  fo(i,m) {
+    ll cust;
+    cin >> cust;
+    auto it = Ti.upper_bound(cust);
+    if (it == Ti.begin())
+      cout << -1 << nl;
+    else {
+      cout << *(--it) << nl;
+      Ti.erase(it);
+    }
+  }
 }
 
 int main() {

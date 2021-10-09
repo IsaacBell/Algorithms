@@ -214,30 +214,21 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
-  fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
-  sortall(A);
-  sortall(B);
-
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
+  cin >> n;
+  vpl A(n);
+  fo(i,n) cin >> A[i].F >> A[i].S;
+  sort(all(A), comp2nd);
+  ll i = 0, o = 0, last = -1;
+  while (i < n) {
+    if (A[i].F >= last) {
       o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
+      last = A[i].S;
     }
+    i++;
   }
-
   cout << o << nl;
 }
 

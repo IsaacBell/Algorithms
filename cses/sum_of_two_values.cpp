@@ -190,6 +190,8 @@ T fac(T x) { // factorial
   return o;
 }
 
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
 void buildAdj(vvl& A, size_t nn = 0) {
   if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
   A.rsz(nn+1, vl {});
@@ -215,30 +217,41 @@ string s;
 
 /* Solution starts here */
 
+// void solution() {
+//   cin >> n >> q;
+//   vl A(n);
+//   map<ll, ll> m;
+//   fo(i,n) cin >> A[i];
+
+//   fo(i,n) {
+//     if (m.count(q - A[i])) {
+//       cout << i + 1 << " " << m[q - A[i]] + 1 << nl;
+//       return;
+//     }
+//     m[A[i]] = i + 1;
+//   }
+//   cout << "IMPOSSIBLE" << nl;
+// }
 void solution() {
-  ll k; cin >> n >> m >> k;
-  vl A(n), B(n);
-  fo(i,n) cin >> A[i];
-  fo(i,m) cin >> B[i]; 
-
+  cin >> n >> q;
+  vpl A;
+  fo(i,n) {
+    cin >> w;
+    A.pb({w, i+1});
+  }
   sortall(A);
-  sortall(B);
-
-  ll a = 0, b = 0, o = 0;
-  while (a<n && b<m) {
-    if (abs(A[a] - B[b]) <= k) {
-      a++;
-      b++;
-      o++;
-    } else {
-      // If apt size too big, move apt pointer
-      if (A[a] - B[b] > k) b++;
-      // If apt too small, skip that applicant
-      else a++;
+  ll l = 0, r = n-1;
+  while (l < r) {
+    ll cur = A[l].F + A[r].F;
+    if (cur > q) r--;
+    else if (cur < q) l++;
+    else if (cur == q) {
+      cout << A[l].S << " " << A[r].S << nl;
+      return;
     }
   }
 
-  cout << o << nl;
+  cout << "IMPOSSIBLE" << nl;
 }
 
 int main() {
