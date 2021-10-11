@@ -64,8 +64,8 @@ using namespace std;
 #define S second
 #define FR front
 #define BK back
-#define qt(x,y) auto [x,y] = q.top(); q.pop();
-#define qf(x,y) auto [x,y] = q.front(); q.pop();
+#define qt(args...) auto [args] = q.top(); q.pop();
+#define qf(args...) auto [args] = q.front(); q.pop();
 #define qp(args...) q.push(args)
 #define qe q.empty()
 #define wqe while(!q.empty())
@@ -93,6 +93,9 @@ typedef vector<ld> vd;
 typedef vector<cd> vcd;
 typedef vector<uint32_t> vu32;
 typedef vector<uint64_t> vu64;
+typedef map<ll, ll> mll;
+typedef map<ll, string> mls;
+typedef map<string, ll> msl;
 
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim) {
@@ -190,7 +193,9 @@ T fac(T x) { // factorial
   return o;
 }
 
-void buildAdj(vvl& A, size_t nn = 0) {
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
+void buildAdj(vvl& A, ll nn = 0) {
   if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
   A.rsz(nn+1, vl {});
   fo(i,nn) {
@@ -217,6 +222,8 @@ string s;
 
 void solution() {
   cin >> n;
+  vl A(n);
+  fo(i,n) cin >> A[i];
 }
 
 int main() {
