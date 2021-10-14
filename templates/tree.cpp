@@ -114,7 +114,7 @@ template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
 template<typename T=ll> using pq  = priority_queue<T>;
 template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-using ql   = queue<ll>;
+using qll  = queue<ll>;
 using qpl  = qp<ll>;
 using qtl  = qt<ll>;
 using qtl3 = qt3<ll>;
@@ -221,11 +221,29 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+vvl Adj(N, vl {});
+vvl Ch(N,  vl {});
+
+vl tree(N), // subTree size
+   d(N);    // depth
+
+void dfs(ll i, ll p = -1) {
+}
 
 void solution() {
   cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  Fo(i,1,n) {
+    cin >> a;
+    a--;
+    Ch[a].pb(i);
+
+    // cin >> a >> b;
+    // a--; b--;
+    // Adj[a].pb(b);
+    // Adj[b].pb(a);
+  }
+
+  dfs(0);
 }
 
 int main() {

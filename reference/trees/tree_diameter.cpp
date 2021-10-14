@@ -106,21 +106,19 @@ int rng(int lim) {
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<typename T=ll> using ql  = queue<ll>;
-template<typename T=ll> using qp  = queue<pair<T,T>>;
-template<typename T=ll> using qt  = queue<tuple<T,T>>;
+template<typename T=ll> using qp = queue<pair<T,T>>;
+template<typename T=ll> using qt = queue<tuple<T,T>>;
 template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
 template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
-template<typename T=ll> using pq  = priority_queue<T>;
+template<typename T=ll> using pq = priority_queue<T>;
 template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-using ql   = queue<ll>;
-using qpl  = qp<ll>;
-using qtl  = qt<ll>;
+using qpl = qp<ll>;
+using qtl = qt<ll>;
 using qtl3 = qt3<ll>;
 using qtl4 = qt4<ll>;
-using qpd  = qp<double>;
-using qtd  = qt<double>;
+using qpd = qp<double>;
+using qtd = qt<double>;
 using qtd3 = qt3<double>;
 using qtd4 = qt4<double>;
 
@@ -197,7 +195,7 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-void buildAdj(vvl& A, ll nn = 0) {
+void buildAdj(vvl& A, size_t nn = 0) {
   if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
   A.rsz(nn+1, vl {});
   fo(i,nn) {
@@ -221,20 +219,54 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+vvl Ch; // children of node
+vl dp;
+vl f(N), // # subtrees at i
+   g(N); // # subtrees w/o i
+ll d = 0;
+
+// Run DFS from Node 1 to bottom,
+// maximizing f[i] and g[i] along
+// the way
+void dfs(ll i, ll p) {
+  pq<ll> q;
+
+  trav(ch, Ch[i]) {
+    if (ch == p) continue;
+    dfs(ch, i);
+    ckmax(f[i], f[ch] + 1);
+    qp(f[ch]);
+  }
+
+  ckmax(d, f[i]);
+
+  if (q.sz() > 1) {
+    auto mx  = q.top();
+    q.pop();
+    auto mx2 = q.top();
+    g[i] = 2 + mx + mx2;
+    ckmax(d, g[i]);
+  }
+}
 
 void solution() {
   cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  dp.rsz(n);
+  Ch.rsz(n+1, vl {});
+  fo(i,n-1) {
+    cin >> a >> b;
+    Ch[a].pb(b);
+    Ch[b].pb(a);
+  }
+
+  dfs(1,-1);
+  cout << d << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

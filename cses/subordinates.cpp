@@ -106,21 +106,19 @@ int rng(int lim) {
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<typename T=ll> using ql  = queue<ll>;
-template<typename T=ll> using qp  = queue<pair<T,T>>;
-template<typename T=ll> using qt  = queue<tuple<T,T>>;
+template<typename T=ll> using qp = queue<pair<T,T>>;
+template<typename T=ll> using qt = queue<tuple<T,T>>;
 template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
 template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
-template<typename T=ll> using pq  = priority_queue<T>;
+template<typename T=ll> using pq = priority_queue<T>;
 template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-using ql   = queue<ll>;
-using qpl  = qp<ll>;
-using qtl  = qt<ll>;
+using qpl = qp<ll>;
+using qtl = qt<ll>;
 using qtl3 = qt3<ll>;
 using qtl4 = qt4<ll>;
-using qpd  = qp<double>;
-using qtd  = qt<double>;
+using qpd = qp<double>;
+using qtd = qt<double>;
 using qtd3 = qt3<double>;
 using qtd4 = qt4<double>;
 
@@ -221,20 +219,39 @@ ll a, b, c, n, m, q, w;
 string s;
 
 /* Solution starts here */
+vvl Adj(N, vl {});
+vvl Ch(N,  vl {});
+
+vl tree(N), // subTree size
+   d(N);    // depth
+
+void dfs(ll i, ll p = -1) {
+  tree[i] = 1; // root of Node's subTree
+  trav(ch, Ch[i]) {
+    d[ch] = d[i] + 1;
+    dfs(ch, i);
+    tree[i] += tree[ch];
+  }
+}
 
 void solution() {
   cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  Fo(i,1,n) {
+    cin >> a;
+    a--;
+    Ch[a].pb(i);
+  }
+
+  dfs(0);
+
+  fo(i,n) cout << tree[i] - 1 << " ";
+  cout << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
