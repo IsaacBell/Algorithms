@@ -114,7 +114,7 @@ template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
 template<typename T=ll> using pq  = priority_queue<T>;
 template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-using ql   = queue<ll>;
+using qll  = queue<ll>;
 using qpl  = qp<ll>;
 using qtl  = qt<ll>;
 using qtl3 = qt3<ll>;
