@@ -22,3 +22,9 @@ ll rho(ll n, ll x0, ll z) {
 
   return g;
 }
+
+void solution() {
+  ll n; 
+  cin >> n;
+  cout << rho(n, 1, 1);
+}
