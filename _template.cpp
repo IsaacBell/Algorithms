@@ -79,6 +79,7 @@ using namespace std;
 #define sortall(x) sort(all(x))
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
+#define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
 
 typedef long double ld;
 typedef complex<ld> cd;
