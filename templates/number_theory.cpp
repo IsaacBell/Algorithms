@@ -79,6 +79,7 @@ using namespace std;
 #define sortall(x) sort(all(x))
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
+#define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
 
 typedef long double ld;
 typedef complex<ld> cd;
@@ -223,6 +224,12 @@ void buildAdj(vvl& A, ll nn = 0) {
 ll a, b, c, n, m, k, w;
 string s;
 
+/* Custom template functions */
+
+bool __primes_generated__ = 0;
+vl prime(15000105);
+vl primeList;
+
 bool isPrime(ll num) {
   if (num < 4) return true;
   if (!(num & 1)) return false;
@@ -261,6 +268,51 @@ vl prime_factorization(ll num) {
 
   if (num > 1) out.pb(num);
   return out;
+}
+
+void sieve(ll nn) {}
+
+void genprimes(int n) {
+  __primes_generated__ = 1;
+  sieve(n + 1);
+  for (ll i = 2; i <= n; i++)
+    if (prime[i])
+      primeList.push_back(i);
+}
+ 
+vector<ll> factors(ll n) {
+  if (!__primes_generated__) {
+  cerr << "Call genprimes you dope" << endl;
+  exit(1);
+  }
+  vector<ll> facs;
+  
+  for (ll i = 0; primeList[i] * primeList[i] <= n && i < primeList.size(); i++) {
+  if (n % primeList[i] == 0) {
+    while (n % primeList[i] == 0) {
+    n /= primeList[i];
+    facs.push_back(primeList[i]);
+    }
+  }
+  }
+  if (n > 1) {
+  facs.push_back(n);
+  }
+  sort(facs.begin(), facs.end());
+  return facs;
+}
+
+vector<ll> getdivs(ll n) {
+  vector<ll> divs;
+  for (ll i = 1; i * i <= n; i++) {
+    if (n % i == 0) {
+      divs.push_back(i);
+      divs.push_back(n / i);
+    }
+  }
+
+  getunique(divs);
+  return divs;
 }
 
 /* Solution starts here */
