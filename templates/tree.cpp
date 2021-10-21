@@ -207,17 +207,17 @@ void buildAdj(vvl& A, ll nn = 0) {
   }
 }
 
-vl v(N);
-vl par(N, -1);
-vl szz(N);
-vl anc(N);
-bitset<N> vis;
-bitset<N> bs;
+// vl v(N);
+// vl par(N, -1);
+// vl szz(N);f
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
 
-ll timer = 0;
+// ll timer = 0;
 // vl tin, tout;
 
-ll a, b, c, n, m, q, w;
+ll a, b, c, n, m, k, w;
 string s;
 
 /* Solution starts here */
@@ -227,20 +227,18 @@ vvl Ch(N,  vl {});
 vl tree(N), // subTree size
    d(N);    // depth
 
+vl f(N), g(N);
+
 void dfs(ll i, ll p = -1) {
 }
 
 void solution() {
   cin >> n;
   Fo(i,1,n) {
-    cin >> a;
-    a--;
-    Ch[a].pb(i);
-
-    // cin >> a >> b;
-    // a--; b--;
-    // Adj[a].pb(b);
-    // Adj[b].pb(a);
+    cin >> a >> b;
+    a--; b--;
+    Adj[a].pb(b);
+    Adj[b].pb(a);
   }
 
   dfs(0);
