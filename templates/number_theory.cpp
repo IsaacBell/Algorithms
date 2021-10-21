@@ -227,7 +227,7 @@ string s;
 /* Custom template functions */
 
 bool __primes_generated__ = 0;
-vl prime(15000105);
+bitset<(const int) 15000105> prime;
 vl primeList;
 
 bool isPrime(ll num) {
@@ -270,7 +270,19 @@ vl prime_factorization(ll num) {
   return out;
 }
 
-void sieve(ll nn) {}
+void sieve(ll nn) {
+  prime.set();
+  prime[0] = prime[1] = false;
+  for (ll i = 2; i <= n; i += 2) prime[i] = false;
+
+  Fo(i,2,n) {
+    if (prime[i]) {
+      primeList.pb(i);
+      for (ll j = i+i; j*j <= n; j += i)
+        prime[j] = false;
+    }
+  }
+}
 
 void genprimes(int n) {
   __primes_generated__ = 1;
@@ -288,16 +300,14 @@ vector<ll> factors(ll n) {
   vector<ll> facs;
   
   for (ll i = 0; primeList[i] * primeList[i] <= n && i < primeList.size(); i++) {
-  if (n % primeList[i] == 0) {
-    while (n % primeList[i] == 0) {
-    n /= primeList[i];
-    facs.push_back(primeList[i]);
+    if (n % primeList[i] == 0) {
+      while (n % primeList[i] == 0) {
+        n /= primeList[i];
+        facs.push_back(primeList[i]);
+      }
     }
   }
-  }
-  if (n > 1) {
-  facs.push_back(n);
-  }
+  if (n > 1) facs.push_back(n);
   sort(facs.begin(), facs.end());
   return facs;
 }
