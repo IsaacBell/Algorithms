@@ -35,6 +35,8 @@ using namespace std;
 #define nl "\n"
 #define sz size
 #define rsz resize
+#define ret return
+#define cont continue
 #define IMAX INT_MAX
 #define IMIN INT_MIN
 #define gc getchar_unlocked
@@ -65,6 +67,7 @@ using namespace std;
 #define FR front
 #define BK back
 #define qt(args...) auto [args] = q.top(); q.pop();
+#define qta(arg...) auto arg = q.top(); q.pop();
 #define qf(args...) auto [args] = q.front(); q.pop();
 #define qp(args...) q.push(args)
 #define qe q.empty()
@@ -207,17 +210,17 @@ void buildAdj(vvl& A, ll nn = 0) {
   }
 }
 
-vl v(N);
-vl par(N, -1);
-vl szz(N);
-vl anc(N);
-bitset<N> vis;
-bitset<N> bs;
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
 
-ll timer = 0;
+// ll timer = 0;
 // vl tin, tout;
 
-ll a, b, c, n, m, q, w;
+ll a, b, c, n, m, k, w;
 string s;
 
 /* Solution starts here */
