@@ -325,6 +325,39 @@ vector<ll> getdivs(ll n) {
   return divs;
 }
 
+/*
+  # of integers relatively prime to x in a given range [1...r]
+  O(√‾n)
+*/
+ll relativePrimes(ll n, ll r) {
+  vl pp;
+  Fo(i,2,sqrt(n)+1)
+    if (n%i == 0) {
+      pp.pb(i);
+      while (n%i == 0)
+        n /= i;
+    }
+  if (n > 1) pp.pb(n);
+
+  ll sum = 0;
+  Fo(msk,1, (1 << pp.sz()) ) {
+    ll mul = 1, bits = 0;
+    fo(i, pp.sz())
+      if (msk & (1 << i)) {
+        bits++;
+        mul *= pp[i];
+      }
+
+    ll cur = r / mul;
+    if (bits % 2 == 1)
+      sum += cur;
+    else
+      sum -= cur;
+  }
+
+  return r - sum; 
+}
+
 /* Solution starts here */
 
 void solution() {
