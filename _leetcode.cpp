@@ -23,7 +23,7 @@
 #define ll int64_t
 #define PI 3.1415926535897932384626
 #define INF 2000000000
-#define szn(s) const ll n = s.sz()
+#define szn(n, s) const ll n = s.sz()
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
