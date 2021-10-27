@@ -1,10 +1,16 @@
-int maxArea(vector<int>& H) {
-    szn(H);
-    int mx = 0, l = 0, r = n - 1;
+class Solution {
+public:
+  int maxArea(vector<int>& H) {
+    szn(n,H);
+    int l = 0, r = n - 1, mx = 0;
     while (l < r) {
-      ckmax(mx, min(H[l], H[r]) * (r - l));
+      int cur = min(H[l], H[r]) * (r - l);
+      ckmax(mx, cur);
+      
       if (H[l] < H[r]) l++;
       else r--;
     }
+
     return mx;
   }
+};
