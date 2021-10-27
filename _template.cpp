@@ -92,6 +92,7 @@ typedef vector<vtll> vvtll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
+typedef vector<string> vstr;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;

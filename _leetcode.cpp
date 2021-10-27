@@ -180,6 +180,7 @@ T fac(T x) { // factorial
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
 using string = std::string;
+using vstr = vector<string>;
 
 /* Solution starts here */
 
