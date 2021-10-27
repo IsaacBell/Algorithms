@@ -183,7 +183,9 @@ using string = std::string;
 using vstr = vector<string>;
 
 /* Solution starts here */
+/* Clone this file to "leetcode_scratch.cpp" or similar */
 
 class Solution {
 public:
+  int replaceThisFn() {}
 };
