@@ -1,20 +1,3 @@
-// #include<bits/stdc++.h>
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <sstream>
-#include <queue>
-#include <deque>
-#include <bitset>
-#include <iterator>
-#include <list>
-#include <stack>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <unordered_set>
 #include <complex>
 #include <chrono>
 #include <functional>
@@ -30,12 +13,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-using namespace std;
-
 #define nl "\n"
 #define sz size
 #define rsz resize
-#define ret return
 #define cont continue
 #define IMAX INT_MAX
 #define IMIN INT_MIN
@@ -104,12 +84,6 @@ typedef vector<uint64_t> vu64;
 typedef map<ll, ll> mll;
 typedef map<ll, string> mls;
 typedef map<string, ll> msl;
-
-mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
-int rng(int lim) {
-  uniform_int_distribution<int> uid(0,lim-1);
-  return uid(rang);
-}
 
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
@@ -205,44 +179,10 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-vvl buildAdj(ll nn, ll mm) {
-  vvl A(nn+1, vl {});
-  fo(i,mm) {
-    pl p; cin >> p.F >> p.S;
-    A[p.F].pb(p.S);
-    A[p.S].pb(p.F);
-  }
-}
+using string = std::string;
 
 /* Solution starts here */
 
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
-// vl anc(N);
-// bitset<N> vis;
-// bitset<N> bs;
-
-// ll timer = 0;
-// vl tin, tout;
-
-ll a, b, c, n, m, k, w;
-string s;
-
-
-void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
-}
-
-int main() {
-  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
-
-  return 0;
-}
+class Solution {
+public:
+};
