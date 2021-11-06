@@ -8,5 +8,6 @@
   If you use real numbers, this may cause precision issues.
 */
 ll int_div(ll x, ll y) {
+  if ((x + y - 1) == 0) return 0;
   return (x + y-1) / 2;
 }
