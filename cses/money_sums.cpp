@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -93,9 +93,9 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<pii> vpii;
 typedef vector<bool> vb;
 typedef vector<vb> vvb;
-typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
 typedef vector<vi> vvi;
@@ -234,28 +234,30 @@ string s;
 
 
 void solution() {
-  const ll MOD = 1e9 + 7;
-
   cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
-  }
-  
-  targ /= 2;
+  const ll MAXN = n * 1000;
+  vl A(n);
+  fo(i,n) cin >> A[i];
 
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
+  vvb can(101, vb(MAXN, false));
+  can[0][0] = true;
+  Fo(i,1,n+1)
+    fo(j,MAXN+1) {
+      can[i][j] = can[i-1][j];
+      auto left = j - A[i-1];
+      if (left >= 0 && can[i-1][left])
+        can[i][j] = true;
     }
-  
-  cout << dp[n-1][targ] << nl;
+
+  vl possible;
+  Fo(j,1,MAXN+1)
+    if (can[n][j])
+      possible.pb(j);
+
+  cout << possible.sz() << nl;
+  trav(x, possible)
+    cout << x << " ";
+  cout << nl;
 }
 
 int main() {

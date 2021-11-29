@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,30 +232,45 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+struct P {
+  ll x, y;
+  void read() {
+    cin >> x >> y;
+  }
+
+  P(): x(0), y(0) {};
+  P(ll _x, ll _y): x(_x), y(_y) {};
+
+  P operator-(const P& rhs) const {
+    return {x-rhs.x, y-rhs.y};
+  }
+
+  void operator-=(const P& rhs) {
+    x -= rhs.x;
+    y -= rhs.y;
+  }
+
+  ll operator*(const P& rhs) const {
+    return (x * rhs.y) - (rhs.x * y);
+  }
+
+  ll triangle(const P& b, const P& c) {
+    return (b - *this) * (c - *this);
+  }
+};
 
 void solution() {
-  const ll MOD = 1e9 + 7;
-
   cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
-  }
-  
-  targ /= 2;
+  vector<P> Pts(n);
+  trav(p,Pts)
+    p.read();
 
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
+  ll o = 0;
   Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
-    }
-  
-  cout << dp[n-1][targ] << nl;
+    o += Pts[i] * Pts[i-1];
+  o += Pts[0] * Pts[n-1];
+
+  cout << abs(o) << nl;
 }
 
 int main() {

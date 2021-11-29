@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,30 +232,58 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+struct Vertex {
+  vl go, next;
+  ll p = -1, link = -1;
+  bool leaf = false;
+  char pch;
+
+  Vertex(ll p_ = -1, char pch_ = '$'): p(p_), pch(pch_) {
+    go.rsz(26, -1);
+    next.rsz(26, -1);
+  }
+};
+
+vector<Vertex> t;
+
+void add_string(string const& s) {
+  ll v = 0;
+  szn(n,s);
+  trav(ch,s) {
+    auto c = ch - 'a';
+    if (t[v].next[c] == -1) {
+      t[v].next[c] = t.sz();
+      t.pb({v, ch});
+    }
+    v = t[v].next[c];
+  }
+  t[v].leaf = true;
+}
+
+ll go(ll v, char ch);
+ll get_link(ll v) {
+  if (t[v].link == -1)
+    if (!v || !t[v].p) t[v].link = 0;
+    else t[v].link = go( get_link(t[v].p), t[v].pch);
+  return t[v].link;
+}
+
+ll go(ll v, char ch) {
+  auto c = ch - 'a';
+  if (t[v].go[c] == -1)
+    if (t[v].next[c] != -1) t[v].go[c] = t[v].next[c];
+    else t[v].go[c] = v ? 0 : go( get_link(v), ch);
+}
 
 void solution() {
-  const ll MOD = 1e9 + 7;
-
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
+  cin >> s >> n;
+  vstr A(n);
+  fo(i,n) {
+    cin >> A[i];
+    add_string(A[i]);
   }
-  
-  targ /= 2;
 
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
 
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
-    }
-  
-  cout << dp[n-1][targ] << nl;
 }
 
 int main() {

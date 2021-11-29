@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,30 +232,50 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+ll trie[1000005][26];
+bool stop[1000005];
+ll dp[5005];
+ll ct = 0;
+
+void insert(string s) {
+  ll node = 0;
+  for (ll i = 0; i < s.size(); i++) {
+    auto c = s[i] - 'a';
+    if (!trie[node][c])
+      trie[node][c] = ++ct;
+    node = trie[node][c];
+  }
+  stop[node] = 1;
+}
+
+ll search(ll x) {
+  ll node = 0, ans = 0;
+  for (ll i = x; i < s.size(); i++) {
+    auto c = s[i] - 'a';
+    if (!trie[node][c])
+      return ans;
+    
+    node = trie[node][c];
+    
+    if (stop[node]) {
+      (ans += dp[i+1]) %= mod;
+    }
+  }
+  return ans;
+}
 
 void solution() {
-  const ll MOD = 1e9 + 7;
-
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
+  cin >> s >> k;
+  vstr A(k);
+  fo(i,k) {
+    cin >> A[i];
+    insert(A[i]);
   }
-  
-  targ /= 2;
+  szn(n,s);
+  dp[n] = 1;
 
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
-    }
-  
-  cout << dp[n-1][targ] << nl;
+  ford(i,n) dp[i] = search(i);
+  cout << dp[0] << nl;
 }
 
 int main() {

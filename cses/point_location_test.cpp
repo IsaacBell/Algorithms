@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,36 +232,75 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+struct P {
+  ll x, y;
+  P(ll _x, ll _y): x(_x), y(_y) {};
+  P(): x(0), y(0) {}
+
+  void read() {
+    cin >> x >> y;
+  }
+
+  ll operator*(const P& rhs) {
+    return x * rhs.y - rhs.x * y;
+  }
+
+  P operator-(const P& rhs) const {
+    return P {x - rhs.x, y - rhs.y};
+  }
+
+  void operator-=(const P& rhs) {
+    x -= rhs.x;
+    y -= rhs.y;
+  }
+
+  bool operator==(const P& rhs) {
+    return x == rhs.x && y == rhs.y;
+  }
+
+  double deg2rad(double d) {
+    // const double PI = acos(-1.0);
+    return d * PI / 180.0;
+  }
+
+  double rad2deg(double r) {
+    // const double PI = acos(-1.0);
+    return r * (180.0) / PI;
+  }
+
+  P rotate(double theta) {
+    double r = deg2rad(theta);
+    return P(
+      x * cos(r) - y * sin(r),
+      x * sin(r) - y * cos(r)
+    );
+  }
+};
 
 void solution() {
-  const ll MOD = 1e9 + 7;
+  P p1, p2, p3;
+  p1.read();
+  p2.read();
+  p3.read();
+  p2 -= p1;
+  p3 -= p1;
 
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
-  }
-  
-  targ /= 2;
-
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
-    }
-  
-  cout << dp[n-1][targ] << nl;
+  ll cross_prod = p3 * p2;
+  if (cross_prod > 0)
+    cout << "RIGHT" << nl;
+  else if (cross_prod < 0)
+    cout << "LEFT" << nl;
+  else
+    cout << "TOUCH" << nl; 
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+
+  while(t--)
+    solution();
 
   return 0;
 }

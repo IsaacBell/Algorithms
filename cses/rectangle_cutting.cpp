@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -93,8 +93,6 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
-typedef vector<bool> vb;
-typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -234,28 +232,24 @@ string s;
 
 
 void solution() {
-  const ll MOD = 1e9 + 7;
+  ll h; cin >> w >> h;
+  vvl dp(1001, vl(1001));
 
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
-  }
-  
-  targ /= 2;
-
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
+  fo(i,w+1)
+    fo(j,h+1) {
+      if (i == j) dp[i][j] = 0;
+      else {
+        dp[i][j] = mod;
+        Fo(k,1,i)
+          if (k < i)
+            ckmin(dp[i][j], dp[k][j] + dp[i-k][j]+1);
+        Fo(k,1,j)
+          if (k < j)
+            ckmin(dp[i][j], dp[i][k] + dp[i][j-k]+1);
+      }
     }
-  
-  cout << dp[n-1][targ] << nl;
+
+  cout << dp[w][h] << nl;
 }
 
 int main() {

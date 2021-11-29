@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,36 +232,30 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+ll f(ll n, ll k) {
+  if (n == 1) return 1;
+  if (k <= (n+1)/2) {
+    if (2*k > n) return (2*k)%n;
+    else return 2*k;
+  }
+
+  ll tmp = f(n/2, k - (n+1)/2);
+  if (n & 1) return 2 * tmp + 1;
+  return 2 * tmp - 1;
+}
 
 void solution() {
-  const ll MOD = 1e9 + 7;
-
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
-    return;
-  }
-  
-  targ /= 2;
-
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
-
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
-    }
-  
-  cout << dp[n-1][targ] << nl;
+  cin >> n >> k;
+  cout << f(n, k) << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+  
+  while (t--) 
+    solution();
 
   return 0;
 }

@@ -55,7 +55,7 @@ using namespace std;
 #define fo(i, n) for(ll i=0;i<n;i++)
 #define ford(i, n) for(ll i = n - 1; i >= 0; i--)
 #define ford1(i, n) for(ll i = n - 1; i; i--)
-#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i >= n; k < n ? i += 1: i -= 1)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
@@ -232,36 +232,83 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+struct P {
+  ll x, y;
+  void read() {
+    cin >> x >> y;
+  }
+  P(ll _x, ll _y): x(_x), y(_y) {};
+  P(): x(0), y(0) {};
+
+  ll operator*(const P& rhs) const {
+    return x * rhs.y - rhs.x * y;
+  }
+
+  P operator-(const P& rhs) const {
+    return {x - rhs.x, y - rhs.y};
+  }
+
+  void operator-=(const P& rhs) {
+    x -= rhs.x;
+    y -= rhs.y;
+  }
+
+  ll triangle(const P& b, const P& c) const {
+    return (b - *this) * (c - *this);
+  }
+};
 
 void solution() {
-  const ll MOD = 1e9 + 7;
+  P p1, p2, p3, p4;
+  p1.read();
+  p2.read();
+  p3.read();
+  p4.read();
 
-  cin >> n;
-  ll targ = n*(n+1)/2;
-  if (targ % 2) {
-    cout << 0 << nl;
+  // if parallel
+  if ((p2 - p1) * (p4 - p3) == 0) {
+    if (p1.triangle(p2,p3) != 0) {
+      cout << "NO" << nl;
+      return;
+    }
+    fo(i,2) {
+      if (
+        max(p1.x,p2.x) < min(p3.x,p4.x)
+        || max(p1.y,p2.y) < min(p3.y,p4.y)
+      ) {
+        cout << "NO" << nl;
+        return;
+      }
+      swap(p1,p3);
+      swap(p2,p4);
+    }
+    cout << "YES" << nl;
     return;
   }
-  
-  targ /= 2;
 
-  vvl dp(n, vl(targ+1));
-  dp[0][0] = 1;
+  fo(i,2) {
+    ll sign1 = p1.triangle(p2,p3);
+    ll sign2 = p1.triangle(p2,p4);
 
-  Fo(i,1,n)
-    fo(j,targ+1) {
-      dp[i][j] = dp[i-1][j];
-      if (j >= i)
-        (dp[i][j] += dp[i-1][j-i]) %= MOD;
+    if ((sign1 > 0 && sign2 > 0) || (sign1 < 0 && sign2 < 0)) {
+      cout << "NO" << nl;
+      return;
     }
-  
-  cout << dp[n-1][targ] << nl;
+
+    swap(p1,p3);
+    swap(p2,p4);
+  }
+
+  cout << "YES" << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t; cin >> t;
+
+  while(t--)
+    solution();
 
   return 0;
 }
