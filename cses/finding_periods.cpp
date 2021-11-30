@@ -232,25 +232,46 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-void permute(string s, set<string>& st, ll l, ll r) {
-  if (l == r) st.insert(s);
-  else {
-    Fo(i,l,r+1) {
-      swap(s[l], s[i]);
-      permute(s, st, l+1, r);
-      swap(s[l], s[i]);
-    }
+// WIP
+void kmp(string const& s) {
+  szn(n,s);
+  ll j = 0;
+  vl pi;
+  pi.rsz(n);
+  Fo(i,1,n) {
+    j = pi[i-1];
+    while (j && s[i] != s[j])
+      j = pi[j-1];
+    if (s[i] == s[j])
+      j++;
+    pi[i] = j;
   }
+
+  fo(i,n) if (i + pi[i] >= n) cout << i << " ";
+  cout << n << nl;
+}
+
+void zAlgo(string const& s) {
+  szn(n,s);
+  ll l = 0, r = 0;
+  vl z(n);
+  Fo(i,1,n) {
+    if (i <= r)
+      z[i] = min(r - i + 1, z[i-l]);
+    while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+      z[i]++;
+    if (i + z[i] - 1 > r)
+      l = i, r = i + z[i] - 1;
+  }
+
+  fo(i,n) if (i + z[i] >= n) cout << i << " ";
+  cout << n << nl;
 }
 
 void solution() {
   cin >> s;
-  szn(n,s);
-  set<string> st;
-  permute(s, st, 0, n-1);
-  cout << st.sz() << nl;
-  trav(x, st) cout << x << " ";
-  cout << nl;
+  // kmp(s);
+  zAlgo(s);
 }
 
 int main() {

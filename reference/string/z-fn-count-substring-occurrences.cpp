@@ -232,25 +232,37 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-void permute(string s, set<string>& st, ll l, ll r) {
-  if (l == r) st.insert(s);
-  else {
-    Fo(i,l,r+1) {
-      swap(s[l], s[i]);
-      permute(s, st, l+1, r);
-      swap(s[l], s[i]);
-    }
-  }
-}
-
 void solution() {
-  cin >> s;
+  // Use z-function to count # occurrences of t in s
+
+  string t;
+  cin >> s >> t;
+  szn(m,t);
+
+  // Prepend t to s, w/ a delimiter char
+  s = t + '$' + s;
   szn(n,s);
-  set<string> st;
-  permute(s, st, 0, n-1);
-  cout << st.sz() << nl;
-  trav(x, st) cout << x << " ";
-  cout << nl;
+  vl z(n);
+
+  ll o = 0, l = 0, r = 0;
+
+  // Standard z-fn implementation
+  Fo(i,1,n) {
+    if (i <= r)
+      z[i] = min(r - i + 1, z[i - 1]);
+    while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+      z[i]++;
+    if (i + z[i] - 1 > r)
+      l = i, r = i + z[i] - 1;
+  }
+
+  // Count occurences of full-length match,
+  // starting at the delimiter char in s
+  Fo(i, m+1, n)
+    if (z[i] == m)
+      o++;
+
+  cout << o << nl;
 }
 
 int main() {

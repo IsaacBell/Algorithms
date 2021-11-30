@@ -232,25 +232,30 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-void permute(string s, set<string>& st, ll l, ll r) {
-  if (l == r) st.insert(s);
-  else {
-    Fo(i,l,r+1) {
-      swap(s[l], s[i]);
-      permute(s, st, l+1, r);
-      swap(s[l], s[i]);
-    }
-  }
-}
+vl f;
 
 void solution() {
   cin >> s;
+  s += s;
   szn(n,s);
-  set<string> st;
-  permute(s, st, 0, n-1);
-  cout << st.sz() << nl;
-  trav(x, st) cout << x << " ";
-  cout << nl;
+  f.rsz(n, -1);
+
+  k = 0;
+  ll i = 0, o = 0;
+
+  while (i < n/2) {
+    o = i;
+    ll k = i, j = i+1;
+    while (j < n && s[j] >= s[k]) {
+      if (s[j] == s[k]) k++;
+      if (s[j] > s[k])  k = i;
+      j++;
+    }
+
+    while (i <= k) i += j - k;
+  }
+
+  cout << s.substr(o, n/2) << nl;
 }
 
 int main() {

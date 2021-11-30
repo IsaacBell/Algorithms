@@ -232,24 +232,22 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-void permute(string s, set<string>& st, ll l, ll r) {
-  if (l == r) st.insert(s);
-  else {
-    Fo(i,l,r+1) {
-      swap(s[l], s[i]);
-      permute(s, st, l+1, r);
-      swap(s[l], s[i]);
-    }
-  }
-}
 
 void solution() {
   cin >> s;
   szn(n,s);
-  set<string> st;
-  permute(s, st, 0, n-1);
-  cout << st.sz() << nl;
-  trav(x, st) cout << x << " ";
+
+  ll R = 9973, p = 1;
+
+  vl H(n);
+  fo(i,n) H[i] = ((i ? H[i-1]: 0) * R + (ll) s[i]) % mod;
+  Fo(i,1,n) {
+    p = (p * R) % mod;
+    ll suffix = (H[n-1] - (p * H[n-i-1]) % mod + mod) % mod;
+    if (H[i-1] == suffix)
+      cout << i << " ";
+  }
+
   cout << nl;
 }
 
