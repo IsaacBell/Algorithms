@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
@@ -228,18 +231,22 @@ vvl buildAdj(ll nn, ll mm) {
 // vl tin, tout;
 
 ll a, b, c, n, m, k, w;
-string s;
+string s, t;
+
 
 void solution() {
-  string keys; cin >> keys >> s;
-  unordered_map<char, int> m;
+  cin >> s >> t;
+  szn(n,s);
+  szn(m,t);
+  vl hm(26);
   ll o = 0;
 
-  fo(i, keys.sz())
-    m[keys[i]] = i+1;
-
-  Fo(i,1,s.sz())
-    o += abs(m[s[i]] - m[s[i-1]]);
+  fo(i,n) hm[(ll) s[i] - 'a'] = i;
+  Fo(i,1,m) {
+    a = (ll) hm[t[i-1] - 'a'];
+    b = (ll) hm[t[i] - 'a'];
+    o += abs(a-b);
+  }
 
   cout << o << nl;
 }

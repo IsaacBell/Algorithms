@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
@@ -233,24 +236,25 @@ string s;
 
 void solution() {
   cin >> n >> m >> s;
+  ll bx = 0, by = 0;
+  ll min_bx = 0, max_bx = 0, min_by = 0, max_by = 0;
+  for (char c: s) {
+    if      (c == 'L') min_by = min(min_by, --by);
+    else if (c == 'R') max_by = max(max_by, ++by);
+    else if (c == 'U') min_bx = min(min_bx, --bx);
+    else               max_bx = max(max_bx, ++bx);
 
-  pl p {1,1};
-  pl o {0,0};
-  map<char, pl> dirs {
-    {'L', {-1, 0}},
-    {'R', {1, 0}},
-    {'U', {0, 1}},
-    {'D', {0, -1}}
-  };
-
-  trav(ch, s) {
-    p.F += dirs[ch].F;
-    p.S += dirs[ch].S;
-    ckmin(p.F, n);
-    ckmin(p.S, m);
+    if (max_bx - min_bx >= n) {
+        if (bx == min_bx) min_bx++;
+        break;
+    }
+    if (max_by - min_by >= m) {
+        if (by == min_by) min_by++;
+        break;
+    }
   }
-  
-  cout << (p.F < 1 ? 2 - p.F : p.F) << " " << (p.S < 1 ? 2 - p.S : p.S) << nl;
+
+  cout << 1 - min_bx << ' ' << 1 - min_by << nl;
 }
 
 int main() {

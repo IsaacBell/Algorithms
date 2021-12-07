@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */

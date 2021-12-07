@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
@@ -230,29 +233,20 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+
 void solution() {
   cin >> n;
   vl A(n);
-  mpq<ll> q;
-  fo(i,n) {
-    cin >> A[i];
-    q.push(A[i]);
-  }
+  
+  
+  fo(i,n) cin >> A[i];
+  
+  sort(all(A));
+  ll o = A[0];
 
-  if (n == 1) {
-    cout << A[0] << nl;
-    return;
-  }
+  Fo(i,1,n) ckmax(o, A[i] - A[i-1]);
 
-  ll mn = q.top(), mx = q.top();
-
-  wqe {
-    ckmax(mx, q.top() - mn);
-    mn = q.top();
-    q.pop();
-  }
-
-  cout << mx << nl;
+  cout << o << nl;
 }
 
 int main() {

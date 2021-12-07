@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
@@ -234,23 +237,20 @@ string s;
 void solution() {
   cin >> n;
   vl A(n);
-  fo(i,n) {
-    cin >> A[i];
-    A[i]--;
-  }
+  fo(i,n) cin >> A[i];
   cin >> s;
-  
-  fo(i,n)
-    if (
-      A[i] > i && s[i] == 'R' ||
-      A[i] < i && s[i] == 'B'
-    ) {
-      cout << "NO" << nl;
-      return;
-    }
+  k = 0;
 
-  cout << "YES" << nl;
-  return;
+  vl l, r;
+  fo(i,n) (s[i] == 'B' ? l : r).pb(A[i]);
+
+  sortall(l);
+  sort(all(r), greater<ll>());
+
+  Fo(i,1,l.sz()+1) if (l[i-1] < i) k = -1;
+  fo(i,r.sz()) if (r[i] > n-i) k = -1;
+
+  cout << (k == -1 ? "NO" : "YES") << nl;
 }
 
 int main() {

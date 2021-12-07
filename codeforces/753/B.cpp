@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,11 +215,12 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
 
-vl v;
+// vl v(N);
 // vl p(N, -1);
 // vl szz(N);
 // vl anc(N);
@@ -230,26 +233,20 @@ vl v;
 ll a, b, c, n, m, k, w;
 string s;
 
-void build() {
-  // v.pb(0);
-  ll x = 1;
-  Fo(i,1,1e14) {
-    x += (x & 1) ? i : i * -1;
-    // v.pb(x);
-  }
-}
 
 void solution() {
   cin >> k >> n;
-  
-  // cout << k + v[n] << nl;
+  Fo(i,1,n+1) {
+    ll posNeg = (k&1) ? 1 : -1;
+    k += (i * posNeg);
+  }
+  cout << k << nl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t; cin >> t;
-  build();
 
   while(t--)
     solution();
