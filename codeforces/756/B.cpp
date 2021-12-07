@@ -235,9 +235,8 @@ string s;
 
 
 void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  cin >> a >> b;
+  cout << min({a, b, (a+b)/4}) << nl;
 }
 
 int main() {

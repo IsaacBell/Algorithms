@@ -235,9 +235,29 @@ string s;
 
 
 void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  cin >> s;
+  szn(n,s);
+  k = (ll) s[n-1] - '0';
+  if (!(k&1)) {
+    cout << 0 << nl;
+    return;
+  }
+
+  if (((int) s[0] - '0') % 2 == 0) {
+    cout << 1 << nl;
+    return;
+  }
+  
+  fo(i,n) {
+    auto k = (ll) s[i] - '0';
+    if (!(k&1)) {
+      cout << 2 << nl;
+      return;
+    }
+  }
+
+
+  cout << "-1" << nl;
 }
 
 int main() {

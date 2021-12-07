@@ -233,11 +233,43 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-
 void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  cin >> n >> k;
+  vl col(n+1, -1);
+  
+  deque<ll> deq;
+  fo(i,k) {
+    cin >> c;
+    col[--c] = 0;
+    deq.pb(c);
+  }
+  
+  col[0] = 1;
+  deq.pb(0);
+  
+  vvl adj(n+1, vl {});
+  Fo(i,1,n) {
+    cin >> a >> b;
+    adj[--a].pb(--b);
+    adj[b].pb(a);
+  }
+
+  while (!deq.empty()) {
+    ll i = deq.front();
+    deq.pop_front();
+    // deb(i);
+    trav(nei, adj[i])
+      if (col[nei] == -1) {
+        col[nei] = col[i];
+        deq.pb(nei);
+      }
+  }
+  // deba(i,col,n);
+
+  Fo(i,1,n) if (adj[i].sz() == 1 && col[i] == 1)
+    return cout << "YES" << nl, void();
+    
+  cout << "NO" << nl;
 }
 
 int main() {
@@ -247,6 +279,7 @@ int main() {
 
   while(t--)
     solution();
+    // solve();
 
   return 0;
 }

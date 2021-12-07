@@ -235,9 +235,35 @@ string s;
 
 
 void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  cin >> n >> k;
+  vl A(n+1);
+  Fo(i,1,n+1) cin >> A[i];
+
+  ll sum = k;
+  ll l = 1, r = 1;
+  sum += A[1];
+
+  ll x = 0, y = 0, cnt = 0;
+
+  while (l <= n && r <= n) {
+    while (sum >= 0) {
+      if (r-l+1 > cnt)
+        cnt = r-l+1, x = l, y = r;
+      r++;
+      if (r > n) break;
+      sum += A[r];
+    }
+
+    while (sum < 0) {
+      sum -= A[l];
+      l++;
+      if (l > n || l > k) break;
+    }
+  }
+
+  if(!x &&!y) cout << -1 << nl;
+    else cout << x << " " << y << nl;
+
 }
 
 int main() {

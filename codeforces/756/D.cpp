@@ -236,8 +236,19 @@ string s;
 
 void solution() {
   cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  vl B(n+1), p(n+1), o(n+1, -1), d(n+1, -1);
+  Fo(i,1,n+1) cin >> B[i];
+  Fo(i,1,n+1) cin >> p[i];
+  
+  o[p[1]] = d[p[1]] = 0;
+  Fo(i,2,n+1) {
+    auto j = p[i];
+    if (d[B[j]] == -1) return cout << -1 << nl, void();
+    o[j] = i - d[B[j]];
+    d[j] = i;
+  }
+  Fo(i,1,n+1) cout << o[i] << " ";
+  cout << nl;
 }
 
 int main() {

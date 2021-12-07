@@ -238,6 +238,14 @@ void solution() {
   cin >> n;
   vl A(n);
   fo(i,n) cin >> A[i];
+
+  if (A[0] != n && A[n-1] != n) {
+    cout << "-1" << nl;
+    return;
+  }
+
+  ford(i,n) cout << A[i] << " ";
+  cout << nl;
 }
 
 int main() {

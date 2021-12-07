@@ -221,10 +221,10 @@ vvl buildAdj(ll nn, ll mm) {
 /* Solution starts here */
 
 // vl v(N);
-// vl p(N, -1);
+vl p(N, -1);
 // vl szz(N);
 // vl anc(N);
-// bitset<N> vis;
+bitset<N> vis;
 // bitset<N> bs;
 
 // ll timer = 0;
@@ -233,20 +233,33 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
+void dfs(vvl& adj, ll i, ll p = -1) {
+  vis[i] = true;
+  k = i;
+  trav(nei, adj[i]) {
+    if (!vis[nei] && nei != p)
+      dfs(adj, nei, i);
+  }
+}
 
 void solution() {
-  cin >> n;
-  vl A(n);
-  fo(i,n) cin >> A[i];
+  cin >> n >> m;
+  vl o;
+  auto adj = buildAdj(n,m);
+  Fo(i,1,n+1) if (!vis[i]) {
+    o.pb(i);
+    dfs(adj, i);
+  }
+
+  cout << o.sz() - 1 << nl;
+  for (auto oo: o) if (oo != k) cout << oo << " " << k << nl;
+  
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; cin >> t;
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
