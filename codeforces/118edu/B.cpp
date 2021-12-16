@@ -93,6 +93,8 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
 typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
 typedef vector<vpl> vvpl;
@@ -213,6 +215,7 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
 /* Solution starts here */
@@ -221,7 +224,7 @@ vvl buildAdj(ll nn, ll mm) {
 // vl p(N, -1);
 // vl szz(N);
 // vl anc(N);
-// bitset<N> vis;
+bitset<(const int) 1e7> vis;
 // bitset<N> bs;
 
 // ll timer = 0;
@@ -232,18 +235,19 @@ string s;
 
 
 void solution() {
-  cin >> n >> k;
-  ll i = 1, o = 0;
-  if (i >= n) {
-    cout << 0 << nl;
-    return;
+  cin >> n;
+  vl A(n);
+  fo(i,n) cin >> A[i];
+  ll mn = *min_element(all(A));
+
+  ll cnt = n/2;
+  fo(i,n) {
+    if (!cnt) break;
+    if (A[i] != mn) {
+      cout << A[i] << " " << mn << nl;
+      cnt--;
+    }
   }
-  while (i<k) {
-    i *= 2;
-    ++o;
-  }
-  if (i < n) o += (n-i-1 + k) / k;
-  cout << o << nl;
 }
 
 int main() {
