@@ -235,18 +235,19 @@ string s;
 
 
 void solution() {
-  cin >> n >> m;
-  ll o = 0;
-  fo(i,n+1) {
-    ll cur = i;
-    ll l = n-i, r = m - 2*i;
-
-    if (r >= 0) {
-      cur += min(l/2, r);
-      ckmax(o, cur);
+  cin >> s >> k;
+  szn(n,s);
+  ll o = 0, i = n-1;
+  while (k--) {
+    while (s[i] != '0') {
+      o++; i--;
     }
+    i--;
   }
 
+  
+  if (i < 0) o = n - 1;
+  
   cout << o << nl;
 }
 
