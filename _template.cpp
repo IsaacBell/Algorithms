@@ -33,6 +33,8 @@
 using namespace std;
 
 #define nl "\n"
+#define cnl cout << nl
+#define NL cnl
 #define sz size
 #define rsz resize
 #define ret return
@@ -59,6 +61,10 @@ using namespace std;
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> x
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -231,7 +237,7 @@ vvl buildAdj(ll nn, ll mm) {
 // vl tin, tout;
 
 ll a, b, c, n, m, k, w;
-string s;
+string s, t;
 
 
 void solution() {
