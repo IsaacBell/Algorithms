@@ -62,7 +62,7 @@ using namespace std;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
-#define readall(x) trav(elem, x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -175,7 +175,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
