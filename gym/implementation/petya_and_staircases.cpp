@@ -175,7 +175,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
@@ -226,100 +226,34 @@ vvl buildAdj(ll nn, ll mm) {
 
 /* Solution starts here */
 
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
+
 ll a, b, c, n, m, k, w;
 string s, t;
 
-const ll BLOCK_SZ = sqrt(1e5);
-ll o = 0; // output
-
-vl A, freq, can;
-
-ll get_answer() { return o; }
-
-void add(ll i) {
-  if (A[i] > 100001) return;
-  if (freq[A[i]] == A[i]) o--;
-  freq[A[i]]++;
-  if (freq[A[i]] == A[i]) o++;
-}
-
-void remove(ll i) {
-  if (A[i] > 100001) return;
-  if (freq[A[i]] == A[i]) o--;
-  freq[A[i]]--;
-  if (freq[A[i]] == A[i]) o++;
-}
-
-// Query
-struct Q {
-  ll l, r, i;
-
-  Q(ll l_, ll r_): l(l_), r(r_), i(-1) {}
-  Q(ll l_, ll r_, ll i_): l(l_), r(r_), i(i_) {}
-
-  bool operator<(Q& rhs) const {
-    return make_pair(l / BLOCK_SZ, r) <
-           make_pair(rhs.l / BLOCK_SZ, rhs.r);
-  }
-};
-
-bool cmp_qys(Q& lhs, Q& rhs) {
-  ll lBlock = lhs.l / BLOCK_SZ,
-     rBlock = rhs.l / BLOCK_SZ;
-  if (lBlock != rBlock)
-    return lBlock < rBlock;
-  return (lBlock & 1) ? (lhs.r < rhs.r) : (lhs.r > rhs.r);
-}
-
-// mos = Mo's, qys = queries
-vl mos(vector<Q> qys) {
-  vl ans(qys.sz());
-  sort(all(qys), cmp_qys);
-
-  ll l = 0, r = -1;
-  trav(q, qys) {
-    while (l > q.l) {
-      l--;
-      add(l);
-    }
-    while (r < q.r) {
-      r++;
-      add(r);
-    }
-    while (l < q.l) {
-      remove(l);
-      l++;
-    }
-    while (r > q.r) {
-      remove(r);
-      r--;
-    }
-    ans[q.i] = get_answer();
-  }
-
-  return ans;
-}
 
 void solution() {
-  assert(BLOCK_SZ != 0);
+  vb bs(1e9+7, false);
   cin >> n >> m;
-
-  o = 0;
-  A.rsz(n+1);
-  freq.rsz(100001);
-
-  fo(i,n) cin >> A[i];
-
-  vector<Q> qys;
-
+  vl A(m);
   fo(i,m) {
-    ll l,r; cin >> l >> r;
-    l--;r--;
-    qys.emplace_back(l,r,i);
+    rd(A[i]);
+    A[i]--;
+    bs[A[i]] = true;
   }
 
-  vl o = mos(qys);
-  fo(i,m) put(o[i]);
+  if (bs[0] || bs[n-1]) { put("NO"); return; }
+  trav(x, A) if (bs[x-1] && bs[x-2]) { put("NO"); return; }
+
+  put("YES");
 }
 
 int main() {

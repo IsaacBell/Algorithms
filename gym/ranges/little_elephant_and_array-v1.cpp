@@ -229,97 +229,32 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s, t;
 
-const ll BLOCK_SZ = sqrt(1e5);
-ll o = 0; // output
+ll o = 0;
 
-vl A, freq, can;
-
-ll get_answer() { return o; }
-
-void add(ll i) {
-  if (A[i] > 100001) return;
-  if (freq[A[i]] == A[i]) o--;
-  freq[A[i]]++;
-  if (freq[A[i]] == A[i]) o++;
-}
-
-void remove(ll i) {
-  if (A[i] > 100001) return;
-  if (freq[A[i]] == A[i]) o--;
-  freq[A[i]]--;
-  if (freq[A[i]] == A[i]) o++;
-}
-
-// Query
-struct Q {
-  ll l, r, i;
-
-  Q(ll l_, ll r_): l(l_), r(r_), i(-1) {}
-  Q(ll l_, ll r_, ll i_): l(l_), r(r_), i(i_) {}
-
-  bool operator<(Q& rhs) const {
-    return make_pair(l / BLOCK_SZ, r) <
-           make_pair(rhs.l / BLOCK_SZ, rhs.r);
-  }
-};
-
-bool cmp_qys(Q& lhs, Q& rhs) {
-  ll lBlock = lhs.l / BLOCK_SZ,
-     rBlock = rhs.l / BLOCK_SZ;
-  if (lBlock != rBlock)
-    return lBlock < rBlock;
-  return (lBlock & 1) ? (lhs.r < rhs.r) : (lhs.r > rhs.r);
-}
-
-// mos = Mo's, qys = queries
-vl mos(vector<Q> qys) {
-  vl ans(qys.sz());
-  sort(all(qys), cmp_qys);
-
-  ll l = 0, r = -1;
-  trav(q, qys) {
-    while (l > q.l) {
-      l--;
-      add(l);
-    }
-    while (r < q.r) {
-      r++;
-      add(r);
-    }
-    while (l < q.l) {
-      remove(l);
-      l++;
-    }
-    while (r > q.r) {
-      remove(r);
-      r--;
-    }
-    ans[q.i] = get_answer();
-  }
-
-  return ans;
-}
+vl A, can;
+vvl nums(1e5+7, vl {});
 
 void solution() {
-  assert(BLOCK_SZ != 0);
   cin >> n >> m;
-
-  o = 0;
   A.rsz(n+1);
-  freq.rsz(100001);
-
-  fo(i,n) cin >> A[i];
-
-  vector<Q> qys;
-
-  fo(i,m) {
-    ll l,r; cin >> l >> r;
-    l--;r--;
-    qys.emplace_back(l,r,i);
+  Fo(i,1,n+1) {
+    cin >> A[i];
+    if (A[i] <= n) nums[A[i]].pb(i);
   }
 
-  vl o = mos(qys);
-  fo(i,m) put(o[i]);
+  Fo(i,1,n+1) if (nums[i].sz() >= i) can.pb(i);
+
+  while (m--) {
+    ll o = 0, l, r;
+    rd(l); rd(r);
+    fo(i, can.sz()) {
+      ll x = can[i];
+      ll R = upper_bound(all(nums[x]), r) - nums[x].begin();
+      ll L = lower_bound(all(nums[x]), l) - nums[x].begin();
+      if (R - L == x) o++;
+    }
+    put(o);
+  }
 }
 
 int main() {
