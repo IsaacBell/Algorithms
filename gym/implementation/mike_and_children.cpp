@@ -239,19 +239,26 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s, t;
 
+
 void solution() {
   rd(n);
-  vl A(n);
-  readall(A);
+  vl A(n); readall(A);
+  map<ll, ll> mp;
+  ll o = 0;
+
+  fo(i,n)
+    fo(j,n)
+      if (i != j) mp[A[i] + A[j]]++;
+  for (auto [k,v]: mp)
+    ckmax(o, v);
+
+  put(o/2);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; rd(t);
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

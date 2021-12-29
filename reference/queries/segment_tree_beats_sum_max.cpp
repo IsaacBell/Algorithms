@@ -224,34 +224,206 @@ vvl buildAdj(ll nn, ll mm) {
   return A;
 }
 
+ll a, b, n, m, q, k, w;
+string s;
+
 /* Solution starts here */
+struct node;
 
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
-// vl anc(N);
-// bitset<N> vis;
-// bitset<N> bs;
+ll mx1, mx2, mx_cnt, mn1, mn2, mn_cnt;
+vector<node> tree(N << 2);
 
-// ll timer = 0;
-// vl tin, tout;
+struct info {
+	ll mx1, mx2, mx_cnt, mn1, mn2, mn_cnt;
 
-ll a, b, c, n, m, k, w;
-string s, t;
+	info(
+    ll _mx1 = -mod,
+    ll _mx2 = -mod,
+    ll _mx_cnt = 0, 
+    ll _mn1 = mod,
+    ll _mn2 = mod,
+    ll _mn_cnt = 0
+  ): mx1(_mx1), mx2(_mx2), mx_cnt(_mx_cnt), mn1(_mn1), mn2(_mn2), mn_cnt(_mn_cnt)
+	{}
 
-void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+	friend inline info merge(info lhs, info rhs) {
+		if (lhs.mx1 < rhs.mx1) {
+			lhs.mx_cnt = 0;
+			lhs.mx2 = lhs.mx1;
+			lhs.mx1 = rhs.mx1;
+		}
+
+		if (lhs.mx1 == rhs.mx1) {
+			lhs.mx_cnt += rhs.mx_cnt;
+			lhs.mx2 = max(lhs.mx2, rhs.mx2);
+		} else ckmax(lhs.mx2, rhs.mx1);
+
+		if (lhs.mn1 > rhs.mn1) {
+			lhs.mn_cnt = 0;
+			lhs.mn2 = lhs.mn1;
+			lhs.mn1 = rhs.mn1;
+		}
+
+		if (lhs.mn1 == rhs.mn1) {
+			lhs.mn_cnt += rhs.mn_cnt;
+			ckmin(lhs.mn2, rhs.mn2);
+		} else ckmin(lhs.mn2, rhs.mn1);
+
+		return lhs;
+	}
+};
+
+struct node {
+	info p;
+	ll sum, mx_lazy, mn_lazy;
+
+	node(info nfo = info(), ll _sum = 0): p(nfo), sum(_sum) {
+    reset();
+	}
+
+	inline void reset() {
+		mx_lazy = -mod, mn_lazy = mod;
+	}
+
+	inline void set_max(ll x) {
+		if (x <= p.mn1) return;
+
+		sum += 1LL * (x - p.mn1) * p.mn_cnt;
+
+		if (p.mx1 == p.mn1) p.mx1 = x;
+		if (p.mx2 == p.mn1) p.mx2 = x;
+
+		p.mn1 = mx_lazy = x;
+	}
+
+	inline void set_min(ll x) {
+	  if (x >= p.mx1) return;
+
+		sum += 1LL * (x - p.mx1) * p.mx_cnt;
+
+		if (p.mn1 == p.mx1) p.mn1 = x;
+		if (p.mn2 == p.mx1) p.mn2 = x;
+
+		p.mx1 = mn_lazy = x;
+	}
+
+	friend inline node merge(node lhs, node rhs) {
+		lhs.p = merge(lhs.p, rhs.p);
+		lhs.sum += rhs.sum;
+		lhs.reset();
+		return lhs;
+	}
+};
+
+inline void find(ll i) {
+  tree[i] = merge(tree[i << 1], tree[i << 1 | 1]);
+}
+
+inline void shift(ll i) {
+	for (auto p: {i << 1, i << 1 | 1}) {
+		tree[p].set_max(tree[i].mx_lazy);
+		tree[p].set_min(tree[i].mn_lazy);
+	}
+	tree[i].reset();
+}
+
+void build(vl& A, ll i = 1, ll l = 0, ll r = n-1) {
+	if (l == r) {
+		info x;
+
+		x.mx1 = A[l], x.mx_cnt = 1;
+		x.mn1 = A[l], x.mn_cnt = 1;
+
+		tree[i] = {x, A[l]};
+		return;
+	}
+
+	ll mid = (l + r) >> 1;
+	build(A, i << 1, l, mid);
+	build(A, i << 1 | 1, mid+1, r);
+
+	find(i);
+}
+
+void update_max(ll i, ll lo, ll hi, ll a, ll b, ll x) {
+	if (hi <= a || b <= lo || tree[i].p.mn1 >= x) return;
+	if (lo >= a && b <= hi && tree[i].p.mn2 > x)
+		return tree[i].set_max(x);
+
+  shift(i);
+
+	ll mid = lo + hi >> 1;
+
+	update_max(i << 1, lo, mid, a, b, x);
+	update_max(i << 1 | 1, mid+1, hi, a, b, x);
+
+	find(i);
+}
+
+void update_min(ll i, ll lo, ll hi, ll a, ll b, ll x) {
+	if (hi <= a || b <= lo || tree[i].p.mn1 <= x) return;
+	if (lo >= a && b <= hi && tree[i].p.mn2 < x)
+		return tree[i].set_min(x);
+
+	shift(i);
+
+	ll mid = (lo + hi) >> 1;
+	update_min(i << 1, lo, mid, a, b, x);
+	update_min(i << 1 | 1, mid+1, hi, a, b, x);
+
+	find(i);
+}
+
+// "lo, hi": Current range in view
+// "a, b": Range of the inputted search query
+ll query(ll i, ll lo, ll hi, ll a, ll b) {
+  // If element is in our target search range, returns its value
+  if (a <= lo && b >= hi) return tree[i].sum;
+  // If search range & our current range are disjoint (have no overlap), exit
+  if (hi < a || b < lo) return 0;
+
+  shift(i);
+
+  ll mid = (hi + lo) >> 1;
+
+  /*
+  modify(2*i, lo, mid, a, b);
+  modify(2*i+1, mid+1, hi, a, b);
+  */
+  
+  return query(2*i, lo, mid, a, b)
+       + query(2*i+1, mid+1, hi, a, b);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t; rd(t);
+  
+  ll q; rd(n >> q);
+  vl A(n);
+  readall(A);
 
-  while(t--)
-    solution();
+  build(A);
+
+  while (q--) {
+    short int type; ll x;
+    rd(type >> a >> b);
+    a--, b--;
+
+    if (type == 1) {
+      // Update Max
+      rd(x);
+      update_max(1, 0, n-1, a, b, x);
+    } else if (type == 2) {
+      // Update Min
+      rd(x);
+      update_min(1, 0, n-1, a, b, x);
+    } else {
+      put(
+        query(1, 0, n-1, a, b)
+      );
+    }
+  }
 
   return 0;
 }
