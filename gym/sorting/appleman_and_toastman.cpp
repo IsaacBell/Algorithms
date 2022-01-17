@@ -33,14 +33,19 @@
 using namespace std;
 
 #define nl "\n"
+#define cnl cout << nl
+#define NL cnl
 #define sz size
 #define rsz resize
+#define ret return
+#define cont continue
 #define IMAX INT_MAX
 #define IMIN INT_MIN
 #define gc getchar_unlocked
 #define ll int64_t
 #define PI 3.1415926535897932384626
 #define INF 2000000000
+#define szn(n, s) const ll n = s.sz()
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
@@ -56,6 +61,10 @@ using namespace std;
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -65,6 +74,7 @@ using namespace std;
 #define FR front
 #define BK back
 #define qt(args...) auto [args] = q.top(); q.pop();
+#define qta(arg...) auto arg = q.top(); q.pop();
 #define qf(args...) auto [args] = q.front(); q.pop();
 #define qp(args...) q.push(args)
 #define qe q.empty()
@@ -76,17 +86,24 @@ using namespace std;
 #define sortall(x) sort(all(x))
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
+#define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
 
 typedef long double ld;
 typedef complex<ld> cd;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pl;
 typedef tuple<ll,ll,ll> tll;
+typedef vector<tll> vtll;
+typedef vector<vtll> vvtll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
+typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
+typedef vector<vpl> vvpl;
 typedef vector<vi> vvi;
 typedef vector<vl> vvl;
 typedef vector<ld> vd;
@@ -106,19 +123,21 @@ int rng(int lim) {
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<typename T=ll> using qp = queue<pair<T,T>>;
-template<typename T=ll> using qt = queue<tuple<T,T>>;
+template<typename T=ll> using ql  = queue<ll>;
+template<typename T=ll> using qp  = queue<pair<T,T>>;
+template<typename T=ll> using qt  = queue<tuple<T,T>>;
 template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
 template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
-template<typename T=ll> using pq = priority_queue<T>;
+template<typename T=ll> using pq  = priority_queue<T>;
 template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
 
-using qpl = qp<ll>;
-using qtl = qt<ll>;
+using qll  = queue<ll>;
+using qpl  = qp<ll>;
+using qtl  = qt<ll>;
 using qtl3 = qt3<ll>;
 using qtl4 = qt4<ll>;
-using qpd = qp<double>;
-using qtd = qt<double>;
+using qpd  = qp<double>;
+using qtd  = qt<double>;
 using qtd3 = qt3<double>;
 using qtd4 = qt4<double>;
 
@@ -156,7 +175,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
@@ -195,78 +214,61 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-void buildAdj(vvl& A, size_t nn = 0) {
-  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
-  A.rsz(nn+1, vl {});
-  fo(i,nn) {
+vvl buildAdj(ll nn, ll mm) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
     pl p; cin >> p.F >> p.S;
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
-
-vl v(N);
-vl par(N, -1);
-vl szz(N);
-vl anc(N);
-bitset<N> vis;
-bitset<N> bs;
-
-ll timer = 0;
-// vl tin, tout;
-
-ll a, b, c, n, m, q, w;
-string s;
 
 /* Solution starts here */
-vvl Ch; // children of node
-vl dp;
-vl f(N), // # subtrees at i
-   g(N); // # subtrees w/o i
-ll diameter = 0;
 
-// Run DFS from Node 1 to bottom,
-// maximizing f[i] and g[i] along
-// the way
-void dfs(ll i, ll p) {
-  pq<ll> q;
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
 
-  trav(ch, Ch[i]) {
-    if (ch == p) continue;
-    dfs(ch, i);
-    ckmax(f[i], f[ch] + 1);
-    qp(f[ch]);
-  }
+// ll timer = 0;
+// vl tin, tout;
 
-  ckmax(diameter, f[i]);
-
-  if (q.sz() > 1) {
-    auto mx  = q.top();
-    q.pop();
-    auto mx2 = q.top();
-    g[i] = 2 + mx + mx2;
-    ckmax(diameter, g[i]);
-  }
-}
+ll a, b, c, n, m, k, w;
+string s, t;
 
 void solution() {
   rd(n);
-  f.rsz(n+1), g.rsz(n+1), dp.rsz(n+1);
-  Ch.rsz(n+1, vl {});
-  fo(i,n-1) {
-    rd(a >> b);
-    Ch[a].pb(b);
-    Ch[b].pb(a);
+  vl A(n);
+  mpq<ll> q;
+  ll sum = 0, ans = 0;
+  fo(i,n) { rd(A[i]); qp(A[i]); sum += A[i]; }
+  ans = sum;
+
+  while (q.sz() > 2) {
+    auto x = q.top();
+    ans += sum;
+    sum -= x;
+    q.pop();
+  }
+  
+  if (q.sz() == 2) {
+    ans += sum;
   }
 
-  dfs(1,-1);
-  put(diameter);
+  put(ans);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t = 1;
+//   rd(t);
+
+  while(t--)
+    solution();
 
   return 0;
 }
