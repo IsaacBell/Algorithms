@@ -1,8 +1,240 @@
-/* Notes
-   - Overrides any macro named "P"
-   - Removes any macro w/ name "F". I re-add "F" at the end to compile to "first", based on my main template
-   - 3D structures still not stress-tested
-*/
+// #include<bits/stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <complex>
+#include <chrono>
+#include <functional>
+#include <climits>
+#include <utility>
+#include <limits>
+#include <random>
+#include <numeric>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+
+using namespace std;
+
+#define nl "\n"
+#define cnl cout << nl
+#define NL cnl
+#define sz size
+#define rsz resize
+#define ret return
+#define cont continue
+#define IMAX INT_MAX
+#define IMIN INT_MIN
+#define gc getchar_unlocked
+#define ll int64_t
+#define PI 3.1415926535897932384626
+#define INF 2000000000
+#define szn(n, s) const ll n = s.sz()
+#define si(x) scanf("%d", &x)
+#define sl(x) scanf("%lld", &x)
+#define ss(s) scanf("%s", s)
+#define pi(x) printf("%d\n", x)
+#define pl(x) printf("%lld\n", x)
+#define ps(s) printf("%s\n", s)
+#define br printf("\n")
+#define trav(a, x) for (auto &a : x)
+#define fo(i, n) for(ll i=0;i<n;i++)
+#define ford(i, n) for(ll i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(ll i = n - 1; i; i--)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
+#define deb(x) cout << #x << " = " << x << endl;
+#define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
+#define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
+#define pb push_back
+#define ppb pop_back
+#define mp make_pair
+#define mt make_tuple
+#define F first
+#define S second
+#define FR front
+#define BK back
+#define qt(args...) auto [args] = q.top(); q.pop();
+#define qta(arg...) auto arg = q.top(); q.pop();
+#define qf(args...) auto [args] = q.front(); q.pop();
+#define qp(args...) q.push(args)
+#define qe q.empty()
+#define wqe while(!q.empty())
+#define begend(x) all(x)
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define clr(x) memset(x, 0, sizeof(x))
+#define sortall(x) sort(all(x))
+#define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
+#define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
+#define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
+
+typedef long double ld;
+typedef complex<ld> cd;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pl;
+typedef tuple<ll,ll,ll> tll;
+typedef vector<tll> vtll;
+typedef vector<vtll> vvtll;
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vl vll;
+typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+typedef vector<pii> vpii;
+typedef vector<pl> vpl;
+typedef vector<vpl> vvpl;
+typedef vector<vi> vvi;
+typedef vector<vl> vvl;
+typedef vector<ld> vd;
+typedef vector<cd> vcd;
+typedef vector<uint32_t> vu32;
+typedef vector<uint64_t> vu64;
+typedef map<ll, ll> mll;
+typedef map<ll, string> mls;
+typedef map<string, ll> msl;
+
+mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
+int rng(int lim) {
+  uniform_int_distribution<int> uid(0,lim-1);
+  return uid(rang);
+}
+
+const ll mod = 1e9 + 7;
+const ll N = 3e5;
+
+template<typename T=ll> using ql  = queue<ll>;
+template<typename T=ll> using qp  = queue<pair<T,T>>;
+template<typename T=ll> using qt  = queue<tuple<T,T>>;
+template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
+template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
+template<typename T=ll> using pq  = priority_queue<T>;
+template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+
+using qll  = queue<ll>;
+using qpl  = qp<ll>;
+using qtl  = qt<ll>;
+using qtl3 = qt3<ll>;
+using qtl4 = qt4<ll>;
+using qpd  = qp<double>;
+using qtd  = qt<double>;
+using qtd3 = qt3<double>;
+using qtd4 = qt4<double>;
+
+// Modulo operators
+template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
+template<typename T=ll> T addM(T a, T b)  { return M(M(a) + M(b)); }
+template<typename T=ll> T subM(T a, T b)  { a -= b; return a < 0 ? a + mod : a; }
+template<typename T=ll> T multM(T a, T b) { return M(M(a) * M(b)); }
+template<typename T=ll> T powM(T x, T y) {
+  T o = 1;
+  x %= mod;
+  while (y) {
+    if (y & 1) (o *= x) %= mod;
+    y >>= 1;
+    (x *= x) %= mod;
+  }
+  return o;
+}
+
+// General functions
+template<class T=ll> T gcd(T a, T b) { return b ? gcd(b, a%b) : a; }
+template<class T=ll> T lcm(T a, T b) { return a*(b/gcd(a,b)); }
+template<typename T=ll> bool ckmin(T& a, T b){ return b < a ? a = b, true : false; }
+template<typename T=ll> bool ckmax(T& a, T b){ return b > a ? a = b, true : false; }
+
+template<class T=ll> T maxpow2(T n) { return (n & (~(n - 1))); }
+template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
+template<class T=ll> T sum_digit(T n) {
+  T sum = 0;
+  while (n != 0) {
+    sum = sum + n % 10;
+    n = n / 10;
+  }
+  return sum;
+}
+
+template<class T=ll>
+T sum_digit_string(string str)
+{
+    T sum = 0;
+    for (T i = 0; i < str.length(); i++)
+    {
+        sum = sum + str[i] - 48;
+    }
+    return sum;
+}
+
+template<class T=ll> string dec2bin(T n)
+{
+    const T size=sizeof(n)*8;
+    string s = "00000000000000000000000000000000";
+    for (T a=0;a<32;a++)
+    {
+        if(n==0)
+            return s;
+        else
+        {
+            if(n%2!=0)
+                s[31-a]='1';
+            n/=2;
+        }
+    }
+    return s;
+}
+
+template<typename T = ll>
+T fac(T x) { // factorial
+  T o = 1;
+  if (x > 0)
+    for(T i = 1; i <= x; ++i)
+        o = multM<T>(o,i);
+  return o;
+}
+
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
+vvl buildAdj(ll nn, ll mm) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
+    pl p; cin >> p.F >> p.S;
+    A[p.F].pb(p.S);
+    A[p.S].pb(p.F);
+  }
+  return A;
+}
+
+/* Solution starts here */
+
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
 
 ll a, b, c, n, m, k, w;
 string s, t;
@@ -31,7 +263,6 @@ struct Point {
     x /= factor; y /= factor; return *this; }
 };
 
-template <class F = ll> using P = Point<F>;
 template <class F = ll> using Polygon = vector<Point<F>>;
 
 template <class F> int read(Point<F>& point) { return read(point.x, point.y) / 2; }
@@ -94,25 +325,6 @@ F euclidean_dist_sqrt(Point<F>& lhs, Point<F>& rhs) {
   return sqrt(euclidean_dist<F, F> (lhs, rhs));
 }
 
-template <class F = ll>
-F signed_area_parallelogram(const Point<F>& p1, const Point<F>& p2, const Point<F>& p3) {
-  return (p2 - p1) ^ (p3 - p2);
-}
-
-template <class F = ll>
-double triangle_area(const Point<F>& p1, const Point<F>& p2, const Point<F>& p3) {
-  return abs((double) signed_area_parallelogram(p1, p2, p3)) / 2.0;
-}
-
-bool clockwise(const Point<F>& p1, const Point<F>& p2, const Point<F>& p3) {
-  return signed_area_parallelogram(p1, p2, p3) < 0;
-}
-
-bool counter_clockwise(const Point<F>& p1, const Point<F>& p2, const Point<F>& p3) {
-  return signed_area_parallelogram(p1, p2, p3) > 0;
-}
-
-
 // Angles and rotations (counter-clockwise).
 FUNC1(angle, Point<F>& point, atan2(point.y, point.x))
 FUNC2(angle, Point<F1>& lhs, Point<F2>& rhs, atan2(lhs ^ rhs, lhs * rhs))
@@ -132,91 +344,6 @@ FUNC1(norm, Point<F>& point, sqrt(abs(point)))
 FUNC2(dist, Point<F1>& lhs, Point<F2>& rhs, norm(lhs - rhs))
 FUNC2(dist2, Point<F1>& lhs, Point<F2>& rhs, abs(lhs - rhs))
 FUNC2(bisector, Point<F1>& lhs, Point<F2>& rhs, lhs * norm(rhs) + rhs * norm(lhs))
-
-template <class F>
-struct P3d { // 3d point
-  F x, y, z;
-  P3d() {}
-  P3d(F x, F y, F z): x(x), y(y), z(z) {}
-  P3d& operator+=(const P3d &t) {
-    x += t.x;
-    y += t.y;
-    z += t.z;
-    return *this;
-  }
-  P3d& operator-=(const P3d &t) {
-    x -= t.x;
-    y -= t.y;
-    z -= t.z;
-    return *this;
-  }
-  P3d& operator*=(F t) {
-    x *= t;
-    y *= t;
-    z *= t;
-    return *this;
-  }
-  P3d& operator/=(F t) {
-    x /= t;
-    y /= t;
-    z /= t;
-    return *this;
-  }
-  P3d operator+(const P3d &t) const {
-    return P3d(*this) += t;
-  }
-  P3d operator-(const P3d &t) const {
-    return P3d(*this) -= t;
-  }
-  P3d operator*(F t) const {
-    return P3d(*this) *= t;
-  }
-  P3d operator/(F t) const {
-    return P3d(*this) /= t;
-  }
-  F operator*(P3d<F>& rhs) const {
-    return x * rhs.x + y * rhs.y + z * rhs.z;
-  }
-  P3d operator^(P3d& rhs) const {
-    return P3d<F>(y * rhs.z - z * rhs.y,
-                z * rhs.x - x * rhs.z,
-                x * rhs.y - y * rhs.x);
-  }
-};
-
-template <class F = ll> using P3d = P3d<F>;
-template <class F = ll> using Point3d = P3d<F>;
-template <class F = ll> using point3d = P3d<F>;
-
-template <class F = ll>
-P3d<F> operator*(F a, P3d<F> b) {
-  return b * a;
-}
-template <class F = ll>
-F dot(point3d<F> a, point3d<F> b) {
-  return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-template <class F = ll>
-P3d<F> cross(P3d<F> a, P3d<F> b) {
-  return P3d(a.y * b.z - a.z * b.y,
-             a.z * b.x - a.x * b.z,
-             a.x * b.y - a.y * b.x);
-}
-template <class F = ll>
-F triple(P3d<F> a, P3d<F> b, P3d<F> c) {
-  return dot(a, cross(b, c));
-}
-template <class F = ll>
-P3d<F> intersect(P3d<F> a1, P3d<F> n1, P3d<F> a2, P3d<F> n2, P3d<F> a3, P3d<F> n3) {
-  P3d<F> x(n1.x, n2.x, n3.x);
-  P3d<F> y(n1.y, n2.y, n3.y);
-  P3d<F> z(n1.z, n2.z, n3.z); 
-  P3d<F> d(dot(a1, n1), dot(a2, n2), dot(a3, n3));
-  return P3d<F>(triple(d, y, z),
-                triple(x, d, z),
-                triple(x, y, d)) / triple(n1, n2, n3);
-}
-
 
 #undef FUNC1
 #undef FUNC2
@@ -369,66 +496,6 @@ void sortByAngle(Iterator first, Iterator last, const Point<F>& origin) {
   sort(pivot, last, acmp);
 }
 
-/* Circles
-*/
-
-template <class F>
-struct circle : Point<F> {
-    double r;
-
-    ll countLatticePoints()
-    {
-      if (r <= 0) return 0; 
-
-      // Initialize result as 4 for (r, 0), (-r. 0), (0, r) and (0, -r)
-      ll result = 4;
-
-      // Check every value that can be potential x
-      for (ll X=1; X<r; X++) {
-        // Find a potential y
-        ll ySquare = r*r - X*X;
-        ll Y = sqrt(ySquare);
-
-        // checking whether square root is an lleger
-        // or not. Count increments by 4 for four 
-        // different quadrant values
-        if (Y*Y == ySquare) result += 4;
-      }
-
-      return result;
-    }
-};
-
-double sqr(double a);
-
-template <class F = ll>
-void tangents (Point<F> c, double r1, double r2, vector<Line<F>> & ans) {
-  double r = r2 - r1;
-  double z = sqr(c.x) + sqr(c.y);
-  double d = z - sqr(r);
-
-  if (d < -mod)  return;
-  d = sqrt (abs (d));
-
-  Line<F> l;
-  l.a = (c.x * r + c.y * d) / z;
-  l.b = (c.y * r - c.x * d) / z;
-  l.c = r1;
-  ans.push_back (l);
-}
-
-template <class F = ll>
-vector<Line<F>> tangents (circle a, circle b) {
-  vector<line<F>> ans;
-  for (int i=-1; i<=1; i+=2)
-      for (int j=-1; j<=1; j+=2)
-          tangents (b-a, a.r*i, b.r*j, ans);
-  for (size_t i=0; i<ans.size(); ++i)
-      ans[i].c -= ans[i].a * a.x + ans[i].b * a.y;
-  return ans;
-}
-
-
 /* Inclusion tests
 Given a point, sometimes we need to check whether it lies inside or outside the given polygon. All the functions below return
 
@@ -534,39 +601,6 @@ bool orientation(const Polygon<F>& poly) {
 }
 
 template <class F = ll>
-void reorder_polygon(Polygon& P){
-  size_t pos = 0;
-  for(size_t i = 1; i < P.size(); i++){
-    if(P[i].y < P[pos].y || (P[i].y == P[pos].y && P[i].x < P[pos].x))
-      pos = i;
-  }
-  rotate(P.begin(), P.begin() + pos, P.end());
-}
-
-template <class F = ll>
-Polygon<F> minkowski(Polygon<F> P, Polygon<F> Q){
-  // the first vertex must be the lowest
-  reorder_polygon(P), reorder_polygon(Q);
-
-  // we must ensure cyclic indexing
-  P.pb(P[0]), P.pb(P[1]),
-  Q.pb(Q[0]), Q.pb(Q[1]);
-
-  // main part
-  Polygon<F> result;
-  size_t i = 0, j = 0;
-  while(i < P.size() - 2 || j < Q.size() - 2){
-    result.push_back(P[i] + Q[j]);
-    auto cross = (P[i + 1] - P[i]) ^ (Q[j + 1] - Q[j]);
-    if(cross >= 0)
-      ++i;
-    if(cross <= 0)
-      ++j;
-  }
-  return result;
-}
-
-template <class F = ll>
 Polygon<F> convexHull(Polygon<F> points) {
   sortall(points);
   Polygon<F> hull;
@@ -589,9 +623,41 @@ Polygon<F> convexHull(Polygon<F> points) {
   return hull;
 }
 
-double sqr (double a) {
-  return a * a;
-}
-
 // replace macro we cleared above
 #define F first
+
+void solution() {
+  rd(n);
+
+  ll o = 0;
+  ll xsum = 0, xsq = 0, ysum = 0, ysq = 0;
+  fo(i,n) {
+    Point<ll> p; rd(p);
+    
+    o += xsq;
+    o -= 2 * xsum * p.x;
+    o += i * pow(p.x, 2);
+    xsq += pow(p.x, 2);
+    xsum += p.x;
+    
+    o += ysq;
+    o -= 2 * ysum * p.y;
+    o += i * pow(p.y, 2);
+    ysq += pow(p.y, 2);
+    ysum += p.y;
+  }
+
+  put(o);
+}
+
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+  ll t = 1;
+  // rd(t);
+
+  while(t--)
+    solution();
+
+  return 0;
+}
