@@ -14,7 +14,7 @@ Study notes are listed under `notes.md` in their respective folders.
 
 # Codeforces
 
-[Contest Results <- out of date](https://github.com/IsaacBell/Algorithms/tree/master/codeforces)
+[Contest Results (out of date)](https://github.com/IsaacBell/Algorithms/tree/master/codeforces)
 
 [Practice Problems](https://github.com/IsaacBell/Algorithms/tree/master/gym)
 
