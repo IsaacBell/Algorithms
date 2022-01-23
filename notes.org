@@ -4,51 +4,51 @@ TODO Data Structures
 ** [x] Sparse Tables
 ** [x] Segment Trees
 ** [x] Monotonic Stacks/Queues
-** [ ] Heavy/Light Decompositions
+** [x] Heavy/Light Decompositions
 
 TODO Algorithms
 ** [ ] Kosaraju's
 ** [x] Djikstra's
 ** [x] Tarjan's
 ** [ ] Kruskal's
-** [ ] KMP
+** [x] KMP
 ** [x] Rabin-Karp
 
 TODO Study
 
 ** [x] Greedy
 *** [x] Beginner
-*** [ ] Intermediate
+*** [x] Intermediate
 *** [ ] Advanced
 ** [x] Trees
 *** [x] LCA
-*** [ ] Heavy-Light Decompositions
-*** [ ] Sparse Table
-** [ ] Segment Tree Beats
-** [ ] Network Flows
-*** [ ] Max Flow
+*** [x] Heavy-Light Decompositions
+*** [x] Sparse Table
+** [x] Segment Tree Beats
+** [x] Network Flows
+*** [x] Max Flow
 *** [ ] Dinic's
-*** [ ] Floyd-Warshall
-*** [ ] Edmonds-Karp
+*** [x] Floyd-Warshall
+*** [x] Edmonds-Karp
 ** Combinatorial Theory
 *** [x] Beginner
-*** [ ] Intermediate
+*** [x] Intermediate
 *** [ ] Advanced
 ** Number Theory
 *** [x] Sieve of Eratosthenes
 *** [x] Prime Number Theory
-*** [ ] Factorialization Concepts
+*** [x] Factorialization Concepts
 ** Range Queries/Segment Trees
 *** [x] Lazy Propagation
 *** [x] Static vs. Dynamic
-*** [ ] "Beats"
-*** [ ] 2D SegTrees
+*** [x] "Beats"
+*** [x] 2D SegTrees
 ** Geometry
 *** [x] Bounding Boxes
 *** [x] Cross Product
 *** [x] Computing Area of a Triangle
-*** [ ] Maximal Rectangle
-*** [ ] Histograms
+*** [x] Maximal Rectangle
+*** [x] Histograms
 ** Dynamic Programming
 *** [x] Knapsack
 *** [x] Coins
@@ -57,67 +57,11 @@ TODO Study
 *** [x] LIS
 *** [x] Probability
 *** [x] Bitmasks
-*** [ ] Graph
+*** [x] Graph
 *** [x] Tree
 *** [x] 2-Layer 1D DP
 *** [x] 2D DP (General Concepts)
-*** [x] 3D DP
+*** [ ] 3D DP
 *** [x] Tiling/Dominoes (2x1 Grid)
 *** [x] Tiling/Dominoes (4x1 Grid)
 
-#+begin_src C++ :includes <stdio.h>
-  int n; cin >> n;
-  vector<int> tree;
-  // Padding tree - don't need to pad A
-  while(__builtin_popcount(n) != 1)
-    n++;
-  tree.resize(2 * n);
-#+end_src
-
-* Range Query Updates
-** How to increase each value in a range by u?
-** Add the update val to the two nodes which comprise the entire range
-*** Ask our children to provide us a sum of their data, I add my own, and we keep heading down towards root.
-** #+begin_src C++ :includes <stdio.h>
-ll query(ll node, ll lo, ll hi, ll a, ll b, ll val) {
-    // If node range within query range,
-    // first update the value if this is an update query,
-    // then return the value at the given node
-    if (a <= lo && b >= hi) {
-        if (val != 1) tree[node] = val;
-        return tree[node];
-    }
-
-    // Check if node range and query range are disjoint
-    if (hi < a || b < lo)
-        return 0;
-
-    // Logarithmetically, recursively sum child nodes
-    ll mid = (lo + hi) / 2;
-
-    auto sum = query(2*node,  lo, mid, a, b, val)
-             + query(2*node+1, mid+1, hi, a, b, val);
-
-    // Handle updates
-    tree[node] = tree[node * 2] + tree[node * 2 + 1];
-    return sum;
-}
-
-int main() {
-    ...
-    for (i, q) {
-        int type; cin >> type;
-        if (type == 1) { // update
-            int lo, hi, u;
-            cin >> lo >> hi >> u;
-            lo --;
-            hi--;
-            query(1, 0, n - 1, lo, hi, u);
-        } else {
-            int k; cin >> k;
-            k--;
-            cout << change(1, 0, n-1, k, k, -1) << "\n";
-        }
-    }
-}
-#+end_src
