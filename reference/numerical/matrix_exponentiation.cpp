@@ -1,31 +1,39 @@
-struct Matrix {
-  vvl data(MAX_N, vl(MAX_N));
 
-  Matrix(ll nn, ll mm) {
-    data.rsz(nn, vl(mm));
-  }
+
+#define DIM 2 // default to 2. Set value according to problem.
+struct matrix{
+  ll a[DIM][DIM];
+	
+	// constructor. Make an empty array.
+	matrix() {
+		memset(a, 0, sizeof(ll) * DIM * DIM);
+	}
+	
+	// constant matrix (M). Set value according to problem.
+	void unit_matrix() {
+		a[0][0] = 26; a[0][1] = 52;
+		a[1][0] = 0; a[1][1] = 1;
+	}
+	
+	matrix operator* (matrix b) {
+		matrix c;
+		for (int k = 0; k < DIM; ++ k) { 
+			for (int i = 0; i < DIM; ++i) {
+				for (int j = 0; j < DIM; ++j) {
+					c.a[i][j] = (c.a[i][j] + a[i][k] * b.a[k][j]) % mod;
+				}
+			}
+		}
+		return c;
+	}
 };
-
-Matrix matMul(Matrix a, Matrix b) { // O(n^3)
-  Matrix ans; ll i, j, k;
-
-  fo(i,MAX_N)
-    fo(j,MAX_N)
-      for (ans.mat[i][j] = k = 0; k < MAX_N; k++) // if necessary,
-        ans.mat[i][j] += a.mat[i][k] * b.mat[k][j]; // do modulo arithmetic here
-  return ans;
-}
-
-Matrix matPow(Matrix base, ll p) { // O(n^3 log p)
-  Matrix ans; ll i, j;
-
-  fo(i, MAX_N) fo(j, MAX_N) ans.mat[i][j] = (i == j); // identity matrix
-
-  while (p) { // iterative version of Divide & Conquer exponentiation
-    if (p & 1) ans = matMul(ans, base);
-    base = matMul(base, base); // square the base
-    p >>= 1;
-  }
-
-  return ans;
+ 
+matrix pow_matrix(matrix a, ll n) {
+	if (n == 1) return a;
+	
+	matrix b = pow_matrix(a, n / 2);
+	b = b * b;
+	if (n & 1) b = b * a;
+	
+	return b;
 }
