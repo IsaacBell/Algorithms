@@ -14,9 +14,9 @@ Study notes are listed under `notes.md` in their respective folders.
 
 # Codeforces
 
-[https://github.com/IsaacBell/Algorithms/tree/master/codeforces](Contest Results <- out of date)
+(https://github.com/IsaacBell/Algorithms/tree/master/codeforces)[Contest Results <- out of date]
 
-[https://github.com/IsaacBell/Algorithms/tree/master/gym](Practice Problems)
+(https://github.com/IsaacBell/Algorithms/tree/master/gym)[Practice Problems]
 
 # CSES Problem Set
 
