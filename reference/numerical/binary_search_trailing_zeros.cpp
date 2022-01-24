@@ -11,15 +11,15 @@ F trailing_zeros(F x)
 }
 
 template <class F = ll>
-F bsearch_trailing_zeros(F n_, F m_)
+F bsearch_trailing_zeros(F n_)
 {
 	 F left = 0, F right = n_;
 	 F mid, ans;
 	 ans = 0;
 	 while (left <= right)
 	 {
-	 	 mid = (left+right) / 2;
-	 	 if(trailing_zeros(mid) >= m)
+	 	 mid = left + (right-left) / 2;
+	 	 if(trailing_zeros(mid) >= n_)
 	 	 {
 	 	 	right = mid-1;
 	 	 	//ans = mid;
