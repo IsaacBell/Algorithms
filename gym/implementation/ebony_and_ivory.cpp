@@ -265,16 +265,17 @@ ll a, b, c, n, m, k, w;
 string s, t;
 
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  rd(a >> b >> c);
+  fo(i,c) fo(j,c)
+  if (i*a + j*b == c) put("Yes");
+  else put("No");
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
     solution();
