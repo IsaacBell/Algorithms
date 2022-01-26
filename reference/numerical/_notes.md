@@ -73,3 +73,9 @@ The basic idea - to use the idea of quick sort algorithm.
 This is implemented in the C++ standard.
 
 template <class T> nth_element(std::vector<T> a, unsigned n, unsigned k)
+
+# Represent the set of all positive fractions from 1 to n
+
+The Stern-Brocot tree accomplishes this. It generates all positive fractions from 0 to INF.
+
+todo - make a template for the Stern-Brocot tree
