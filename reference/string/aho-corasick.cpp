@@ -33,6 +33,8 @@
 using namespace std;
 
 #define nl "\n"
+#define cnl cout << nl
+#define NL cnl
 #define sz size
 #define rsz resize
 #define ret return
@@ -59,6 +61,10 @@ using namespace std;
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -169,7 +175,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
@@ -215,9 +221,105 @@ vvl buildAdj(ll nn, ll mm) {
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
+}
+
+template <class T = ll>
+T binpow(T a, T b) {
+  T res = 1;
+  while (b > 0) {
+      if (b & 1)
+          res = res * a;
+      a = a * a;
+      b >>= 1;
+  }
+  return res;
+}
+template <class T = ll>
+T binpowmod(T a, T b) {
+  if(b == 0){
+        return 1;
+    }
+    T ans = binpowmod(a,b/2);
+    ans *= ans;
+    ans %= mod;
+    if(b % 2){
+        ans *= a;
+    }
+    return ans % mod;
 }
 
 /* Solution starts here */
+
+const int K = 26;
+
+struct Vertex {
+    int next[K];
+    bool leaf = false;
+    int p = -1;
+    char pch;
+    int link = -1;
+    int go[K];
+
+    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
+        fill(begin(next), end(next), -1);
+        fill(begin(go), end(go), -1);
+    }
+};
+
+vector<Vertex> t(1);
+
+void add_string(string const& s) {
+    int v = 0;
+    for (char ch : s) {
+        int c = ch - 'a';
+        if (t[v].next[c] == -1) {
+            t[v].next[c] = t.size();
+            t.emplace_back(v, ch);
+        }
+        v = t[v].next[c];
+    }
+    t[v].leaf = true;
+}
+
+int go(int v, char ch);
+
+int get_link(int v) {
+    if (t[v].link == -1) {
+        if (v == 0 || t[v].p == 0)
+            t[v].link = 0;
+        else
+            t[v].link = go(get_link(t[v].p), t[v].pch);
+    }
+    return t[v].link;
+}
+
+int go(int v, char ch) {
+    int c = ch - 'a';
+    if (t[v].go[c] == -1) {
+        if (t[v].next[c] != -1)
+            t[v].go[c] = t[v].next[c];
+        else
+            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
+    }
+    return t[v].go[c];
+} 
+
+void search(vstr& words, size_t n, string& s) {
+  ll state = 0;
+  string str = "";
+
+  fo(i, s.sz()) {
+    state = go(state, s[i]);
+    str += t[state].pch;
+    
+    // Uncomment to exit program when we find a match
+    // if (t[state].leaf) { put("Yes"); return; }
+
+    if (t[state].pch == '$') str = "";
+    if (t[state].leaf) put(str), str = "";
+  }
+}
 
 // vl v(N);
 // vl p(N, -1);
@@ -232,58 +334,12 @@ vvl buildAdj(ll nn, ll mm) {
 ll a, b, c, n, m, k, w;
 string s;
 
-struct Vertex {
-  vl go, next;
-  ll p = -1, link = -1;
-  bool leaf = false;
-  char pch;
-
-  Vertex(ll p_ = -1, char pch_ = '$'): p(p_), pch(pch_) {
-    go.rsz(26, -1);
-    next.rsz(26, -1);
-  }
-};
-
-vector<Vertex> t;
-
-void add_string(string const& s) {
-  ll v = 0;
-  szn(n,s);
-  trav(ch,s) {
-    auto c = ch - 'a';
-    if (t[v].next[c] == -1) {
-      t[v].next[c] = t.sz();
-      t.pb({v, ch});
-    }
-    v = t[v].next[c];
-  }
-  t[v].leaf = true;
-}
-
-ll go(ll v, char ch);
-ll get_link(ll v) {
-  if (t[v].link == -1)
-    if (!v || !t[v].p) t[v].link = 0;
-    else t[v].link = go( get_link(t[v].p), t[v].pch);
-  return t[v].link;
-}
-
-ll go(ll v, char ch) {
-  auto c = ch - 'a';
-  if (t[v].go[c] == -1)
-    if (t[v].next[c] != -1) t[v].go[c] = t[v].next[c];
-    else t[v].go[c] = v ? 0 : go( get_link(v), ch);
-}
-
 void solution() {
-  cin >> s >> n;
-  vstr A(n);
-  fo(i,n) {
-    cin >> A[i];
-    add_string(A[i]);
-  }
+  rd(n >> s >> m);
+  vstr A(m);
+  fo(i,m) { rd(A[i]); add_string(A[i]); }
 
-
+  search(A, n, s);
 }
 
 int main() {

@@ -224,88 +224,51 @@ vvl buildAdj(ll nn, ll mm) {
   return A;
 }
 
-template <class T = ll>
-T binpow(T a, T b) {
-  T res = 1;
-  while (b > 0) {
-      if (b & 1)
-          res = res * a;
-      a = a * a;
-      b >>= 1;
-  }
-  return res;
-}
-template <class T = ll>
-T binpowmod(T a, T b) {
-  if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
-}
+vl v(N);
+vl par(N, -1);
+vl szz(N);
+vl anc(N);
+bitset<N> vis;
+bitset<N> bs;
 
-/* Solution starts here */
-
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
-// vl anc(N);
-// bitset<N> vis;
-// bitset<N> bs;
-
-// ll timer = 0;
+ll timer = 0;
 // vl tin, tout;
 
-ll a, b, c, n, m, k, w;
-string s, t;
+ll a, b, c, n, m, q, w;
+string s;
 
-ll extended_euclid(ll a, ll b, ll& x, ll& y) {
-  if (!b) { x = 1, y = 0; return a; }
-  ll x1, y1;
-  ll d = extended_euclid(b, a % b, x1, y1);
-  x = y1;
-  y = x1 - y1 * (a / b);
-  return d;
-}
-
-bool find_any(ll a, ll b, ll c, ll &x0, ll &y0, ll &g) {
-  g = extended_euclid(abs(a), abs(b), x0, y0);
-  if (c % g) return false;
-
-  x0 *= c / g, y0 *= c / g;
-  if (a < 0) x0 = -x0;
-  if (b < 0) y0 = -y0;
-  return true;
-}
+/* Solution starts here */
+vvl Ch; // children of node
+vl dp;
+vl f(N), // # subtrees at i
+   g(N); // # subtrees w/o i
+vl d(N);
 
 void solution() {
-  rd(a >> b >> c);
-  
-  for (ll i = 0; i * a <= c; i++)
-    if (c - i % b == 0) put("YES");
-    else put("NO");
+  ll q; rd(n >> q);
+  Ch.rsz(n+1);
+  Fo(i,1,n) {
+    ll x, y; rd(x >> y);
+    Ch[x].pb(y);
+    Ch[y].pb(x);
+  }
 
-  // doesn't work
-  /*
-  // ll x, y, g;
-  if (find_any(a, b, c, x, y, g)) put("Yes");
-  else put("No");
-  */
+  while (q--) {
+    short int type;
+    rd(type >> a);
+    if (type == 1) // update val
+      // do something
+    else
+      put(
+      // do something
+      );
+  }
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t = 1;
-  // rd(t);
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }

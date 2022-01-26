@@ -49,3 +49,19 @@ Positive int of form n(n+1)
 * n^3 = Sum of n consecutive odd #s from n^2 - n + 1 to n^2 - n + 2n - 1
 * Sum of n oblong #s = (n * (n+1) * (n+2)) / 3
 * Sum of 1st n triangular #s = (n * (n+1) * (n+2)) / 6
+
+# Linear Diophantine Equations
+
+Have the form: ax + by = c, where a and b and c are known in advance.
+
+An Integral solution is a solution such that all the unknown variables take only integer values. They will exist if and only if, the GCD of coefficients of the two variables divides the constant term perfectly. In other words the integral solution exists if, GCD(a ,b) divides c.
+
+if (c % euclid(a,b) == 0) put("Yes") else put("NO");
+
+If a or b is 0, then the problem only has one solution.
+
+...
+
+a * m + b * n = gcd(a, b) for some integer m and n, they can be negative or zero.
+
+
