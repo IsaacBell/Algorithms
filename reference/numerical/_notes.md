@@ -1,3 +1,7 @@
+# Odd #s in Range
+
+ll x = (r-l+1) - (r/2 - (l-1)/2);
+
 # Triangular Numbers
 
 Sum of 1,2,...,N

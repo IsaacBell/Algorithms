@@ -34,7 +34,7 @@ vector<vector<int>> group_identical_strings(vector<string> const& s) {
 
 // Determine the number of different substrings in a string
 /*
-Problem: Given a string  of length , consisting only of lowercase English 
+Problem: Given a string  of length, consisting only of lowercase English 
 letters, find the number of different substrings in this string.
 */
 
