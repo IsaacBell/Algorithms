@@ -1,3 +1,25 @@
+# Coins
+
+- Pick subset of nodes so no 2 adj are chosen, w/ max coin sum
+- If we include node V, we can't include its direct children
+- dp(V) = max( Σn dp(v1), C(v) + (Σn dp(j) for all v's children) )
+- dp1 & dp2: if we include node V in our answer or not
+
+# Min Root w/ Min Sum of Node Costs
+
+- f(i) = time if we start at i = Ci + (Σn f(ch[i])/n)
+- g(i) = time at parent[i] if tree rooted at i
+
+# Splay Trees
+
+- Repeat until node reaches root:
+  - Rotate parent if node parent unbalanced
+    - if (node == par.par.L.L) node = par.par.R.R
+  - Otherwise, rotate node
+- Insert: splay new node
+- Erase: splay node and join its subtrees
+- Splaying doesn't affect in-order traversal
+
 # Distance Queries
 Distance between node u and v can be calculated as 𝑑𝑒𝑝𝑡ℎ[𝑢]+𝑑𝑒𝑝𝑡ℎ[𝑣]−2∗𝑑𝑒𝑝𝑡ℎ[𝐿𝐶𝐴(𝑢,𝑣)]
 

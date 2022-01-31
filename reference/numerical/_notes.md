@@ -1,3 +1,7 @@
+# Number of ways between two vertices
+
+https://www.youtube.com/watch?v=Q4gTV4r0zRs
+
 # Odd #s in Range
 
 ll x = (r-l+1) - (r/2 - (l-1)/2);
