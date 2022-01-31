@@ -10,3 +10,4 @@ Problems to do:
 Todos:
 
 - Write a template for the Stern-Brocot tree
+- Study canonical representations
