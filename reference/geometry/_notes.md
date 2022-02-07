@@ -1,3 +1,20 @@
+# Internal angles of regular polygons:
+  - ∆: 60°
+  - Square: 90°
+  - Pentagon: 108°
+  - Hexagon: 120°
+  - Octagon: 135°
+  - Decagon: 144°
+  - Dodecagon: 150°
+
+  - Proof/technique:
+    - Split a polygon into ∆s. Sum the angles in each ∆ and subtract the sum of angles at the center.
+    - Ex: 
+      Pentagon: (5*180°) - 360° = 540°
+      Each internal angle is 540°/5 = 108°
+
+  - Formula: {(n*180°) - 360°}/n = (n-2) / n*180°
+
 # Triangles on a Square
 
 Area of a ∆ = its base * its H, divided by 2

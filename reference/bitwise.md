@@ -1,5 +1,6 @@
 # TOC
 
+* [Techniques](#Techniques)
 * [Formulas](#Formulas)
 * [Essentials](#Essentials)
 * [Hacks](#Hacks)
@@ -8,6 +9,27 @@
   * Interleave bits (Morton #s)
   * Round up to the next highest power of 2
 * [Problems](#Problems)
+
+# Techniques
+
+## Sum-Xor property
+
+: 𝑎+𝑏=𝑎⊕𝑏+2(𝑎&𝑏). 
+
+Extended Version with two equations: 𝑎+𝑏=𝑎|𝑏+𝑎&𝑏 AND 𝑎⊕𝑏=𝑎|𝑏−𝑎&𝑏
+
+## XOR Hashing
+
+### Motivational Problem:
+You have an array 𝐴 and 𝑄 queries, which are, say if the subarray from 𝑙 to 𝑟, (𝐴[𝑙], 𝐴[𝑙+1], ..., 𝐴[𝑟]) forms a permutation.
+
+### Some basic observations:
+Only the set of elements matters, the order is irrelevant.
+
+You want to know if each element is exactly once.
+
+### Solution:
+Assign a random number 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[𝑖] to each number 𝑖, now we can say that if the XOR of the subarray ( 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[𝐴[𝑙]] xor 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[𝐴[𝑙+1]] xor ... xor 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[𝐴[𝑟]] ) is equal to the xor of any permutation of size 𝑟−𝑙+1 (for example 1, 2, 3, ... ,𝑟−𝑙+1, which hash is 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[1] xor 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[2] xor ... xor 𝑟𝑎𝑛𝑑𝑣𝑎𝑙[𝑟−𝑙+1] ) the subarray is a permutation.
 
 # Formulas
 

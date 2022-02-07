@@ -1,3 +1,8 @@
+# General
+
+- Any even number greater than 2 can be split into two prime numbers (no proof, not proven wrong)
+- 𝑔𝑐𝑑(𝐹𝑛,𝐹𝑚)=𝐹𝑔𝑐𝑑(𝑛,𝑚), where 𝐹𝑥 is the 𝑥𝑡ℎ fibonacci numbers and first two terms are  0,1
+
 # Number of ways between two vertices
 
 https://www.youtube.com/watch?v=Q4gTV4r0zRs

@@ -150,9 +150,9 @@ template<typename T=ll> T powM(T x, T y) {
   T o = 1;
   x %= mod;
   while (y) {
-    if (y & 1) (o *= x) %= mod;
-    y >>= 1;
-    (x *= x) %= mod;
+  if (y & 1) (o *= x) %= mod;
+  y >>= 1;
+  (x *= x) %= mod;
   }
   return o;
 }
@@ -168,8 +168,8 @@ template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
 template<class T=ll> T sum_digit(T n) {
   T sum = 0;
   while (n != 0) {
-    sum = sum + n % 10;
-    n = n / 10;
+  sum = sum + n % 10;
+  n = n / 10;
   }
   return sum;
 }
@@ -177,38 +177,38 @@ template<class T=ll> T sum_digit(T n) {
 template<class T=ll>
 T sum_digit_string(string str)
 {
-    T sum = 0;
-    for (T i = 0; i < str.length(); i++)
-    {
-        sum = sum + str[i] - 48;
-    }
-    return sum;
+  T sum = 0;
+  for (T i = 0; i < str.length(); i++)
+  {
+    sum = sum + str[i] - 48;
+  }
+  return sum;
 }
 
 template<class T=ll> string dec2bin(T n)
 {
-    const T size=sizeof(n)*8;
-    string s = "00000000000000000000000000000000";
-    for (T a=0;a<32;a++)
+  const T size=sizeof(n)*8;
+  string s = "00000000000000000000000000000000";
+  for (T a=0;a<32;a++)
+  {
+    if(n==0)
+      return s;
+    else
     {
-        if(n==0)
-            return s;
-        else
-        {
-            if(n%2!=0)
-                s[31-a]='1';
-            n/=2;
-        }
+      if(n%2!=0)
+        s[31-a]='1';
+      n/=2;
     }
-    return s;
+  }
+  return s;
 }
 
 template<typename T = ll>
 T fac(T x) { // factorial
   T o = 1;
   if (x > 0)
-    for(T i = 1; i <= x; ++i)
-        o = multM<T>(o,i);
+  for(T i = 1; i <= x; ++i)
+    o = multM<T>(o,i);
   return o;
 }
 
@@ -217,9 +217,9 @@ bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 vvl buildAdj(ll nn, ll mm) {
   vvl A(nn+1, vl {});
   fo(i,mm) {
-    pl p; cin >> p.F >> p.S;
-    A[p.F].pb(p.S);
-    A[p.S].pb(p.F);
+  pl p; cin >> p.F >> p.S;
+  A[p.F].pb(p.S);
+  A[p.S].pb(p.F);
   }
   return A;
 }
@@ -228,44 +228,35 @@ template <class T = ll>
 T binpow(T a, T b) {
   T res = 1;
   while (b > 0) {
-      if (b & 1)
-          res = res * a;
-      a = a * a;
-      b >>= 1;
+    if (b & 1)
+      res = res * a;
+    a = a * a;
+    b >>= 1;
   }
   return res;
 }
 template <class T = ll>
 T binpowmod(T a, T b) {
   if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
+    return 1;
+  }
+  T ans = binpowmod(a,b/2);
+  ans *= ans;
+  ans %= mod;
+  if(b % 2){
+    ans *= a;
+  }
+  return ans % mod;
 }
-
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool ok(int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
-/* Grid traversal
-fo(i,4) {
-  newX = x + dx[i]; newY = y + dy[i];
-  if (ok(newX, newY)) ...
-}
-*/
 
 /* Solution starts here */
 
-// vl v(N);
+vl v(N);
 // vl p(N, -1);
 // vl szz(N);
 // vl anc(N);
 // bitset<N> vis;
-// bitset<N> bs;
+bitset<N+1> bs;
 
 // ll timer = 0;
 // vl tin, tout;
@@ -273,20 +264,67 @@ fo(i,4) {
 ll a, b, c, n, m, k, w;
 string s, t;
 
+// vb match;
+vl memo(N+1);
+ll modd;
+
+// pl fib (ll i) {
+//   if (!i) return {0, 1};
+
+//   pl p = fib(i >> 1);
+//   memo[i >> i] = p;
+//   ll C = p.F * (2 * p.S - p.F);
+//   ll D = p.F * p.F + p.S * p.S;
+//   if (i & 1) return {D, C+D};
+//   else return {C,D};
+// }
+
+void fib() {
+  memo[0] = 1; memo[1] = 1;
+  for(ll i = 2; i <= N; i++) memo[i] = memo[i-1] + memo[i-2];
+}
+
+
+void upd(vl& Arr, vl& Other, ll l, ll r) {
+  ll x = 0;
+  Fo(i,l,r) {
+    (Arr[i] += memo[x++]) %= modd;
+    bs[i] = (Arr[i] != Other[i]);
+  }
+  // puts(Arr); cnl; puts(Other); cnl;
+  // put(bs.count());
+
+  if (bs.count()) put("NO");
+  else put("YES");
+}
+
 void solution() {
-  rd(n);
-  vl A(n);
+  fib();
+  ll q; rd(n >> q >> modd);
+
+  vl A(n), B(n);
   readall(A);
+
+  fo(i,n) { rd(B[i]); bs[i] = (A[i] != B[i]); }
+  // deb(bs.count());
+  // deba(i,bs,n);
+
+  while (q--) {
+    char who; rd(who >> a >> b);
+    // deb(who);
+    if (who == 'A') upd(A,B,a-1,b);
+    else upd(B,A,a-1,b);
+  }
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
-    solution();
+  solution();
 
   return 0;
 }

@@ -1,3 +1,45 @@
+# Quick Examples
+
+- How many ways to arrange this set of letters: AAABBBBCCC
+  (3 A's, 4 B's, 3 C's)
+
+  = 10!/(3! * 4! * 3!)
+
+- Permutation (nPr):
+  N objs are present. We'll select any ordering of R objs. Order matters
+
+  = n * (n-1) * (n-2) * ... * (n-r+1)
+  = n!/(n-r)!
+
+- Combination (nCr):
+  N objs present, select any r objs. Order doesn't matter.
+
+  = n!/((n-r)!*r!)
+
+- nCr % m (where m is prime, and n,m <= 10^6)
+  nCr % m = (n! % m) * inv((n-r)!) * inv(r!)
+
+  Fermat's Theorem for finding inverse:
+  inv(n % m) = n^(m-2) % m
+
+  Total TC: O(log m)
+
+- nCr % m (where m is prime, and n,r <= 10^12, m <= 10^5)
+  Lucas Theorem: Write r and n in base m
+                 n = n{k-1} * n{k-2} * ... n0
+
+                 Recursively divide by m to get base m #.
+                 Think of it like converting a # to binary. 
+
+- Internal angles of regular polygons:
+  - ∆: 60°
+  - Square: 90°
+  - Pentagon: 108°
+  - Hexagon: 120°
+  - Octagon: 135°
+  - Decagon: 144°
+  - Dodecagon: 150°
+
 # Selections
 
 ### Order significant, repetition allowed: 

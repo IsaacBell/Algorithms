@@ -236,27 +236,18 @@ T binpow(T a, T b) {
   return res;
 }
 template <class T = ll>
-T binpowmod(T a, T b) {
+T binpowmod(T a, T b, T modd = mod) {
   if(b == 0){
         return 1;
     }
     T ans = binpowmod(a,b/2);
     ans *= ans;
-    ans %= mod;
+    ans %= modd;
     if(b % 2){
         ans *= a;
     }
-    return ans % mod;
+    return ans % modd;
 }
-
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool ok(int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
-/* Grid traversal
-fo(i,4) {
-  newX = x + dx[i]; newY = y + dy[i];
-  if (ok(newX, newY)) ...
-}
-*/
 
 /* Solution starts here */
 
@@ -277,13 +268,23 @@ void solution() {
   rd(n);
   vl A(n);
   readall(A);
+  mll mp;
+  fo(i,n) mp[A[i]] = i;
+  ll j = 0, x = 0;
+  fo(i,n) {
+    ckmax(j, mp[A[i]]);
+    if (j == i) j++, x++;
+  }
+  ll o = 1; 
+  fo(i,x-1) ((o *= 2) %= 998244353);
+  put(o);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
     solution();

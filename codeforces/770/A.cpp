@@ -249,15 +249,6 @@ T binpowmod(T a, T b) {
     return ans % mod;
 }
 
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool ok(int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
-/* Grid traversal
-fo(i,4) {
-  newX = x + dx[i]; newY = y + dy[i];
-  if (ok(newX, newY)) ...
-}
-*/
-
 /* Solution starts here */
 
 // vl v(N);
@@ -274,9 +265,12 @@ ll a, b, c, n, m, k, w;
 string s, t;
 
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  rd(n >> k >> s);
+  if (!k) {put(1); ret;}
+  
+  t = s;
+  reverse(all(t));
+  if (t == s) put(1); else put(2);
 }
 
 int main() {

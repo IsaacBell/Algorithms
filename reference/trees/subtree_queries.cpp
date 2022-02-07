@@ -224,69 +224,96 @@ vvl buildAdj(ll nn, ll mm) {
   return A;
 }
 
-template <class T = ll>
-T binpow(T a, T b) {
-  T res = 1;
-  while (b > 0) {
-      if (b & 1)
-          res = res * a;
-      a = a * a;
-      b >>= 1;
-  }
-  return res;
-}
-template <class T = ll>
-T binpowmod(T a, T b) {
-  if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
-}
+vl v(N);
+vl par(N, -1);
+vl szz(N);
+vl anc(N);
+bitset<N> vis;
+bitset<N> bs;
 
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool ok(int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
-/* Grid traversal
-fo(i,4) {
-  newX = x + dx[i]; newY = y + dy[i];
-  if (ok(newX, newY)) ...
-}
-*/
-
-/* Solution starts here */
-
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
-// vl anc(N);
-// bitset<N> vis;
-// bitset<N> bs;
-
-// ll timer = 0;
+ll timer = 0;
 // vl tin, tout;
 
-ll a, b, c, n, m, k, w;
-string s, t;
+ll a, b, c, n, m, q, w;
+string s;
+
+/* Solution starts here */
+vvl Ch; // children of node
+vl dp;
+vl f(N), // # subtrees at i
+   g(N); // # subtrees w/o i
+vl d(N);
+
+const int MAXN = 2e5+5;
+vl adj(MAXN);
+vl st(MAXN), en(MAXN);
+
+void dfs(ll node, ll parent) {
+	st[node] = timer++;
+	trav(i, Ch[node]) {
+		if (i != parent) {
+			dfs(i, node);
+		}
+	}
+	en[node] = timer-1;
+}
+
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	* any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source:
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+	const T ID = 0; T comb(T a, T b) { return a+b; }
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID;
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
+	}
+};
+
+Seg<ll> S;
 
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  assert(MAXN);
+  v.rsz(MAXN);
+	ll q; rd(n >> q);
+	Fo(i,1,n+1) rd(v[i]);
+	fo(i,n-1) {
+		rd(a >> b);
+		Ch[a].pb(b), Ch[b].pb(a);
+	}
+	dfs(1,0);
+	S.init(n);
+	Fo(i,1,n+1) S.upd(st[i],v[i]);
+	while(q--) {
+		short int type; ll i; rd(type >> i);
+		if (type == 1) {
+			ll x; rd(x);
+			S.upd(st[i], x);
+		} else {
+			put(S.query(st[i],en[i]));
+		}
+	}
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  ll t = 1;
-  rd(t);
-
-  while(t--)
-    solution();
+  solution();
 
   return 0;
 }
