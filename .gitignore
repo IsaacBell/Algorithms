@@ -2,3 +2,5 @@
 scratch*.cpp
 settings.json
 *DS_Store
+*/Dropbox/
+~/Dropbox/*
