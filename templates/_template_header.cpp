@@ -63,6 +63,7 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -248,3 +249,12 @@ T binpowmod(T a, T b) {
     }
     return ans % mod;
 }
+
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/

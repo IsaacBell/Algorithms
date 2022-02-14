@@ -63,7 +63,6 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
-#define print(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -276,15 +275,24 @@ string s, t;
 
 void solution() {
   rd(n);
-  vl A(n);
-  readall(A);
+  vpl A(n);
+  fo(i,n) rd(A[i].F >> A[i].S);
+  sortall(A);
+
+  ll sum = 0, start = 0;
+  fo(i,n) {
+    start += A[i].F;
+    sum += A[i].S - start;
+  }
+
+  put(sum);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
     solution();
