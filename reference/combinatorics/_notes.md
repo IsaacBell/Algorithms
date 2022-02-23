@@ -1,5 +1,25 @@
 # Quick Examples
 
+- # paths on a 2D grid (Dirs: U+R). Can't cross diagonal
+
+= (n*m) C (n)
+
+- # paths on a 2D grid (Dirs: U+R)
+
+= (2n) C (n)
+
+- # paths on a 3D grid (U+R+F)
+
+= (n*m*p)!/(n!m!p!)
+
+- # ways to distribute n candies to r ppl
+
+= (n+r-1) C (r-1)
+
+- # ways to distribute n candies to r ppl. Each prsn needs >= k candies
+
+= (n - r*k + r-1) C (r-1)
+
 - How many ways to arrange this set of letters: AAABBBBCCC
   (3 A's, 4 B's, 3 C's)
 
