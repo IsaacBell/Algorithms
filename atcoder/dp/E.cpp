@@ -33,6 +33,8 @@
 using namespace std;
 
 #define nl "\n"
+#define cnl cout << nl
+#define NL cnl
 #define sz size
 #define rsz resize
 #define ret return
@@ -43,6 +45,7 @@ using namespace std;
 #define ll int64_t
 #define PI 3.1415926535897932384626
 #define INF 2000000000
+#define szn(n, s) const ll n = s.sz()
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
@@ -58,6 +61,11 @@ using namespace std;
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -86,11 +94,17 @@ typedef complex<ld> cd;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pl;
 typedef tuple<ll,ll,ll> tll;
+typedef vector<tll> vtll;
+typedef vector<vtll> vvtll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
+typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
+typedef vector<vpl> vvpl;
 typedef vector<vi> vvi;
 typedef vector<vl> vvl;
 typedef vector<ld> vd;
@@ -162,7 +176,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
@@ -201,15 +215,48 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-void buildAdj(vvl& A, ll nn = 0) {
-  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
-  A.rsz(nn+1, vl {});
-  fo(i,nn) {
+vvl buildAdj(ll nn, ll mm) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
     pl p; cin >> p.F >> p.S;
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
+
+template <class T = ll>
+T binpow(T a, T b) {
+  T res = 1;
+  while (b > 0) {
+      if (b & 1)
+          res = res * a;
+      a = a * a;
+      b >>= 1;
+  }
+  return res;
+}
+
+template <class T = ll>
+T binpowmod(T a, T b, T modd = mod) {
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
+}
+
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
+
+/* Solution starts here */
 
 // vl v(N);
 // vl p(N, -1);
@@ -222,40 +269,33 @@ void buildAdj(vvl& A, ll nn = 0) {
 // vl tin, tout;
 
 ll a, b, c, n, m, k, w;
-string s;
-
-/* Solution starts here */
+string s, t;
 
 void solution() {
-  cin >> n >> w;
+  rd(n >> w);
   vl wt(n), val(n);
-  ll sum = 0;
-
-  fo(i,n) {
-    cin >> wt[i] >> val[i];
-    sum += val[i];
-  }
-
-  vl dp(sum + 1, mod);
+  fo(i,n) rd(wt[i] >> val[i]);
+  ll sum = accumulate(all(val), 0);
+  vl dp(sum+1, mod);
   dp[0] = 0;
-  // dp[i] = min total  wt of items w/ total value exactly i
-
   fo(i,n)
-    ford(j, sum - val[i] + 1)
-      ckmin(dp[j+val[i]], dp[j] + wt[i]);
+    ford(j,sum-val[i]+1) {
+        ckmin(dp[j+val[i]], dp[j] + wt[i]);
+    }
 
-  ll maxx = 0;
-  fo(i, sum+1)
-    if (dp[i] <= w)
-      ckmax(maxx, i);
-
-  cout << maxx << nl;
+  ll ans = -mod;
+  fo(i, sum+1) if (dp[i] <= w) ckmax(ans, i);
+  put(ans);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t = 1;
+  // rd(t);
+
+  while(t--)
+    solution();
 
   return 0;
 }

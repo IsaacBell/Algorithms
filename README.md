@@ -28,3 +28,5 @@ https://github.com/IsaacBell/Algorithms/tree/master/atcoder/dp
 
 Need to re-attempt. I was still new to DP when I last ran through these questions.
 
+*Update:* Re-attempt underway as of 2022. Progress documented in the folder
+

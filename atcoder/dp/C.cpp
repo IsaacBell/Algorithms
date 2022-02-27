@@ -33,14 +33,19 @@
 using namespace std;
 
 #define nl "\n"
+#define cnl cout << nl
+#define NL cnl
 #define sz size
 #define rsz resize
+#define ret return
+#define cont continue
 #define IMAX INT_MAX
 #define IMIN INT_MIN
 #define gc getchar_unlocked
 #define ll int64_t
 #define PI 3.1415926535897932384626
 #define INF 2000000000
+#define szn(n, s) const ll n = s.sz()
 #define si(x) scanf("%d", &x)
 #define sl(x) scanf("%lld", &x)
 #define ss(s) scanf("%s", s)
@@ -49,42 +54,66 @@ using namespace std;
 #define ps(s) printf("%s\n", s)
 #define br printf("\n")
 #define trav(a, x) for (auto &a : x)
-#define fo(i, n) for(size_t i=0;i<n;i++)
-#define ford(i, n) for(size_t i = n - 1; i >= 0; i--)
-#define ford1(i, n) for(size_t i = n - 1; i; i--)
-#define Fo(i, k, n) for(size_t i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
+#define fo(i, n) for(ll i=0;i<n;i++)
+#define ford(i, n) for(ll i = n - 1; i >= 0; i--)
+#define ford1(i, n) for(ll i = n - 1; i; i--)
+#define Fo(i, k, n) for(ll i = k; k < n ? i < n : i > n; k < n ? i += 1: i -= 1)
 #define deb(x) cout << #x << " = " << x << endl;
 #define deb2(x, y) cout << #x << " = " << x << ", " << #y << " = " << y << endl
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
+#define rd(x) cin >> x
+#define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
+#define put(x) cout << x << nl
+#define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
 #define mt make_tuple
 #define F first
 #define S second
+#define FR front
+#define BK back
+#define qt(args...) auto [args] = q.top(); q.pop();
+#define qta(arg...) auto arg = q.top(); q.pop();
+#define qf(args...) auto [args] = q.front(); q.pop();
+#define qp(args...) q.push(args)
+#define qe q.empty()
+#define wqe while(!q.empty())
+#define begend(x) all(x)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define clr(x) memset(x, 0, sizeof(x))
 #define sortall(x) sort(all(x))
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
+#define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
 
 typedef long double ld;
 typedef complex<ld> cd;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pl;
 typedef tuple<ll,ll,ll> tll;
+typedef vector<tll> vtll;
+typedef vector<vtll> vvtll;
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vl vll;
+typedef vector<string> vstr;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
 typedef vector<pii> vpii;
 typedef vector<pl> vpl;
+typedef vector<vpl> vvpl;
 typedef vector<vi> vvi;
 typedef vector<vl> vvl;
 typedef vector<ld> vd;
 typedef vector<cd> vcd;
 typedef vector<uint32_t> vu32;
 typedef vector<uint64_t> vu64;
+typedef map<ll, ll> mll;
+typedef map<ll, string> mls;
+typedef map<string, ll> msl;
 
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim) {
@@ -95,8 +124,23 @@ int rng(int lim) {
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
-template<class T=ll> using pq = priority_queue<T>;
-template<class T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+template<typename T=ll> using ql  = queue<ll>;
+template<typename T=ll> using qp  = queue<pair<T,T>>;
+template<typename T=ll> using qt  = queue<tuple<T,T>>;
+template<typename T=ll> using qt3 = queue<tuple<T,T,T>>;
+template<typename T=ll> using qt4 = queue<tuple<T,T,T,T>>;
+template<typename T=ll> using pq  = priority_queue<T>;
+template<typename T=ll> using mpq = priority_queue<T, vector<T>, greater<T>>;
+
+using qll  = queue<ll>;
+using qpl  = qp<ll>;
+using qtl  = qt<ll>;
+using qtl3 = qt3<ll>;
+using qtl4 = qt4<ll>;
+using qpd  = qp<double>;
+using qtd  = qt<double>;
+using qtd3 = qt3<double>;
+using qtd4 = qt4<double>;
 
 // Modulo operators
 template<typename T=ll> T M(T x) { return ((x % mod + mod) % mod);  }
@@ -132,7 +176,7 @@ template<class T=ll> T sum_digit(T n) {
 }
 
 template<class T=ll>
-T sum_digit_string(T str)
+T sum_digit_string(string str)
 {
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
@@ -169,54 +213,83 @@ T fac(T x) { // factorial
   return o;
 }
 
-void buildAdj(vvl& A, size_t nn = 0) {
-  if (!nn) cerr << "::::::::You missed the size arg (\"nn\") while building your adjacency list::::::::" << nl;
-  A.rsz(nn+1, vl {});
-  fo(i,nn) {
+bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
+
+vvl buildAdj(ll nn, ll mm) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
     pl p; cin >> p.F >> p.S;
     A[p.F].pb(p.S);
     A[p.S].pb(p.F);
   }
+  return A;
 }
 
-vl v(N, 0);
-vl par(N, -1);
-vl szz(N);
-vl anc(N);
-bitset<N> vis;
-bitset<N> bs;
+template <class T = ll>
+T binpow(T a, T b) {
+  T res = 1;
+  while (b > 0) {
+      if (b & 1)
+          res = res * a;
+      a = a * a;
+      b >>= 1;
+  }
+  return res;
+}
 
-ll timer = 0;
-// vl tin, tout;
+template <class T = ll>
+T binpowmod(T a, T b, T modd = mod) {
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
+}
 
-ll a, b, c, n, m, q, w;
-string s;
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
 
 /* Solution starts here */
 
-void solution() {
-  cin >> n;
-  vl dp(3);
-  vl A(3);
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
 
-  fo (i,n) {
-    vl dp2(3);
-    cin >> A[0] >> A[1] >> A[2];
-    fo(j,3)
-      fo(k,3)
-        if (j != k)
-          ckmax(dp2[k], dp[j] + A[k]);
-    dp = dp2;
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
+
+void solution() {
+  rd(n);
+  vl A(3), dp(3), dp2(3);
+  fo(i,n) {
+    readall(A);
+    fo(j,3) fo(k,3)
+    if (j != k) ckmax(dp[j], dp2[k] + A[j]);
+    dp2 = dp;
   }
-  cout << *max_element(dp.begin(), dp.end()) << nl;
+  put((*max_element(all(dp))));
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  // ll t; cin >> t;
+  ll t = 1;
+  // rd(t);
 
-  // while(t--)
+  while(t--)
     solution();
 
   return 0;
