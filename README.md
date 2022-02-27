@@ -10,7 +10,7 @@ https://github.com/IsaacBell/Algorithms/tree/master/templates
 
 https://github.com/IsaacBell/Algorithms/tree/master/reference
 
-Study notes are listed under `notes.md` in their respective folders.
+Study notes are listed under `_notes.md` in their respective folders.
 
 # Codeforces
 
