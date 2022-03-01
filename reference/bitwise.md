@@ -69,6 +69,21 @@ if (x && !((x-1) & x) — check whether x is a power of two
 
 ## Complex
 
+### Max XOR in a range
+
+```
+void solution() {
+  ll l, r; rd(l >> r);
+
+  if (l == r) { put(0); ret; }
+  
+  ll x = l ^ r; // __builtin_clz() crashes if given 0 as an arg
+  ll msb = 63 - __builtin_clz(x);
+
+  put(2 * (1 << msb) - 1);
+}
+```
+
 ### Bit swap
 p = ((x >> a) ^ (x >> b)) & 1
 x ^= (p << a)
