@@ -277,9 +277,9 @@ void solution() {
   if (l == r) { put(0); ret; }
   
   ll x = l ^ r; // __builtin_clz() crashes if given 0 as an arg
-  ll msb = 63 - __builtin_clz(x);
+  ll msb = 63 - __builtin_clzll(x);
 
-  put(2 * (1 << msb) - 1);
+  put(2 * (1LL << msb) - 1);
 }
 
 int main() {
