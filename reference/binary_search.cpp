@@ -1,3 +1,8 @@
+/*
+    Code Snippets
+
+*/
+
 /* Include these in your header.
    DO NOT include after the "Solution starts here" line
    or you could overwrite the "n" global var.
