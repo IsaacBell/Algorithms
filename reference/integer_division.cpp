@@ -16,9 +16,11 @@ ll int_div(ll x, ll y) {
   Division w/ Remainder
 */
 
-ll div_rem(ll x, ll y) {
+pl div_rem(ll x, ll y) {
   ll diff = abs(x-y);
   if (!diff) return 0;
   ll rem = x % diff;
   ckmin(rem, diff - rem);
+
+  return {diff, rem};
 }
