@@ -1,5 +1,18 @@
 # Quick Examples
 
+## Integral Solutions
+
+Given N and K. The task is to count the number of the integral solutions of a linear equation having N variable as given below: 
+
+x1 + x2+ x3…+ xN-1+…+xN = K
+- ### non-negative integral solutions of eqn x1 + x2 + …… + xn = k 
+
+Given by (n+k-1)! / (n-1)!*k!
+
+- ### positive integral solutions of eqn x1 + x2 + ….. + xn = k
+
+Given by (k-1)! / (n-1)! * (k-n)!
+
 - # paths on a 2D grid (Dirs: U+R). Can't cross diagonal
 
 = (n*m) C (n)
