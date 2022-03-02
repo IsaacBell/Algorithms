@@ -11,3 +11,14 @@ ll int_div(ll x, ll y) {
   if (!x) return 0;
   return (x + y-1) / 2;
 }
+
+/*
+  Division w/ Remainder
+*/
+
+ll div_rem(ll x, ll y) {
+  ll diff = abs(x-y);
+  if (!diff) return 0;
+  ll rem = x % diff;
+  ckmin(rem, diff - rem);
+}
