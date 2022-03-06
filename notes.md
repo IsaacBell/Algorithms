@@ -11,3 +11,5 @@ Todos:
 
 - Write a template for the Stern-Brocot tree
 - Study canonical representations
+- Practice advanced bipartite graph probs
+- Practice more painting/coloring probs
