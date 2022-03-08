@@ -1,63 +1,62 @@
 ll compute_hash(string const& s) {
-  const int p = 31;
-  const int m = 1e9 + 9;
+  const ll p = 31;
+  const ll m = 1e9 + 9;
   ll hash_value = 0;
   ll p_pow = 1;
-  for (char c : s) {
-  hash_value = (hash_value + (c - 'a' + 1) * p_pow) % m;
-  p_pow = (p_pow * p) % m;
+  trav(ch : s) {
+    hash_value = (hash_value + (ch - 'a' + 1) * p_pow) % m;
+    p_pow = (p_pow * p) % m;
   }
   return hash_value;
 }
 
-//====================
+/* 
+  Search for duplicate strings in an array of strings
+  Returns a vector of matching indexes
+*/
+vvl group_identical_strings(vstr const& strs) {
+  szn(nn,strs);
+  vpl hashes(nn);
+  fo(i,nn) hashes[i] = {compute_hash(strs[i]), i};
 
-// Search for duplicate strings in an array of strings
-vector<vector<int>> group_identical_strings(vector<string> const& s) {
-  int n = s.size();
-  vector<pair<ll, int>> hashes(n);
-  for (int i = 0; i < n; i++)
-  hashes[i] = {compute_hash(s[i]), i};
+  sortall(hashes);
 
-  sort(hashes.begin(), hashes.end());
-
-  vector<vector<int>> groups;
-  for (int i = 0; i < n; i++) {
-  if (i == 0 || hashes[i].first != hashes[i-1].first)
-    groups.emplace_back();
-  groups.back().push_back(hashes[i].second);
+  vvl groups;
+  fo(i,nn) {
+    if (!i || hashes[i].F != hashes[i-1].F)
+      groups.emplace_back();
+    groups.back().pb(hashes[i].S);
   }
   return groups;
 }
 
 //==========================
 
-// Determine the number of different substrings in a string
 /*
+Determine the number of different substrings in a string
+
 Problem: Given a string  of length, consisting only of lowercase English 
 letters, find the number of different substrings in this string.
 */
 
-int count_unique_substrings(string const& s) {
-  int n = s.size();
+ll count_unique_substrings(string const& s) {
+  szn(nn,s);
 
-  const int p = 31;
-  const int m = 1e9 + 9;
-  vl p_pow(n);
+  const ll p = 31;
+  const ll mm = 1e9 + 9;
+  vl p_pow(nn);
   p_pow[0] = 1;
-  for (int i = 1; i < n; i++)
-    p_pow[i] = (p_pow[i-1] * p) % m;
+  fo(i,nn) p_pow[i] = (p_pow[i-1] * p) % mm;
 
-  vl h(n + 1, 0);
-  for (int i = 0; i < n; i++)
-    h[i+1] = (h[i] + (s[i] - 'a' + 1) * p_pow[i]) % m;
+  vl h(nn + 1, 0);
+  fo(i,nn) h[i+1] = (h[i] + (s[i] - 'a' + 1) * p_pow[i]) % mm;
 
-  int cnt = 0;
-  for (int l = 1; l <= n; l++) {
+  ll cnt = 0;
+  Fo(l, 1, nn+1) {
     set<ll> hs;
-    for (int i = 0; i <= n - l; i++) {
-      ll cur_h = (h[i + l] + m - h[i]) % m;
-      cur_h = (cur_h * p_pow[n-i-1]) % m;
+    fo(i,nn - l + 1) {
+      ll cur_h = (h[i + l] + mm - h[i]) % mm;
+      (cur_h *= p_pow[nn-i-1]) %= mm;
       hs.insert(cur_h);
     }
     cnt += hs.size();
