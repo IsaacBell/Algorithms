@@ -18,7 +18,7 @@ struct BipartiteGraph {
   using vvt = vector<vt>;
   using vpt = vector<pt>;
 
-  ll n, m;
+  t n, m;
   vvt adj;
   vpt edges;
   vt group; // is el in group 0 or group 1?
