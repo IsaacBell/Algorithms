@@ -249,6 +249,15 @@ T binpowmod(T a, T b) {
     return ans % mod;
 }
 
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
+
 /* Solution starts here */
 
 // vl v(N);
@@ -265,44 +274,20 @@ ll a, b, c, n, m, k, w;
 string s, t;
 
 void solution() {
-  rd(m);
-  vstr strs;
-  vl hm(N);
-  set<ll> nums;
-  
-  fo(j,m) {
-    strs.pb("");
-    rd(n);
-    vl A(n);
-    // nums.clear();
-    fo(i,n) {
-      rd(A[i]);
-      hm[A[i]]++;
-      nums.insert(A[i]);
-      
-      if (hm[A[i]] & 1) {
-        strs[j] += 'L';
-        hm[A[i]]--;
-      } else {
-        strs[j] += 'R';
-        hm[A[i]]--;
-      }
-    }
-  }
+  rd(n);
+  if (n > 994) put(994);
+  if (n < 14) put(14);
 
-  trav(x, nums) if (hm[x] & 1) {
-    put("NO");
-    ret;
-  }
-
-  puts(strs);
+  ll up = n, dwn = n;
+  while (up%7 && dwn%7) up++, dwn--;
+  if (up%7) put(dwn); else put(up);
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  // rd(t);
+  rd(t);
 
   while(t--)
     solution();

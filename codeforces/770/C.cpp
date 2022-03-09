@@ -266,8 +266,8 @@ string s, t;
 
 void solution() {
   rd(n >> k);
-  if ((n * k) == 1) {put("YES"); put(1); ret;}
-  if ((n * k) & 1) {put ("NO");ret;}
+  if (n == 1) {put("YES"); put(1); ret;}
+  if (n & 1) {put ("NO");ret;}
 
   put("YES");
   fo(i,n) cout << 2*i+1 << " ";

@@ -63,6 +63,7 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -235,19 +236,25 @@ T binpow(T a, T b) {
   }
   return res;
 }
+
 template <class T = ll>
-T binpowmod(T a, T b) {
-  if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
+T binpowmod(T a, T b, T modd = mod) {
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
 }
+
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
 
 /* Solution starts here */
 
@@ -265,37 +272,15 @@ ll a, b, c, n, m, k, w;
 string s, t;
 
 void solution() {
-  rd(m);
-  vstr strs;
-  vl hm(N);
-  set<ll> nums;
-  
-  fo(j,m) {
-    strs.pb("");
-    rd(n);
-    vl A(n);
-    // nums.clear();
-    fo(i,n) {
-      rd(A[i]);
-      hm[A[i]]++;
-      nums.insert(A[i]);
-      
-      if (hm[A[i]] & 1) {
-        strs[j] += 'L';
-        hm[A[i]]--;
-      } else {
-        strs[j] += 'R';
-        hm[A[i]]--;
-      }
-    }
-  }
-
-  trav(x, nums) if (hm[x] & 1) {
-    put("NO");
-    ret;
-  }
-
-  puts(strs);
+  rd(n >> m);
+  ll M[n][m];
+  ll o = n*m;
+  map<ll,ll> cnt;
+  fo(i,n) fo(j,m)
+    cnt[binpowmod(i,j)]++;
+  for (auto [k,v]: cnt)
+    if (v > 2) o -= v;
+  put(o);
 }
 
 int main() {

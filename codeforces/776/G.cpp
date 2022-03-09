@@ -63,6 +63,7 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -235,74 +236,78 @@ T binpow(T a, T b) {
   }
   return res;
 }
+
 template <class T = ll>
-T binpowmod(T a, T b) {
-  if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
+T binpowmod(T a, T b, T modd = mod) {
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
 }
+
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
+
 
 /* Solution starts here */
 
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
+ll a, b, c, n, m, k, w;
+string s, t;
+
+vl v(N);
+vl p(N, -1);
+vl szz(N);
 // vl anc(N);
-// bitset<N> vis;
+bitset<N> vis;
 // bitset<N> bs;
 
 // ll timer = 0;
 // vl tin, tout;
 
-ll a, b, c, n, m, k, w;
-string s, t;
+vvl adj;
+
+void dfs_sz(ll cur, ll par, ll src, ll tar, ll& o) {
+  if (vis[cur]) ret;
+	// szz[cur] = 1;
+  vis[cur] = 1;
+	p[cur] = par;
+  if (cur == tar) ret;
+  bool tnei = 0, snei = 0;
+	for(ll chi : adj[cur]) {
+		if(chi == par) continue;
+		p[chi] = cur;
+    if (chi == tar) tnei = 1;
+    if (chi == src) snei = 1;
+		// szz[cur] += dfs_sz(chi, cur);
+	}
+  if (tnei && snei) o++;
+	return;
+}
 
 void solution() {
-  rd(m);
-  vstr strs;
-  vl hm(N);
-  set<ll> nums;
-  
-  fo(j,m) {
-    strs.pb("");
-    rd(n);
-    vl A(n);
-    // nums.clear();
-    fo(i,n) {
-      rd(A[i]);
-      hm[A[i]]++;
-      nums.insert(A[i]);
-      
-      if (hm[A[i]] & 1) {
-        strs[j] += 'L';
-        hm[A[i]]--;
-      } else {
-        strs[j] += 'R';
-        hm[A[i]]--;
-      }
-    }
-  }
+  rd(n >> m >> a >> b); // a,b = s,t
+  adj = buildAdj(n,m);
 
-  trav(x, nums) if (hm[x] & 1) {
-    put("NO");
-    ret;
-  }
+	ll o = 0;
+  Fo(i,1,n+1) if(!vis[i]) dfs_sz(i,i,a,b,o);
+	put(o);
 
-  puts(strs);
+	
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  // rd(t);
+  rd(t);
 
   while(t--)
     solution();
