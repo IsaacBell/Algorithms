@@ -215,16 +215,6 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-vvl buildAdj(ll nn, ll mm) {
-  vvl A(nn+1, vl {});
-  fo(i,mm) {
-    pl p; cin >> p.F >> p.S;
-    A[p.F].pb(p.S);
-    A[p.S].pb(p.F);
-  }
-  return A;
-}
-
 template <class T = ll>
 T binpow(T a, T b) {
   T res = 1;
@@ -255,3 +245,25 @@ fo(i,4) {
   if (ok(n, m, newX, newY)) ...
 }
 */
+
+vvl adj;
+vl inDeg(N);
+
+/*
+buildAdj(n,m,1); // DAG
+buildAdj(n,m,0); // UAG
+
+Sets adjacency list and inDegree counts
+*/
+void buildAdj(ll nn, ll mm, bool dag = false) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
+    pl p; rd(p.F >> p.S);
+    A[p.F].pb(p.S);
+    if (!dag) A[p.S].pb(p.F);
+    
+    if (!dag) inDeg[p.F]++; 
+    inDeg[p.S]++;
+  }
+  adj = std::move(A);
+}
