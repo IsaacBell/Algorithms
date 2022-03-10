@@ -4,6 +4,10 @@ http://jovilab.sinaapp.com/visualization/algorithms/strings/aho-corasick
 # KMP Visualization
 http://jovilab.sinaapp.com/visualization/algorithms/strings/kmp
 
+# Manacher's Algorithm
+
+Longest Palindromic Substring in O(n)
+
 # Suffix Trees
 
 - ST: orgs all suffixes of a str together
