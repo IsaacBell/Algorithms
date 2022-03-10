@@ -6,6 +6,8 @@ I'm using this repo to store record of study notes, competition results, and pro
 
 https://github.com/IsaacBell/Algorithms/tree/master/templates
 
+Also see [Geometry Suite]
+
 # Reference Code and Study Notes
 
 https://github.com/IsaacBell/Algorithms/tree/master/reference
@@ -14,7 +16,7 @@ Study notes are listed under `_notes.md` in their respective folders.
 
 # Codeforces
 
-[Contest Results (out of date)](https://github.com/IsaacBell/Algorithms/tree/master/codeforces)
+[Contest Results](https://github.com/IsaacBell/Algorithms/tree/master/codeforces)
 
 [Practice Problems](https://github.com/IsaacBell/Algorithms/tree/master/gym)
 
