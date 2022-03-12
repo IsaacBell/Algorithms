@@ -279,3 +279,117 @@ void buildAdj(ll nn, ll mm, bool dag = false) {
   }
   adj = std::move(A);
 }
+
+/* Solution starts here */
+
+// Entry<ll> initialElem = { 0, 0, 1 };
+template<class T = ll>
+struct Entry {
+  T freq;       // Frequency that this number occurs in the input list
+  T parity;     // 0 for even number of factors, 1 for odd number
+  T prod;       // Product of distinct prime factors
+
+  Entry<T>(): freq(0), parity(0), prod(1) {};
+};
+
+// Sequence<ll> seq(n); seq.read(); seq.build();
+// n: input array size, m: number limit
+template<class T = ll>
+struct Sequence {
+
+public:
+  vector<T> input;
+  vector< Entry<T> > data;
+  T n, m;
+  Sequence<T>(T n_, T m_ = (T) 3e6+1): n(n_), m(m_) {
+    data.rsz(m_), input.rsz(n_);
+  }
+
+  void build() { extendedEratosthenes(); }
+  void printNumCoprimes() { put(countCoprimes()); }
+  void read()  {
+    trav(num, input) {
+      rd(num);
+      data[num].freq++;
+    }
+  }
+  
+  ll getNumCoprimes() { return countCoprimes(); }
+
+private:
+  ll countCoprimes() {
+    ll total = static_cast<ll> (n) * (n - 1) / 2;
+    Fo (i, 2, m + 1) {
+      if (data[i].prod) {
+        // i must have no repeated factors.
+
+        ll c = 0;
+        for (ll j = i; j <= m; j += i) {
+          c += data[j].freq;
+        }
+
+        total -= (data[i].parity * 2 - 1) * static_cast<ll> (c) * (c - 1) / 2;
+      }
+    }
+    
+    ret total;
+  }
+
+  void extendedEratosthenes() {
+    ll i;
+    for (i = 2; i * i <= m; ++i) {
+      if (data[i].prod == 1) {
+        for (ll j = i, k = i; j <= m; j += i) {
+          if (--k) {
+            data[j].parity ^= 1;
+            data[j].prod *= i;
+          } else {
+            // j has a repeated factor of i: knock it out.
+            data[j].prod = 0;
+            k = i;
+          }
+        }
+      }
+    }
+
+    // Fix up numbers with a prime factor above their square root.
+    for (; i <= m; ++i) {
+      if (data[i].prod && data[i].prod != i) {
+        data[i].parity ^= 1;
+      }
+    }
+  }
+};
+
+
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
+
+void solution() {
+  rd(n);
+  Sequence<ll> seq(n); seq.read(); seq.build();
+
+  seq.printNumCoprimes();
+}
+
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+  ll t = 1;
+  // rd(t);
+
+  while(t--)
+    solution();
+
+  return 0;
+}

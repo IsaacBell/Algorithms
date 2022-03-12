@@ -88,18 +88,6 @@ using namespace std;
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
 #define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
-#define putNo put("NO"); ret
-#define putYes put("YES"); ret
-#define oo0 ll o = 0
-#define oomx ll o = mod
-#define oomn ll o = -mod
-#define vlo vl o
-#define vlon(n) vl o(n)
-#define vlonx(n, x) vl o(n, x)
-#define oov(n, x) vl o(n, x)
-#define opb o.pb
-#define osz o.sz()
-#define posz put(o.sz())
 
 typedef long double ld;
 typedef complex<ld> cd;
@@ -163,9 +151,9 @@ template<typename T=ll> T powM(T x, T y) {
   T o = 1;
   x %= mod;
   while (y) {
-    if (y & 1) (o *= x) %= mod;
-    y >>= 1;
-    (x *= x) %= mod;
+  if (y & 1) (o *= x) %= mod;
+  y >>= 1;
+  (x *= x) %= mod;
   }
   return o;
 }
@@ -181,8 +169,8 @@ template<class T=ll> T count_digit(T number) { return T(log10(number) + 1); }
 template<class T=ll> T sum_digit(T n) {
   T sum = 0;
   while (n != 0) {
-    sum = sum + n % 10;
-    n = n / 10;
+  sum = sum + n % 10;
+  n = n / 10;
   }
   return sum;
 }
@@ -190,38 +178,38 @@ template<class T=ll> T sum_digit(T n) {
 template<class T=ll>
 T sum_digit_string(string str)
 {
-    T sum = 0;
-    for (T i = 0; i < str.length(); i++)
-    {
-        sum = sum + str[i] - 48;
-    }
-    return sum;
+  T sum = 0;
+  for (T i = 0; i < str.length(); i++)
+  {
+    sum = sum + str[i] - 48;
+  }
+  return sum;
 }
 
 template<class T=ll> string dec2bin(T n)
 {
-    const T size=sizeof(n)*8;
-    string s = "00000000000000000000000000000000";
-    for (T a=0;a<32;a++)
+  const T size=sizeof(n)*8;
+  string s = "00000000000000000000000000000000";
+  for (T a=0;a<32;a++)
+  {
+    if(n==0)
+      return s;
+    else
     {
-        if(n==0)
-            return s;
-        else
-        {
-            if(n%2!=0)
-                s[31-a]='1';
-            n/=2;
-        }
+      if(n%2!=0)
+        s[31-a]='1';
+      n/=2;
     }
-    return s;
+  }
+  return s;
 }
 
 template<typename T = ll>
 T fac(T x) { // factorial
   T o = 1;
   if (x > 0)
-    for(T i = 1; i <= x; ++i)
-        o = multM<T>(o,i);
+  for(T i = 1; i <= x; ++i)
+    o = multM<T>(o,i);
   return o;
 }
 
@@ -231,10 +219,10 @@ template <class T = ll>
 T binpow(T a, T b) {
   T res = 1;
   while (b > 0) {
-      if (b & 1)
-          res = res * a;
-      a = a * a;
-      b >>= 1;
+    if (b & 1)
+      res = res * a;
+    a = a * a;
+    b >>= 1;
   }
   return res;
 }
@@ -270,12 +258,56 @@ Sets adjacency list and inDegree counts
 void buildAdj(ll nn, ll mm, bool dag = false) {
   vvl A(nn+1, vl {});
   fo(i,mm) {
-    pl p; rd(p.F >> p.S);
-    A[p.F].pb(p.S);
-    if (!dag) A[p.S].pb(p.F);
-    
-    if (!dag) inDeg[p.F]++; 
-    inDeg[p.S]++;
+  pl p; rd(p.F >> p.S);
+  A[p.F].pb(p.S);
+  if (!dag) A[p.S].pb(p.F);
+  
+  if (!dag) inDeg[p.F]++; 
+  inDeg[p.S]++;
   }
   adj = std::move(A);
+}
+
+/* Solution starts here */
+
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
+
+void solution() {
+  rd(n);
+  int type;
+  if (n % 3 == 1)
+    type = 1;
+  else
+    type = 2;
+  int sum = 0;
+  while (sum != n) {
+    cout << type;
+    sum += type;
+    type = 3 - type;
+  }
+  
+  cnl;
+}
+
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+  ll t = 1;
+  rd(t);
+
+  while(t--)
+  solution();
+
+  return 0;
 }

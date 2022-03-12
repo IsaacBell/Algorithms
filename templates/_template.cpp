@@ -88,6 +88,18 @@ using namespace std;
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
 #define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
+#define putNo put("NO"); ret
+#define putYes put("YES"); ret
+#define oo0 ll o = 0
+#define oomx ll o = mod
+#define oomn ll o = -mod
+#define vlo vl o
+#define vlon(n) vl o(n)
+#define vlonx(n, x) vl o(n, x)
+#define oov(n, x) vl o(n, x)
+#define opb o.pb
+#define osz o.sz()
+#define posz put(o.sz())
 
 typedef long double ld;
 typedef complex<ld> cd;

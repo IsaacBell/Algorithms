@@ -88,18 +88,6 @@ using namespace std;
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
 #define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
-#define putNo put("NO"); ret
-#define putYes put("YES"); ret
-#define oo0 ll o = 0
-#define oomx ll o = mod
-#define oomn ll o = -mod
-#define vlo vl o
-#define vlon(n) vl o(n)
-#define vlonx(n, x) vl o(n, x)
-#define oov(n, x) vl o(n, x)
-#define opb o.pb
-#define osz o.sz()
-#define posz put(o.sz())
 
 typedef long double ld;
 typedef complex<ld> cd;
@@ -227,6 +215,16 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
+vvl buildAdj(ll nn, ll mm) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
+    pl p; cin >> p.F >> p.S;
+    A[p.F].pb(p.S);
+    A[p.S].pb(p.F);
+  }
+  return A;
+}
+
 template <class T = ll>
 T binpow(T a, T b) {
   T res = 1;
@@ -258,24 +256,67 @@ fo(i,4) {
 }
 */
 
-vvl adj;
-vl inDeg(N);
+/* Solution starts here */
 
-/*
-buildAdj(n,m,1); // DAG
-buildAdj(n,m,0); // UAG
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
 
-Sets adjacency list and inDegree counts
-*/
-void buildAdj(ll nn, ll mm, bool dag = false) {
-  vvl A(nn+1, vl {});
-  fo(i,mm) {
-    pl p; rd(p.F >> p.S);
-    A[p.F].pb(p.S);
-    if (!dag) A[p.S].pb(p.F);
-    
-    if (!dag) inDeg[p.F]++; 
-    inDeg[p.S]++;
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
+
+vl fact;
+
+ll powmod(ll a, ll b, ll p){
+  a %= p;
+  if (a == 0) return 0;
+  ll product = 1;
+  while(b > 0) {
+    if (b&1) {    // you can also use b % 2 == 1
+      product *= a;
+      product %= p;
+      --b;
+    }
+
+    a *= a;
+    a %= p;
+    b /= 2;    // you can also use b >> 1
   }
-  adj = std::move(A);
+
+  return product;
+}
+
+ll inv(ll a, ll p = mod){
+  return powmod(a, p-2, p);
+}
+
+void solution() {
+  rd(n >> m);
+
+  ll o = (fact[n+m-1] * inv(fact[n-1])) % mod;
+  (o *= inv(fact[m])) %= mod;
+  put(o);
+}
+
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+  ll t = 1;
+  // rd(t);
+  fact.rsz(2000001);
+  fact[0] = fact[1] = 1;
+  Fo(i,2,2000001) {
+    fact[i] = (fact[i-1] * i) % mod;
+  }
+
+  while(t--)
+    solution();
+
+  return 0;
 }

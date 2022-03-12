@@ -7,6 +7,7 @@
 #include <sstream>
 #include <queue>
 #include <deque>
+#include <tuple>
 #include <bitset>
 #include <iterator>
 #include <list>
@@ -93,9 +94,8 @@ using namespace std;
 #define oo0 ll o = 0
 #define oomx ll o = mod
 #define oomn ll o = -mod
-#define vlo vl o
-#define vlon(n) vl o(n)
-#define vlonx(n, x) vl o(n, x)
+#define oov vl o
+#define oov(n) vl o(n)
 #define oov(n, x) vl o(n, x)
 #define opb o.pb
 #define osz o.sz()
@@ -249,6 +249,21 @@ T binpowmod(T a, T b, T modd = mod) {
   return ans % modd;
 }
 
+// printing tuples
+template<class TupType, size_t... I>
+void print(const TupType& _tup, std::index_sequence<I...>)
+{
+    // std::cout << "(";
+    (..., (std::cout << (I == 0? "" : " ") << std::get<I>(_tup)));
+    // std::cout << ")\n";
+}
+
+template<class... T>
+void print (const std::tuple<T...>& _tup)
+{
+    print(_tup, std::make_index_sequence<sizeof...(T)>());
+}
+
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
 bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
 /* Grid traversal
@@ -278,4 +293,49 @@ void buildAdj(ll nn, ll mm, bool dag = false) {
     inDeg[p.S]++;
   }
   adj = std::move(A);
+}
+
+/* Solution starts here */
+
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
+
+void solution() {
+  rd(n >> m);
+  int M[n][m];
+  char ch;
+  fo(i,n) fo(j,m) { rd(ch); M[i][j] = ch == '1'; }
+  if (M[0][0]) putNo;
+  vector<tuple<ll,ll,ll,ll>> o;
+
+  ford1(i,n-1) ford1(j,m-1) {
+    if (!M[i][j]) cont;
+    if (i) opb({i, j+1, i+1, j+1});
+    else opb({i+1, j, i+1, j+1});
+  }
+  
+  posz;
+  trav(oo,o) put(oo);
+}
+
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+  ll t = 1;
+  rd(t);
+
+  while(t--)
+    solution();
+
+  return 0;
 }
