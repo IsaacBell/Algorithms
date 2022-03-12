@@ -23,7 +23,7 @@ struct BipartiteGraph {
   vpt edges;
   vt group; // is el in group 0 or group 1?
   
-  void build(ll nn, ll mm) {
+  void build(T nn, T mm) {
     vvt A(nn+1, vl {});
     vpt pp(mm);
     fo(i,mm) {
