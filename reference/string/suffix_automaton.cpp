@@ -9,7 +9,7 @@ struct SuffixAuto {
  
   vector<State> states;
   vl dp; 
-  int last;
+  int last, K;
  
   SuffixAuto(const string &S) {
     dp.rsz(N);
@@ -23,6 +23,13 @@ struct SuffixAuto {
 
   ll numDistinctSubstrings() {
     return dfs(0) - 1;
+  }
+
+  string kthLexicographicallySmallestSubstr(ll K) {
+    string str = "";
+    dfs();
+    dfsKthSmallestSubstr(K, str);
+    return str;
   }
 
 private:
@@ -45,32 +52,52 @@ private:
     else {
       int Q = states[P].next[c];
       if (states[P].len + 1 == states[Q].len)
-        states[cur].link = Q;
+      states[cur].link = Q;
       else {
-        int C = state(states[P].len + 1, states[Q].link);
-        copy(states[Q].next, states[Q].next + 26, states[C].next);
-        while (P != -1 && states[P].next[c] == Q) {
-          states[P].next[c] = C;
-          P = states[P].link;
-        }
-        states[Q].link = states[cur].link = C;
+      int C = state(states[P].len + 1, states[Q].link);
+      copy(states[Q].next, states[Q].next + 26, states[C].next);
+      while (P != -1 && states[P].next[c] == Q) {
+        states[P].next[c] = C;
+        P = states[P].link;
+      }
+      states[Q].link = states[cur].link = C;
       }
     }
     last = cur;
   }
 
-  ll dfs(int u) {
-    if (dp[u] > 0)
-      return dp[u];
-    for (int i = 0; i < 26; i++)
+  ll dfs(int u = 0) {
+    if (dp[u]) return dp[u];
+
+    fo(i,26)
       if (states[u].next[i] != -1) 
         dp[u] += dfs(states[u].next[i]);
     return dp[u] += 1;
   }
+
+  void dfsKthSmallestSubstr(ll& K, string& out, int u = 0) {
+    if (!K) return;
+    K--;
+    //deb2(K,out);
+
+    fo(i,26) {
+      int v = states[u].next[i];
+      //deb2(v, dp[v]);
+      if (v > -1) {
+        if (K >= dp[v]) K -= dp[v];
+        else {
+          out += (char)(i + 'a');
+          return dfsKthSmallestSubstr(K, out, v);
+        }
+      }
+    }
+  }
 };
 
+
 void solution() {
-  rd(s);
+  rd(s >> k);
   SuffixAuto sa(s);
   put(sa.numDistinctSubstrings());
+  put(sa.kthLexicographicallySmallestSubstr(k));
 }
