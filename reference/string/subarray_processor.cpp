@@ -38,6 +38,36 @@ struct SubArrayProcessor {
     return bsearch(check);
   }
 
+  // maximum sum of vals w/ len between a and b
+  ll maxSumSubarray(ll a, ll b) {
+    multiset<ll> mst;
+   	vl pfs(n); // prefix sums
+    pfs[0] = data[0];
+
+   	Fo(i,1,n) pfs[i] = pfs[i-1] + data[i];
+    mst.insert(0);
+    ll ans = -9e18;
+    ckmax(ans, pfs[a-1]);
+    bool flag = 0;
+    
+    Fo(i,a,n) {
+      if(i-b >= 0) {
+        if(!flag) {
+          auto it = mst.find(0);
+          mst.erase(it);
+          flag = 1;
+        }
+      }
+      if(i-a >= 0) mst.insert(pfs[i-a]);
+      ckmax(ans, pfs[i] - *mst.begin());
+      if(i-b >= 0) {
+        auto it = mst.find(pfs[i-b]);
+        mst.erase(it);
+      }
+    }
+    return ans;
+  }
+
   // Count # subarrays where sum % k == 0
   // Value of k defaults to value of n
   ll numSubarraysWithSumDivisibleByK(ll k = -mod) {
