@@ -63,6 +63,7 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
+#define print(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -87,6 +88,18 @@ using namespace std;
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
 #define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
+#define putNo put("NO"); ret
+#define putYes put("YES"); ret
+#define oo0 ll o = 0
+#define oomx ll o = mod
+#define oomn ll o = -mod
+#define vlo vl o
+#define vlon(n) vl o(n)
+#define vlonx(n, x) vl o(n, x)
+#define oov(n, x) vl o(n, x)
+#define opb o.pb
+#define osz o.sz()
+#define posz put(o.sz())
 
 typedef long double ld;
 typedef complex<ld> cd;
@@ -214,16 +227,6 @@ T fac(T x) { // factorial
 
 bool comp2nd(pl& A, pl& B) { return A.S < B.S; }
 
-vvl buildAdj(ll nn, ll mm) {
-  vvl A(nn+1, vl {});
-  fo(i,mm) {
-    pl p; cin >> p.F >> p.S;
-    A[p.F].pb(p.S);
-    A[p.S].pb(p.F);
-  }
-  return A;
-}
-
 template <class T = ll>
 T binpow(T a, T b) {
   T res = 1;
@@ -235,94 +238,114 @@ T binpow(T a, T b) {
   }
   return res;
 }
+
 template <class T = ll>
-T binpowmod(T a, T b) {
-  if(b == 0){
-        return 1;
-    }
-    T ans = binpowmod(a,b/2);
-    ans *= ans;
-    ans %= mod;
-    if(b % 2){
-        ans *= a;
-    }
-    return ans % mod;
+T binpowmod(T a, T b, T modd = mod) {
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
+}
+
+const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+/* Grid traversal
+fo(i,4) {
+  newX = x + dx[i]; newY = y + dy[i];
+  if (ok(n, m, newX, newY)) ...
+}
+*/
+
+vvl adj;
+vl inDeg(N);
+
+/*
+buildAdj(n,m,1); // DAG
+buildAdj(n,m,0); // UAG
+
+Sets adjacency list and inDegree counts
+*/
+void buildAdj(ll nn, ll mm, bool dag = false) {
+  vvl A(nn+1, vl {});
+  fo(i,mm) {
+    pl p; rd(p.F >> p.S);
+    A[p.F].pb(p.S);
+    if (!dag) A[p.S].pb(p.F);
+    
+    if (!dag) inDeg[p.F]++; 
+    inDeg[p.S]++;
+  }
+  adj = std::move(A);
 }
 
 /* Solution starts here */
 
-const int K = 26;
+template <class T = ll>
+struct PermutationProcessor {
+  using vt = vector<T>;
 
-struct Vertex {
-    int next[K];
-    bool leaf = false;
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];
+public:
+  vt data;
+  vt pfs; // prefix sums
+  vt mx;
+  ll n;
 
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-
-vector<Vertex> t(1);
-
-void add_string(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
-        }
-        v = t[v].next[c];
-    }
-    t[v].leaf = true;
-}
-
-int go(int v, char ch);
-
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
-    }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
-
-void search(vstr& words, size_t n, string& s) {
-  ll state = 0;
-  string str = "";
-
-  fo(i, s.sz()) {
-    state = go(state, s[i]);
-    str += t[state].pch;
-    
-    if (t[state].leaf) { // match found
-      out[lookup[str]] = 1;
-      str = "";
-      // print matched string
-      // put(str);
-    }
-
-    if (t[state].pch == '$') str = "";
+  PermutationProcessor(ll n_): n(n_) {
+    data.rsz(n_);
+    mx.rsz(n_, -mod), pfs.rsz(n_ + 1);
+    iota(all(data), 1);
+    sumPrefixes();
   }
-}
+  PermutationProcessor(vt data_): data(data_), n(data_.sz()) {
+    mx.rsz(n), pfs.rsz(n + 1);
+    sumPrefixes();
+  }
+
+  void reverse() { reverse(all(data)); }
+
+  template <typename Fn>
+  void checkSwaps(Fn& callback) {
+    ford1(i,n) {
+      swap(data[i], data[i-1]);
+      callback(data);
+    }
+  }
+
+  /* max subarray sum after running a transform f(x)
+     e.g. adding 𝑥 to els on 𝑘 distinct positions
+
+    returns max val of 𝑓(𝑘) for all 𝑘 from 0 to 𝑛
+  */
+  template <typename Fn>
+  vt maxTransformedSubarraySum(ll x, Fn& fn) {
+    vt ans(n+1);
+    fo(i,n+1) {
+      ll best = 0;
+      fo(j,n)
+        ckmax(
+          best,
+          mx[j] + fn(i,j)
+        );
+      ans[i] = best;
+    }
+    
+    return ans;
+  }
+
+private:
+  void sumPrefixes() {
+    mx[0] = pfs[0] = 0;
+    fo(i,n) pfs[i+1] = data[i] + pfs[i];
+
+    fo(i,n) {
+      ll best = -mod;
+      Fo(j,0,n-i) ckmax(best, pfs[j+i+1] - pfs[j]);
+      mx[i] = best;
+    }
+  }
+};
 
 // vl v(N);
 // vl p(N, -1);
@@ -335,20 +358,29 @@ void search(vstr& words, size_t n, string& s) {
 // vl tin, tout;
 
 ll a, b, c, n, m, k, w;
-string s;
+string s, t;
 
 void solution() {
-  rd(n >> s >> m);
-  vstr A(m);
-  fo(i,m) { rd(A[i]); add_string(A[i]); }
+  ll x; rd(n >> x);
+  vl A(n);
+  readall(A);
+  PermutationProcessor<ll> p(A);
 
-  search(A, n, s);
+  auto transform = [x](ll i, ll j) {
+    return min(i,j+1) * x;
+  };
+
+  puts(p.maxTransformedSubarraySum(x, transform)); cnl;
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-  solution();
+  ll t = 1;
+  rd(t);
+
+  while(t--)
+    solution();
 
   return 0;
 }
