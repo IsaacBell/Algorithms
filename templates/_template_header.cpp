@@ -241,12 +241,14 @@ T binpow(T a, T b) {
 
 template <class T = ll>
 T binpowmod(T a, T b, T modd = mod) {
-  if(b == 0) return 1;
-  T ans = binpowmod(a,b/2,modd);
-  ans *= ans;
-  ans %= modd;
-  if(b % 2) ans *= a;
-  return ans % modd;
+  T res = 1;
+  while (b > 0) {
+      if (b & 1)
+          res = (res * a) % modd;
+      a = (a * a) % modd;
+      b >>= 1;
+  }
+  return res;
 }
 
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};

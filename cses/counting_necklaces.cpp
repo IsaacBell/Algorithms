@@ -232,8 +232,8 @@ T binpow(T a, T b) {
   T res = 1;
   while (b > 0) {
       if (b & 1)
-          res = res * a;
-      a = a * a;
+          res = (res * a) % mod;
+      a = (a * a) % mod;
       b >>= 1;
   }
   return res;
@@ -241,14 +241,12 @@ T binpow(T a, T b) {
 
 template <class T = ll>
 T binpowmod(T a, T b, T modd = mod) {
-  T res = 1;
-  while (b > 0) {
-      if (b & 1)
-          res = (res * a) % modd;
-      a = (a * a) % modd;
-      b >>= 1;
-  }
-  return res;
+  if(b == 0) return 1;
+  T ans = binpowmod(a,b/2,modd);
+  ans *= ans;
+  ans %= modd;
+  if(b % 2) ans *= a;
+  return ans % modd;
 }
 
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
@@ -297,17 +295,50 @@ void buildAdj(ll nn, ll mm, bool dag = false) {
 ll a, b, c, n, m, k, w;
 string s, t;
 
+template <class T = ll>
+struct CombinatorialGenerator {
+  using vt = vector<T>;
+public:
+  vt data;
+  T n, m, k;
+
+  CombinatorialGenerator<T>() {};
+  CombinatorialGenerator<T>(T n_): n(n_) {};
+  CombinatorialGenerator<T>(T n_, T m_): n(n_), m(m_) {};
+  CombinatorialGenerator<T>(T n_, T m_, T k_): n(n_), m(m_), k(k_) {};
+
+  T burnsidesLemma(T m_ = -1e18) {
+  	// deb2(n,m);
+  	if (m_ != -1e18) m = m_;
+    T ans = 0;
+    fo(i,n) {
+        T temp = binpow(m, gcd(i,n));
+        // deb2(temp, m); deb(inv(n));
+        temp *= inv(n);
+        temp %= mod;
+        ans += temp;
+        ans %= mod;
+    }
+    return ans;
+  }
+private:
+  // Modular inverse
+  T inv(T a, T p = mod) {
+    return binpow(a, p-2);
+  }
+};
+
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  rd(n >> m);
+  CombinatorialGenerator<ll> G(n,m);
+  put(G.burnsidesLemma(m));
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
     solution();
