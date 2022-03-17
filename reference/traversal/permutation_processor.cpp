@@ -29,6 +29,16 @@ public:
     }
   }
 
+  T maxSubarraySum() {
+    ll best = -mod, cur = 0;
+    trav(a, data) {
+      cur = max(cur+a, a);
+      ckmax(best,cur);
+    }
+    return best;
+  }
+  T kadanes() { return maxSubarraySum(); }
+
   // max subarray sum after addition transforms:
   // add 𝑥 to the elements on exactly 𝑘 distinct positions
   vt maxTransformedSubarrayWithAddition(ll x) {

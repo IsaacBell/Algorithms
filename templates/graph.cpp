@@ -5,6 +5,8 @@
 
 template <typename T>
 class graph {
+  using vt = vector<T>;
+  using vvt = vector<vt>;
 public:
   struct edge {
     int from;
@@ -12,10 +14,10 @@ public:
     T cost;
   };
 
-  map<pl,ll> weightDict; // todo - use faster data structure
+  map<pi,T> weightDict; // todo - use faster data structure
   vector<edge> edges;
-  vvi g;
-  vl dist;
+  vvt g;
+  vt dist;
   int n;
 
   function<bool(int)> ignore;
@@ -157,10 +159,37 @@ class undigraph : public graph<T> {
     weightDict[{from, to}] = cost;
     return id;
   }
+
+  T num_connected_components() {
+    T cnt = 0;
+    vb used(n);
+    stack<T> stk;
+
+    fo(i, n) if (not used[i]) {
+      cnt++;
+      used[i] = true;
+      stk.push(i);
+
+      while (not stk.empty()) {
+        T x = stk.top();
+        stk.pop();
+        for (T nei : g[x]) if (not used[nei]) {
+          used[nei] = true;
+          stk.push(nei);
+        }
+      }
+    }
+
+    return cnt;
+  }
+
+  bool is_connected_graph() {
+    return num_connected_components(g) == 1;
+  }
 };
 
 template <typename T>
-vector <T> dijkstra(const graph<T> &g, int start) {
+vector<T> dijkstra(const graph<T> &g, int start) {
   assert(0 <= start && start < g.n);
   vector<T> dist(g.n, numeric_limits<T>::max());
   priority_queue<pair<T, int>, vector<pair<T, int> >, greater<pair<T, int> > > s;

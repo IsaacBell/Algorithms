@@ -11,6 +11,16 @@ public:
     sortall(in);
   };
 
+  T maxSubarraySum() {
+    ll best = -mod, cur = 0;
+    trav(a, data) {
+      cur = max(cur+a, a);
+      ckmax(best,cur);
+    }
+    return best;
+  }
+  T kadanes() { return maxSubarraySum(); }
+
   // Ex: max # movies you can watch given start & end times
   ll maxNumNonOverlappingIntervals(vt& StartTimes, vt& EndTimes) {
     vpl p(n);
