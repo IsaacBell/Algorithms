@@ -4,11 +4,27 @@ struct CombinatorialGenerator {
 public:
   vt data;
   T n, m, k;
+  map<T,T> f; // recursion map for fibonnaci #s
 
   CombinatorialGenerator<T>() {};
   CombinatorialGenerator<T>(T n_): n(n_) {};
   CombinatorialGenerator<T>(T n_, T m_): n(n_), m(m_) {};
   CombinatorialGenerator<T>(T n_, T m_, T k_): n(n_), m(m_), k(k_) {};
+  
+  T fib(T n) {
+    if(f.count(n)) return f[n];
+    if(n==0) return 0;
+    if(n==1 || n==2) return 1;
+    if(n%2==0) {
+        T k=n/2;
+        T ret1=fib(k-1),ret2=fib(k);
+        return f[n]=((((2*ret1)%mod+ret2)%mod)*ret2)%mod;
+    } else {
+        T k=(n+1)/2;
+        T ret1=fib(k-1),ret2=fib(k);
+        return f[n]=( (ret1*ret1)%mod + (ret2*ret2)%mod)%mod;
+    }
+}
 
   // Ex: necklaces that consist of n pearls and each pearl has m possible colors
   // (Pass n and m as initializer args, or pass m as a fn arg)
