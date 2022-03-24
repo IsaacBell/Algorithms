@@ -71,3 +71,39 @@ Ans = T1[p..q-1] - T2[p..q-1];
 We use q-1 so we don't capture j's outgoing edge
 
 For update queries, find i & j in euler[] and update them in T1/T2
+
+# MAXIMUM INDEPENDENT SET
+
+Compute via DFS.
+
+The search will compute two values for each subtree in the graph:
+
+- A(i) = The size of the maximum independent set in the subtree rooted at i with the constraint that node i must be included in the set.
+- B(i) = The size of the maximum independent set in the subtree rooted at i with the restriction that node i must NOT be included in the set.
+These can be computed recursively by considering two cases:
+
+The root of the subtree is not included.
+
+```B(i) = sum(max(A(j),B(j)) for j in children(i))```
+
+The root of the subtree is included.
+
+```A(i) = 1 + sum(B(j) for j in children(i))```
+
+The size of the maximum independent set in the whole tree is `max(A(root),B(root))`.
+
+# Maximal Independent Set
+
+Maximal independent set: (one to which no vertices can be added)
+
+To find the maximal independent set of vertices, we can use an important property of a tree: Every tree is Bipartite i.e. We can color the vertices of a tree using just two colors such that no two adjacent vertices have the same color.
+
+Do a DFS traversal and start coloring the vertices with BLACK and WHITE.
+
+Pick the set of vertices (either BLACK or WHITE) which are more in number. This will give you the maximal independent set of vertices for a tree.
+
+Some Intuition behind the why this algorithm works:
+
+Let us first revisit the definition of the maximal independent set of vertices. We have to pick just one end point of an edge and we have to cover every edge of the tree satisfying this property. We are not allowed to choose both end points of an edge.
+
+Now what does bicoloring of a graph do? It simply divides the set of vertices into two subsets (WHITE and BLACK) and WHITE colored vertices are directly connected to BLACK ones. Thus if we choose either all WHITE or all BLACK ones we are inherently choosing an independent set of vertices. Thus to choose maximal independent set, go for the subset whose size is larger.
