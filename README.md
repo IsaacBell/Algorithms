@@ -1,12 +1,12 @@
 # Competitive Programming Library
 
-I'm using this repo to store record of study notes, competition results, and problems solved on my Competitive Programming journey.
+A personal library. Holds my study notes, contest results, data structures, and practice problems.
 
 # Code Templates
 
 https://github.com/IsaacBell/Algorithms/tree/master/templates
 
-Also see [Geometry Suite]
+Also see [Geometry Suite](https://github.com/IsaacBell/Algorithms/blob/master/reference/geometry/structures.cpp)
 
 # Reference Code and Study Notes
 
@@ -22,13 +22,11 @@ Study notes are listed under `_notes.md` in their respective folders.
 
 # CSES Problem Set
 
-https://github.com/IsaacBell/Algorithms/tree/master/gym
+https://github.com/IsaacBell/Algorithms/tree/master/cses
 
 # AtCoder DP Contest
 
 https://github.com/IsaacBell/Algorithms/tree/master/atcoder/dp
 
-Need to re-attempt. I was still new to DP when I last ran through these questions.
-
-*Update:* Re-attempt underway as of 2022. Progress documented in the folder
+Several problems left unsolved as of March 24, 2022.
 
