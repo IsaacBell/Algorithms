@@ -30,3 +30,8 @@ https://github.com/IsaacBell/Algorithms/tree/master/atcoder/dp
 
 Several problems left unsolved as of March 24, 2022.
 
+# Daily Notes
+
+* Study how to use the Pigeonhole Principle algorithmically
+
+Start w/ Red vs. Blue: https://codeforces.com/blog/entry/100938
