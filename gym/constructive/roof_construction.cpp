@@ -307,8 +307,11 @@ string s, t;
 
 void solution() {
   rd(n);
-  vl A(n);
-  readall(A);
+
+  ll bit = msb(n);
+  ford(i, (1 << bit)) prints(i);
+  Fo(i, (1 << bit), n) prints(i);
+  cnl;
 }
 
 int main() {

@@ -283,3 +283,9 @@ void buildAdj(ll nn, ll mm, bool dag = false) {
   }
   adj = std::move(A);
 }
+
+ll msb (ll n) {
+  ll k = 0;
+  while((1 << (k + 1)) <= n - 1) ++k;
+  return k;
+}
