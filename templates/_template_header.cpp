@@ -63,7 +63,8 @@ using namespace std;
 #define deba(i, a, n) fo(i, n){cout << a[i] << " ";}
 #define rd(x) cin >> x
 #define readall(x) trav(elem, x) cin >> elem
-#define print(x) cout << x << " "
+#define print(x) cout << x
+#define prints(x) cout << x << " "
 #define put(x) cout << x << nl
 #define puts(x) trav(elem, x) cout << elem << " ";
 #define pb push_back
@@ -88,6 +89,7 @@ using namespace std;
 #define tr(it, x) for(auto it = x.begin(); it != x.end(); it++)
 #define trr(it, x) for(auto it = x.rbegin(); it != x.rend(); it+)
 #define getunique(v) {sort(all(v)); v.erase(unique(all(v)), v.end());}
+#define nextgreateridx(A, val) lower_bound(all(A), val)) - A.begin()
 #define putNo put("NO"); ret
 #define putYes put("YES"); ret
 #define oo0 ll o = 0

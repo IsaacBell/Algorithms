@@ -300,9 +300,13 @@ ll a, b, c, n, m, k, w;
 string s, t;
 
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  ll r; rd(n >> r >> b);
+
+  ll p = r / (b+1), q = r % (b+1);
+
+  fo(i,q) print(string(p+1, 'R')), print("B");
+  Fo(i,q,b) print(string(p, 'R')), print("B");
+  put(string(p, 'R'));
 }
 
 int main() {
