@@ -81,7 +81,7 @@ using namespace std;
 #define qp(args...) q.push(args)
 #define qe q.empty()
 #define wqe while(!q.empty())
-#define stktop(args...) auto [args] = stk.top(); stk.pop();
+#define stktop stk.top()
 #define stkpush(args...) stk.push(args)
 #define stkpop stk.pop()
 #define stke stk.empty()
@@ -314,13 +314,21 @@ void solution() {
   rd(n);
   vl A(n);
   readall(A);
+
+  // Amortized Analysis
+  stack<ll> stk;
+  fo(i,n) {
+    while (!stke && A[stktop] >= A[i]) stkpop;
+    prints((stke ? 0 : stktop + 1));
+    stkpush(i);
+  }
 }
 
 int main() {
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  rd(t);
+  // rd(t);
 
   while(t--)
     solution();

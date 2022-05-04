@@ -81,6 +81,11 @@ using namespace std;
 #define qp(args...) q.push(args)
 #define qe q.empty()
 #define wqe while(!q.empty())
+#define stktop(args...) auto [args] = stk.top(); stk.pop();
+#define stkpush(args...) stk.push(args)
+#define stkpop stk.pop()
+#define stke stk.empty()
+#define wse while(!stk.empty())
 #define begend(x) all(x)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
