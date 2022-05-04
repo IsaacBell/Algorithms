@@ -35,3 +35,7 @@ Several problems left unsolved as of March 24, 2022.
 * Study how to use the Pigeonhole Principle algorithmically
 
 Start w/ Red vs. Blue: https://codeforces.com/blog/entry/100938
+
+* Study different binary search constructions
+
+Review Fault-Tolerant Network: https://codeforces.com/contest/1651/problem/C
