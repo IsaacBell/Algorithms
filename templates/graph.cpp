@@ -52,6 +52,19 @@ public:
 
   digraph(int _n) : graph<T>(_n) {}
 
+  void read(int m) {
+    fo(i,m) {
+      rd(a >> b);
+      G.add(a,b);
+    }
+  }
+  void readWeighted(int m) {
+    fo(i,m) {
+      rd(a >> b >> c);
+      G.add(a,b,c);
+    }
+  }
+
   int add(int from, int to, T cost = 1) {
     assert(0 <= from && from < n && 0 <= to && to < n);
     int id = (int) edges.size();
@@ -137,6 +150,27 @@ public:
     trav(nei, g[i])
       ckmax(o, dfsMaxSumPath(tar, nei, o + weightDict[{i, nei}]) );
   }
+
+  // O(V^3*K)
+  // todo
+  /*
+  T shortestPathWithKEdges(T K) {
+    T dp[n][n][K+1];
+    fo(e, K+1)
+      fo(i, n)
+        fo(j, n) {
+          dp[i][j][e] = mod;
+          if (!e && i == j) dp[i][j][e] = 0;
+          if (e == 1 && g[i][j] != ) // todo
+            dp[i][j][e] = g[i][j];
+          
+          if (e > 1)
+            fo(b, n)
+              if (g[i][b] != mod && i == b) // todo
+                ckmin(dp[i][j][e], dp[b][j][e-1] + g[i][b]);
+        }
+  }
+  */
 };
 
 template <typename T>
@@ -186,6 +220,149 @@ class undigraph : public graph<T> {
   bool is_connected_graph() {
     return num_connected_components(g) == 1;
   }
+};
+
+/*
+  Bipartite Maximum Matching Implementation:
+
+  rd(n);
+  bigraph<ll> G(n);
+  G.read();
+  put(G.maximumMatching());
+*/
+
+template <class T>
+class bigraph : public graph<T> {
+
+public:
+  // n: number of nodes on left side, nodes are numbered 1 to n
+  // m: number of nodes on right side, nodes are numbered n+1 to n+m
+  // G = 0[0] ∪ G1[G[1---n]] ∪ G2[G[n+1---n+m]]
+
+  using vt = std::vector<T>;
+  using vvt = std::vector<vt>;
+
+  using graph<T>::weightDict;
+  // using graph<T>::edges;
+  using graph<T>::dist;
+  using graph<T>::g;
+  using graph<T>::n;
+  using graph<T>::ignore;
+  
+  vt match;
+  vvt adjInput;
+  const T MAXN = 1e6;
+  int m;
+
+  bigraph(int n_): graph<T>(n_) {
+    adjInput.rsz(MAXN, vt {});
+    g.rsz(MAXN, vt {});
+    dist.rsz(MAXN);
+    match.rsz(MAXN);
+  }
+
+  int add(int from, int to, T cost) {
+    // static_assert (fail<T>::value, "Do not use!");
+    return 0;
+  }
+
+  void read() {
+    fo(i, n - 1) {
+      ll a, b;
+      rd(a >> b);
+      adjInput[a].pb(b);
+      adjInput[b].pb(a);
+    }
+  }
+
+  bool bfs_hopcroft_karp() {
+    int i, u, v, len;
+    queue<int> q;
+    Fo(i,1,n+1) {
+      if(!match[i]) {
+        dist[i] = 0;
+        qp(i);
+      }
+      else dist[i] = mod;
+    }
+
+    dist[0] = mod;
+
+    wqe {
+      u = q.front();
+      q.pop();
+      if(u != 0) {
+        len = g[u].size();
+        fo(i,len) {
+          v = g[u][i];
+          if(dist[match[v]] == mod) {
+            dist[match[v]] = dist[u] + 1;
+            qp(match[v]);
+          }
+        }
+      }
+    }
+
+    return (dist[0] !=  mod);
+  }
+
+  bool dfs_hopcroft_karp(int u) {
+    int i, v, len;
+    if(u != 0) {
+      len = g[u].size();
+      fo(i, len) {
+        v = g[u][i];
+        if(dist[match[v]]==dist[u]+1) {
+          if(dfs_hopcroft_karp(match[v])) {
+            match[v] = u;
+            match[u] = v;
+            return true;
+          }
+        }
+      }
+      dist[u] = mod;
+      return false;
+    }
+
+    return true;
+  }
+
+  void make_bipartite_dfs(int u, int p, int l) {
+    if(l%2 and p != -1) {
+        g[u].push_back(p+n);
+        g[p+n].push_back(u);
+    }
+    for(int v: adjInput[u]) {
+      if(v != p) {
+        if(l & 1) {
+          g[u].push_back(v+n);
+          g[v+n].push_back(u);
+        }
+
+        make_bipartite_dfs(v, u, l+1);
+      }
+  }
+}
+
+  // Maximum bipartite matching
+  int hopcroft_karp() {
+    int matching = 0, i;
+    // match[] is assumed 0 for all vertex in G
+    while(bfs_hopcroft_karp())
+      Fo(i,1,n+1)
+        if(match[i] == 0 && dfs_hopcroft_karp(i))
+          matching++;
+    return matching;
+  }
+
+  int maximumMatching() {
+    make_bipartite_dfs(1, -1, 1);
+    return hopcroft_karp();
+  }
+
+// private:
+//   template <typename FailType>
+//   struct fail : std::false_type {};
 };
 
 template <typename T>
@@ -266,6 +443,7 @@ vector< vector<int> > find_cycles(const graph<T> &g, int bound_cnt = 1 << 30, in
   // digraph: finds at least one cycle in every connected component (if not broken)
   // undigraph: finds cycle basis
 }
+
 template <typename T>
 vector<int> edges_to_vertices(const graph<T> &g, const vector<int> &edge_cycle) {
   int sz = (int) edge_cycle.size();
