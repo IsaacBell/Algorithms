@@ -14,6 +14,10 @@ https://github.com/IsaacBell/Algorithms/tree/master/reference
 
 Study notes are listed under `_notes.md` in their respective folders.
 
+# External Reference Materials
+
+- [Staircase Nim and Partisan Games](https://pillowmath.github.io/Stat%20155/Lec3.pdf)
+
 # Codeforces
 
 [Contest Results](https://github.com/IsaacBell/Algorithms/tree/master/codeforces)
