@@ -17,6 +17,7 @@ Study notes are listed under `_notes.md` in their respective folders.
 # External Reference Materials
 
 - [Staircase Nim and Partisan Games](https://pillowmath.github.io/Stat%20155/Lec3.pdf)
+- [Impartial Combinatorial Games](https://www.cs.cmu.edu/afs/cs/academic/class/15859-f01/www/notes/comb.pdf)
 
 # Codeforces
 
