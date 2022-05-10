@@ -4,6 +4,9 @@
     - Alternative method in O(log n), using Extended Euclidean Algorithm
     - Modular inverse of all numbers in range [1,n] in O(n)
 
+  Todo:
+    - Mobius Fn
+
   References:
     - https://artofproblemsolving.com/community/c90633h1291397
 
