@@ -1,6 +1,8 @@
 /*
   Calcs the min # swaps of neighboring elements of the string,
-  needed to reverse the string
+  needed to reverse the string.
+
+  Solve by finding # of inversions for each prefix of the array.
 
   See: https://codeforces.com/contest/1430/problem/E
 */
