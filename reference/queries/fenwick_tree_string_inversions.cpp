@@ -1,36 +1,64 @@
-const int N = 3e5+10;
+/*
+  Calcs the min # swaps of neighboring elements of the string,
+  needed to reverse the string
 
-int n;
-int fen[N];
+  See: https://codeforces.com/contest/1430/problem/E
+*/
 
-void update(int i, int v){
-  for(int j = i; j <= n; j += (j&(-j)))
-    fen[j] += v;
+const ll MAXSZ = 31; // max charset size
+
+string revS;
+
+vl fen(N);
+vl cnt(MAXSZ);
+vvl posS(MAXSZ, vl {});
+vvl posT(MAXSZ, vl {});
+
+void inc(int i, int v) {
+  for (; i < n; i = (i | (i+1)))
+    fen[i] += v;
 }
 
-int sum(int i){
+int sum(int r) {
   int res = 0;
-  for(int j = i; j > 0; j -= (j&(-j)))
-    res += fen[j];
+  for (; r >= 0; r = (r & (r+1)) - 1)
+    res += fen[r];
   return res;
 }
 
-int query(int l, int r){
+int query(int l, int r) {
   return sum(r) - sum(l-1);
 }
 
 void Fenwick() {
   rd(n >> s);
-  fo(i,n) {
-    rd(A[i]);
-    A[i]++;
+  revS = s;
+  reverse(all(revS));
+
+  fo(i, n) {
+    posS[s[i] - 'a'].pb(i);
+    posT[revS[i] - 'a'].pb(i);
   }
 
-  ll res = 0;
+  ll ans = 0;
   fo(i,n) {
-    res += query(A[i], n);
-    update(A[i], 1);
+    // Find pos of revS[i] in original string's lookup table
+    ll khar = revS[i] - 'a';
+    ll cur = posS[khar][cnt[khar]];
+    ll oldChar = cur;
+
+    // Sum count of cur in the BIT
+    cur += query(cur, n-1);
+    ans += cur - i;
+
+    // Increase count in lookup table
+    inc(oldChar, 1);
+    cnt[khar]++;
   }
 
-  put(res);
+  put(ans);
+}
+
+void solution() {
+  Fenwick();
 }
