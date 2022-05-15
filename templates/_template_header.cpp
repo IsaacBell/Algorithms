@@ -200,7 +200,7 @@ T sum_digit_string(string str)
     T sum = 0;
     for (T i = 0; i < str.length(); i++)
     {
-        sum = sum + str[i] - 48;
+        sum = sum + str[i] - '0';
     }
     return sum;
 }
