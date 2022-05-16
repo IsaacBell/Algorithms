@@ -1,5 +1,6 @@
 # Ideas, Questions, Thoughts for when you're stuck
 
+- Problems involving minimizing a maximum often involve binary search
 - Is parity important?
   - + ops: parity is inverted if 2nd arg is odd
   - XOR ops: parity is inverted if 2nd arg is odd
