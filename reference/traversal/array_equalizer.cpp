@@ -14,5 +14,5 @@ struct ArrayEqualizer {
   };
 
   template <typename ...Args>
-  T process(Args)
+  T process(Args) {}
 };
