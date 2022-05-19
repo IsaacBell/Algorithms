@@ -259,7 +259,7 @@ T binpowmod(T a, T b, T modd = mod) {
 }
 
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+bool is_in_bounds(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
 /* Grid traversal
 fo(i,4) {
   newX = x + dx[i]; newY = y + dy[i];

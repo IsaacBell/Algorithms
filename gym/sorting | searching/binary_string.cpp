@@ -259,7 +259,7 @@ T binpowmod(T a, T b, T modd = mod) {
 }
 
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
-bool is_in_bounds(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
+bool ok(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
 /* Grid traversal
 fo(i,4) {
   newX = x + dx[i]; newY = y + dy[i];
@@ -297,23 +297,38 @@ ll msb (ll n) {
 
 /* Solution starts here */
 
-// vl v(N);
-// vl p(N, -1);
-// vl szz(N);
-// vl anc(N);
-// bitset<N> vis;
-// bitset<N> bs;
-
-// ll timer = 0;
-// vl tin, tout;
-
 ll a, b, c, n, m, k, w;
 string s, t;
 
+bool ok(vl& pos, ll n, ll k) {
+  if (pos.sz() <= k + 2) return true;
+  fo(i, pos.sz() - k - 1) {
+    ll l = pos[i] + 1, r = pos[k+i+1] - 1;
+    ll ones_left = r - l + 1 - k;
+    if (l > r) ones_left = 0;
+    ll numOnes = n + 2 - pos.sz();
+    ll onesRem = numOnes - ones_left;
+    if (onesRem <= k) return true;
+  }
+
+  return false;
+}
+
 void solution() {
-  rd(n);
-  vl A(n);
-  readall(A);
+  rd(s); szn(n,s);
+  vl pos {-1};
+  fo(i,n) if (s[i] == '0') pos.pb(i);
+  pos.pb(n);
+  ll l = 0, r = n;
+
+  while (l < r) {
+    ll mid = l + (r-l) / 2;
+
+    if (ok(pos, n, mid)) r = mid;
+    else l = mid+1;
+  }
+
+  put(l);
 }
 
 int main() {
