@@ -1,3 +1,5 @@
+#undef F
+
 template <class F = ll>
 struct FenwickTree {
   using vf = vector<F>;
@@ -68,9 +70,11 @@ struct FenwickTreeOneBasedIndexing : FenwickTree {
 // Increasing ranges and querying for single values
 // Uses 1-based indexing
 template <class F = ll>
-struct  FenwickTreeRangePoint : FenwickTree
-{
+struct  FenwickTreeRangePoint {
   using vf = vector<F>;
+  vf bit;  // binary indexed tree
+  int n;
+
   void add(F idx, F val) {
     for (++idx; idx < n; idx += idx & -idx)
         bit[idx] += val;
@@ -82,13 +86,33 @@ struct  FenwickTreeRangePoint : FenwickTree
   }
 
   F poF_query(F idx) {
-      F ret = 0;
+      F res = 0;
       for (++idx; idx > 0; idx -= idx & -idx)
-          ret += bit[idx];
-      return ret;
+          res += bit[idx];
+      return res;
+  }
+  
+  FenwickTreeRangePoint(F n) {
+      this->n = n;
+      bit.assign(n, 0);
+  }
+
+  FenwickTreeRangePoint(vf& a) : FenwickTreeRangePoint(a.size()) {
+    for (auto i = 0; i < a.size(); i++)
+      add(i, a[i]);
+  }
+
+  F sum(F r) {
+    F res = 0;
+    for (; r >= 0; r = (r & (r + 1)) - 1)
+      res += bit[r];
+    return res;
+  }
+
+  F sum(F l, F r) {
+    return sum(r) - sum(l - 1);
   }
 };
-
 template <class F = ll>
 struct FenwickTree2D {
   using vf = vector<F>;
