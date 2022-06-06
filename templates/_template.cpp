@@ -289,11 +289,16 @@ void buildAdj(ll nn, ll mm, bool dag = false) {
   adj = std::move(A);
 }
 
+ll ask(const string &s) { put("? "<<s<<endl); ll r; rd(r); return r; }
+
 ll msb (ll n) {
   ll k = 0;
   while((1 << (k + 1)) <= n - 1) ++k;
   return k;
 }
+
+// least significant bit
+ll lsb (ll n) { return n & (-n); }
 
 /* Solution starts here */
 
