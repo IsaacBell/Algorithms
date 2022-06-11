@@ -50,7 +50,21 @@ public:
   using graph<T>::n;
   using graph<T>::ignore;
 
-  digraph(int _n) : graph<T>(_n) {}
+  vt par;
+  vt vis;
+  vt dfsNum;
+  vt dfsLow;
+
+  const T UNVISITED = -1;
+  const T EXPLORED = 0;
+  const T VISITED = 1;
+
+  digraph(int _n) : graph<T>(_n) {
+    par.rsz(_n + 1, UNVISITED),
+    vis.rsz(_n + 1, UNVISITED),
+    dfsNum.rsz(_n + 1),
+    dfsLow.rsz(_n + 1);
+  }
 
   void read(int m) {
     fo(i,m) {
@@ -151,6 +165,23 @@ public:
       ckmax(o, dfsMaxSumPath(tar, nei, o + weightDict[{i, nei}]) );
   }
 
+  // Back Edges:
+    // if EXPLORED -> EXPLORED, nei is ancestor of p
+    // if par[nei] == u, cycle is a bi-directional edge
+  void cycleCheck(ll u) {
+    dfsNum[u] = EXPLORED;
+    trav(nei, Adj[u])
+      if (dfsNum[nei] == UNVISITED) {
+        par[nei] = u;
+        cycleCheck(nei);
+      } else if (dfsNum[nei] == EXPLORED)
+        if (nei == par[u]) {} // Bi-directional edge
+        else {} // Back Edge
+      else if (dfsNum[nei] == VISITED) {} // Forward Edge (rarely useful in CP)
+
+    dfsNum[nei] = VISITED;
+  }
+
   // O(V^3*K)
   // todo
   /*
@@ -175,14 +206,37 @@ public:
 
 template <typename T>
 class undigraph : public graph<T> {
-  public:
+  using vt = vector<T>;
+
+public:
   using graph<T>::weightDict;
   using graph<T>::edges;
   using graph<T>::dist;
   using graph<T>::g;
   using graph<T>::n;
 
-  undigraph(int _n) : graph<T>(_n) {}
+  vt par;
+  vt vis;
+  vt dfsNum;
+  vt dfsLow;
+  vt articulation_vertex;
+
+  const T UNVISITED = -1;
+  const T EXPLORED = 0;
+  const T VISITED = 1;
+
+  T dfsCnt;
+  T dfsRoot = -1;
+  T rootChildren;
+
+  undigraph(int _n) : graph<T>(_n) {
+    dfsCnt = 0, rootChildren = 0;
+    par.rsz(_n + 1, UNVISITED),
+    vis.rsz(_n + 1, UNVISITED),
+    articulation_vertex.rsz(_n + 1),
+    dfsNum.rsz(_n + 1),
+    dfsLow.rsz(_n + 1);
+  }
 
   int add(int from, int to, T cost = 1) {
     assert(0 <= from && from < n && 0 <= to && to < n);
@@ -192,6 +246,39 @@ class undigraph : public graph<T> {
     edges.push_back({from, to, cost});
     weightDict[{from, to}] = cost;
     return id;
+  }
+
+  vt articulationPtsAndBridges() {
+    dfsCnt = 0;
+    vt out;
+    fo(i,n) {
+      if (dfsNum[i] == UNVISITED) {
+        dfsRoot = i; rootChildren = 0;
+        dfsArticulationPtsAndBridges(i);
+        articulation_vertex[dfsRoot] = rootChildren > 1;
+      }
+    }
+    fo(i,n) if (articulation_vertex[i]) out.pb(i);
+    return out;
+  }
+
+  void dfsArticulationPtsAndBridges(ll u) {
+    assert(dfsRoot != -1); // set this to 1 or 0
+    dfsNum[u] = dfsCnt++;
+    dfsLow[u] = dfsNum[u];
+    trav(nei, g[u]) {
+      if (dfsNum[nei] == UNVISITED) {
+        par[nei] = u;
+        if (u == dfsRoot) rootChildren++;
+        articulationPtsAndBridges(nei);
+
+        if (dfsLow[nei] >= dfsLow[u])
+          articulation_vertex[u] = 1;
+        if (dfsLow[nei] > dfsNum[u]) {} // Edge u->v is a bridge
+        ckmin(dfsLow[u], dfsLow[nei]);
+      } else if (nei != par[u])
+        ckmin(dfsLow[u], dfsNum[nei]);
+    }
   }
 
   T num_connected_components() {
