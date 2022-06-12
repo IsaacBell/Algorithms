@@ -3,7 +3,7 @@ struct Tree {
   using pt = pair<T, T>;
   using vt = vector<T>;
   using vvt = vector<vt>;
-  const int MAXN = 2e5;
+  const int MAXN = 300005;
   const int LOG = log2(MAXN);
 
 public:
@@ -118,8 +118,8 @@ public:
     𝑑𝑝𝑖=𝑚𝑎𝑥(𝑑𝑝𝑐1+𝑠2−1,𝑑𝑝𝑐2+𝑠1−1)
     where 𝑠𝑖 denotes the number of vertices in the subtree of 𝑖.
   */
-  void calcMaxNonInfectedRoots(ll i = 1) {
-    dfsSubtreeSize(i);
+  void calcMaxNonInfectedRoots(ll root = 1) {
+    dfsSubtreeSize(root);
   }
 
 	T centroid(T i = 1) {

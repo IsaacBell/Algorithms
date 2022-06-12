@@ -7,10 +7,19 @@ struct Permutation {
 
   Permutation(vt& in): A(in), n(in.size()) {};
 
+  /*
+    Count inversions w/ modified merge sort
+
+    If front of right (sorted) sublist is taken b4
+    the left sublist, increment inv counter by size
+    of current L sublist
+  */
   ll inversionCount() {
     vt A2(all(A));
     return mergeSort(A, A2, 0, n - 1);
   }
+
+  ll numBubbleSwapsToSort() { return inversionCount(); }
 
 private:
   // merge two sorted subarrays `arr[low … mid]` and `arr[mid+1 … high]`

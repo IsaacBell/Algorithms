@@ -8,8 +8,15 @@ public:
 
   Sorter(): n(0) {};
   Sorter(vt &in): data(in), n(in.sz()) {
-    sortall(in);
+    sorted.rsz(in.sz());
+    std::copy(all(in), sorted.begin());
   };
+
+  void resize(ll n_ = -1) {
+    if (n_ == -1) n_ = n;
+    data.resize(n_);
+    sorted.resize(n_);
+  }
 
   T maxSubarraySum() {
     ll best = -mod, cur = 0;
@@ -20,6 +27,31 @@ public:
     return best;
   }
   T kadanes() { return maxSubarraySum(); }
+
+  /*
+  	Sorter<ll> sorter(A);
+    put(sorter.kthSmallestEl(k)
+  */
+  T kthSmallestEl(ll k) { return kthSmallestEl(0, n-1, k); }
+
+  /*
+    Linear time O(n+k) stable sort
+    Needs small value ranges e.g. [1..99]
+
+    auto sorted = countingSort(1, 99);
+  */
+  vt countingSort(ll L, ll R) {
+    ll k = R - L + 1;
+    vt out(n);
+    vt freq(k);
+    fo(i,n) freq[data[i] - L]++;
+    Fo(i,1,k) freq[i] += freq[i-1];
+    ford(i,n) {
+      out[freq[data[i]-L]] = data[i];
+      freq[data[i] - L]--;
+    }
+    return out;
+  }
 
   // Ex: max # movies you can watch given start & end times
   ll maxNumNonOverlappingIntervals(vt& StartTimes, vt& EndTimes) {
@@ -71,7 +103,7 @@ public:
     szn(n,Sellers); szn(m,Consumers);
     multiset<T> Ti;
     T tmp;
-    fo(T seller : Sellers) Ti.insert(seller);
+    for(T seller : Sellers) Ti.insert(seller);
 
     fo(i,m) {
       auto it = Ti.upper_bound(Consumers[i]);
@@ -105,7 +137,7 @@ public:
     A: Desired apt sizes per applicant
     B: Actual apt sizes
   */
-  T distributeMaxPossible(vt A, vt B) {
+  T distributeMaxPossible(vt A, vt B, ll k) {
     szn(nn, A);
     szn(mm, B);
     sortall(A);
@@ -123,5 +155,27 @@ public:
     }
 
     return o;
+  }
+
+private:
+  T kthSmallestEl(ll L, ll R, ll k) {
+    if (L == R) return sorted[L];
+    ll q = randPartition(L, R);
+    // deb(q);
+    if (q + 1 == k) return sorted[q];
+    if (q + 1 > k) return kthSmallestEl(L, q-1, k);
+    return kthSmallestEl(q+1, R, k);
+  }
+
+  ll randPartition(ll low, ll high) {
+  	ll i = low, x = sorted[high];
+    Fo(j, low, high) {
+      if (sorted[j] <= x) {
+        swap(sorted[i], sorted[j]);
+        i++;
+      }
+    }
+    swap(sorted[i], sorted[high]);
+    return i;
   }
 };
