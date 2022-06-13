@@ -1,132 +1,93 @@
 /*
-  Maximum sum subarray problem
+  Note - tree indexing is 1-based
 
-  We need to store 4 values in each segment tree node to be able to merge
-  child nodes to form a solution to their parent’s node:
+  Usage:
+    idx    0, 1, 2, 3, 4, 5, 6, 7;
+    A is {18,17,13,19,15,11,20,oo};
 
-  1. Maximum sum of a subarray, starting at the leftmost index of this range
-  2. Maximum sum of a subarray, ending at the rightmost index of this range
-  3. Maximum sum of any subarray in this range
-  4. Sum of all elements in this range
+    st.RMQ(1, n));       // 11
+    st.update(5, 5, 77); // update A[5] to 77
 */
-struct SegmentTreeNodeMaxSubarray {
-  int prefixMaxSum, suffixMaxSum, maxSum, sum;
-  
-  void assignLeaf(int value) {
-    prefixMaxSum = suffixMaxSum = maxSum = sum = value;
-  }
-  
-  void merge(SegmentTreeNodeMaxSubarray& left, SegmentTreeNodeMaxSubarray& right) {
-    sum = left.sum + right.sum;
-    prefixMaxSum = max(left.prefixMaxSum, left.sum + right.prefixMaxSum);
-    suffixMaxSum = max(right.suffixMaxSum, right.sum + left.suffixMaxSum);
-    maxSum = max(prefixMaxSum, max(suffixMaxSum, max(left.maxSum, max(right.maxSum, left.suffixMaxSum + right.prefixMaxSum))));
-  }
-  
-  int getValue() {
-    return maxSum;
-  }
-};
-
-/*
-  Maximum pair sum in each subarray 
-  Requires updates to individual array elements
-*/
-struct SegmentTreeNodeMaxPairSum {
-  int maxNum, secondMaxNum;
-  
-  void assignLeaf(int num) {
-    maxNum = num;
-    secondMaxNum = -1;
-  }
-  
-  void merge(SegmentTreeNodeMaxPairSum& left, SegmentTreeNodeMaxPairSum& right) {
-    maxNum = max(left.maxNum, right.maxNum);
-    secondMaxNum = min(max(left.maxNum, right.secondMaxNum), max(right.maxNum, left.secondMaxNum));
-  }
-  
-  int getValue() {
-    return maxNum + secondMaxNum;
-  }
-};
-
-/*
-  T is the type of input array elements
-  V is the type of required aggregate statistic
-*/
-template<class T, class V>
-class SegmentTree {
-  SegmentTreeNode* nodes;
-  int N;
+template <class T>
+struct SegmentTree {
+  using vt = vector<T>;
 
 public:
-  SegmentTree(T arr[], int N) {
-  this->N = N;
-  nodes = new SegmentTreeNode[getSegmentTreeSize(N)];
-  buildTree(arr, 1, 0, N-1);
+  vt A, st, lazy;
+
+  int n;
+
+  T l(int p) { return p << 1; }
+  T r(int p) { return (p << 1) + 1; }
+
+  SegmentTree(int n_, ll fillValue = 0): n(n_), st(4*n_, fillValue), lazy(4*n_, -1) {}
+  SegmentTree(vt &in, ll fillValue = 0): n(in.sz()) {
+    auto n_ = in.sz();
+    A.rsz(n_);
+    st.rsz(4*n_, fillValue);
+    lazy.rsz(4*n_, -1);
+    std::copy(all(in), A.begin());
+    build(1, 0, n-1);
   }
   
-  ~SegmentTree() {
-  delete[] nodes;
+  int RMQ(int p, int L, int R, int i, int j) {
+    propagate(p, L, R);
+    if (p > j) return -1;
+    if ((L >= i) && R <= j) return st[p];
+    int mid = (L+R) / 2;
+    auto left = RMQ(l(p), L, mid, i, min(mid, j));
+    auto right = RMQ(r(p), mid + 1, R, max(i, mid+1), j);
+    return merge(left, right);
   }
-  
-  V getValue(int lo, int hi) {
-  SegmentTreeNode result = getValue(1, 0, N-1, lo, hi);
-  return result.getValue();
+
+
+private:
+
+  void build(int i, int L, int R) {
+    if (L == R) st[i] = A[L];
+    else {
+      int mid = (L+R) / 2;
+      build(l(i), L, mid);
+      build(r(i), mid+1, R);
+      st[i] = merge(st[l(i)], st[r(i)]);
+    }
   }
-  
-  void update(int index, T value) {
-  update(1, 0, N-1, index, value);
-  }
-  
-private:	
-  void buildTree(T arr[], int stIndex, int lo, int hi) {
-  if (lo == hi) {
-    nodes[stIndex].assignLeaf(arr[lo]);
-    return;
-  }
-  
-  int left = 2 * stIndex, right = left + 1, mid = (lo + hi) / 2;
-  buildTree(arr, left, lo, mid);
-  buildTree(arr, right, mid + 1, hi);
-  nodes[stIndex].merge(nodes[left], nodes[right]);
-  }
-  
-  SegmentTreeNode getValue(int stIndex, int left, int right, int lo, int hi) {
-  if (left == lo && right == hi)
-    return nodes[stIndex];
+
+  T merge(int a, int b) {
+    static_assert(
+      0,
+      "Did you update the merge fn as needed?"
+    );
     
-  int mid = (left + right) / 2;
-  if (lo > mid)
-    return getValue(2*stIndex+1, mid+1, right, lo, hi);
-  if (hi <= mid)
-    return getValue(2*stIndex, left, mid, lo, hi);
-    
-  SegmentTreeNode leftResult = getValue(2*stIndex, left, mid, lo, mid);
-  SegmentTreeNode rightResult = getValue(2*stIndex+1, mid+1, right, mid+1, hi);
-  SegmentTreeNode result;
-  result.merge(leftResult, rightResult);
-  return result;
+    // Edge Case
+    if (a == -1) return b;
+    if (b == -1) return a;
+
+    return min(a,b);
   }
-  
-  int getSegmentTreeSize(int N) {
-  int size = 1;
-  for (; size < N; size <<= 1);
-  return size << 1;
+
+  void propagate(int p, int L, int R) {
+    if (lazy[p] != -1) {
+      st[p] = lazy[p];
+      if (L != R) lazy[l(p)] = lazy[r(p)] = lazy[p];
+      else A[L] = lazy[p];
+      lazy[p] = -1;
+    }
   }
-  
-  void update(int stIndex, int lo, int hi, int index, T value) {
-    if (lo == hi) {
-    nodes[stIndex].assignLeaf(value);
-    return;
-  }
-  
-  int left = 2 * stIndex, right = left + 1, mid = (lo + hi) / 2;
-  if (index <= mid)
-    update(left, lo, mid, index, value);
-  else
-    update(right, mid+1, hi, index, value);
-  
-  nodes[stIndex].merge(nodes[left], nodes[right]);
+
+  void update(int p, int L, int R, int i, int j, int val) {
+    propagate(p, L, R);
+    if (p > j) return;
+    if ((L >= p) && (R <= j)) {
+      lazy[p] = val;
+      propagate(p, L, R);
+    } else {
+      int mid = (L+R) / 2;
+      update(l(p), L, mid, i, min(mid,j), val);
+      update(r(p), mid+1, R, max(i, mid+1), j, val);
+      int lSubtree = (lazy[l(p)] != -1) ? lazy[l(p)] : st[l(p)];
+      int rSubtree = (lazy[r(p)] != -1) ? lazy[r(p)] : st[r(p)];
+      st[p] = (lSubtree <= rSubtree) ? st[l(p)] : st[r(p)];
+    }
   }
 };
