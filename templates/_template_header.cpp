@@ -299,3 +299,18 @@ ll msb (ll n) {
 
 // least significant bit
 ll lsb (ll n) { return n & (-n); }
+
+/* Solution starts here */
+
+// vl v(N);
+// vl p(N, -1);
+// vl szz(N);
+// vl anc(N);
+// bitset<N> vis;
+// bitset<N> bs;
+
+// ll timer = 0;
+// vl tin, tout;
+
+ll a, b, c, n, m, k, w;
+string s, t;
