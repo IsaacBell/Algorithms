@@ -27,14 +27,14 @@ public:
   }
 
   void resize(int n_) {
-    up.rsz(LOG+1, vt(MAXN));
-    Ch.rsz(n+1, vl {});
-    szz.rsz(n+1),
-    vis.rsz(n+1),
-      d.rsz(n+1),
-      f.rsz(n+1),
-      g.rsz(n+1),
-      dp.rsz(n+1);
+    up.rsz(LOG + 1, vt(MAXN));
+    Ch.rsz(n_ + 1, vt {});
+    szz.rsz(n_ + 1),
+    vis.rsz(n_ + 1),
+      d.rsz(n_ + 1),
+      f.rsz(n_ + 1),
+      g.rsz(n_ + 1),
+      dp.rsz(n_ + 1);
   }
 
   void build(T mm = -1e9) {
@@ -46,7 +46,7 @@ public:
     fo(i,LOG+1) if ((k >> i) & 1) x = up[i][x];
     return x ?: -1; // -1 if not found
   };
-  
+
   void readABInput() {
     fo(i,n-1) {
       ll a,b; rd(a >> b);
@@ -76,6 +76,49 @@ public:
   T diameter() {
     dfsDiameter(1,-1);
     return dist;
+  }
+
+  /*
+    Find # paths, w/ K edges, from source u to sink v
+
+    We Divide and Conquer in O(V^3 * log(K)) time w/ matrix exponentiation.
+
+    The Kth power (Gk) of a graph (G1) has the same set of vertices
+    as G1. Gk has an edge btwn 2 vertices, if there's a path of length <= k
+    btwn them.
+
+    A path of len K exists btwn u & v for every vertex where {u,v} & {w,v} are
+    edges in G1.
+
+    The {u,v}th element of Gk gives the # of K-length paths from u to v
+
+    Usage:
+      Tree<ll> tree(n);
+      tree.readABInput();
+      put(tree.numPathsWithKEdges(1, 4, k));
+  */
+  T numPathsWithKEdges(T u, T v, T k) {
+    vvt res(n + 1, vt(n + 1));
+    vvt G(n + 1, vt(n + 1)); // 1-0 Adj Matrix
+
+    fo(i,n+1) res[i][i] = 1;
+    fo(i,Ch.sz()) for (auto j: Ch[i]) G[i][j] = 1;
+
+    while (k) {
+      // Debug:
+        // fo(i,n+1) puts(res[i]); cnl;
+        // fo(i,n+1) puts(G[i]); cnl;
+        // put("---");
+      if (k&1) res = this->matrixMultiply(res, G);
+      G = this->matrixMultiply(G, G);
+      k /= 2;
+    }
+
+    // Debug:
+    // fo(i,n+1) puts(res[i]); cnl;
+    // fo(i,n+1) puts(G[i]); cnl;
+
+    return res[u][v];
   }
 
   /*
@@ -109,8 +152,8 @@ public:
   /*
     Stores info for "infected root" tree problems
 
-    Let 𝑑𝑝𝑖 be the maximum number of vertices we can save 
-    in the subtree of vertex 𝑖 if that vertex is infected 
+    Let 𝑑𝑝𝑖 be the maximum number of vertices we can save
+    in the subtree of vertex 𝑖 if that vertex is infected
     and we use operations only in the subtree
 
     If 𝑐1 and 𝑐2 are the children of vertex 𝑖, the transition is
@@ -193,7 +236,7 @@ private:
   void dfsDP(T i, T p) {
     szz[i] = 1;
     f[i] = g[i] = 0;
-  
+
     trav(ch, Ch[i]) {
       if (ch == p) continue;
       dfsDP(ch, i);
@@ -201,12 +244,12 @@ private:
       f[i] += f[ch] + szz[ch];
     }
   }
-  
+
   // Used in distance_sums()
   void dfsDP2(T i, T p) {
     T sum = 0;
     trav(ch, Ch[i]) if (ch != p) sum += f[ch] + szz[ch]*2;
-  
+
     trav(ch, Ch[i])
       if (ch != p) {
         g[ch] = (g[i] + 1*(n - szz[i]+1)) + (sum - (f[ch] + szz[ch]*2));
@@ -216,16 +259,16 @@ private:
 
   void dfsDiameter(T i, T p) {
     pq<T> q;
-  
+
     trav(ch, Ch[i]) {
       if (ch == p) continue;
       dfsDiameter(ch, i);
       ckmax(f[i], f[ch] + 1);
       qp(f[ch]);
     }
-  
+
     ckmax(dist, f[i]);
-  
+
     if (q.sz() > 1) {
       auto mx  = q.top();
       q.pop();
@@ -234,4 +277,15 @@ private:
       ckmax(dist, g[i]);
     }
   }
+
+  vvt matrixMultiply(vvt& a, vvt& b, T modd = mod) {
+    // fo(i,n+1) deb2(a[i].sz(), b[i].sz());
+    assert(a.sz() == b.sz());
+		vvt c(a.sz(), vt(a.sz()));
+		fo(k,a.sz())
+			fo(i,a.sz())
+				fo(j,a.sz())
+					(c[i][j] += a[i][k] * b[k][j]) %= modd;
+		return c;
+	}
 };
