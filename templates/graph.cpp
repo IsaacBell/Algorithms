@@ -7,6 +7,8 @@ template <typename T>
 class graph {
   using vt = vector<T>;
   using vvt = vector<vt>;
+  using pi = pair<int, int>;
+  using pt = pair<T,T>;
 public:
   struct edge {
     int from;
@@ -19,11 +21,12 @@ public:
   vvt g;
   vt dist;
   int n;
+  int m;
 
   function<bool(int)> ignore;
 
   graph(int _n) : n(_n) {
-    g.resize(n), dist.resize(n);
+    g.resize(n+1), dist.resize(n+1);
     ignore = nullptr;
   }
 
@@ -41,13 +44,16 @@ public:
 template <typename T>
 class digraph : public graph<T> {
 public:
+  using pt = pair<T,T>;
   using vt = vector<T>;
+  using vvt = vector<vt>;
 
   using graph<T>::weightDict;
   using graph<T>::edges;
   using graph<T>::dist;
   using graph<T>::g;
   using graph<T>::n;
+  using graph<T>::m;
   using graph<T>::ignore;
 
   vt par;
@@ -60,29 +66,39 @@ public:
   const T VISITED = 1;
 
   digraph(int _n) : graph<T>(_n) {
+    m = n - 1;
+    g.rsz(n + 1, vt {});
+
     par.rsz(_n + 1, UNVISITED),
     vis.rsz(_n + 1, UNVISITED),
+    dist.rsz(_n + 1),
     dfsNum.rsz(_n + 1),
     dfsLow.rsz(_n + 1);
   }
 
-  void read(int m) {
-    fo(i,m) {
-      rd(a >> b);
-      G.add(a,b);
+  void read(int m_) {
+    m = m_;
+    fo(i,m_) {
+      ll a, b; rd(a >> b);
+      add(a,b);
     }
   }
-  void readWeighted(int m) {
-    fo(i,m) {
-      rd(a >> b >> c);
-      G.add(a,b,c);
+  void readWeighted(int m_) {
+    m = m_;
+    fo(i,m_) {
+      ll a, b, c; rd(a >> b >> c);
+      add(a,b,c);
     }
   }
 
+  // Note - "m" won't be set if you call this directly,
+  // so set it manually e.g.: `myGraph.m = 7;`
   int add(int from, int to, T cost = 1) {
-    assert(0 <= from && from < n && 0 <= to && to < n);
+    assert(0 <= from && from <= n && 0 <= to && to <= n);
     int id = (int) edges.size();
-    g.from.push_back(id);
+    // g[from].pb(id);
+
+    g[from].pb(to);
     edges.push_back({from, to, cost});
     weightDict[{from, to}] = cost;
     return id;
@@ -101,36 +117,35 @@ public:
     return rev;
   }
 
-  // 0-1 BFS
-  // single-source shortest path w/ edge weights of 0 or 1
-  T binaryBFS(ll k) {
-    Fo(i,1,k+1) dist[i] = mod;
+  /*
+  	0-1 BFS
+  	SSSP to all vertices, given edge weights of 0 or 1
+
+    Returns the `dist` array, note this array is 1-indexed
+  */
+  vt binaryBFS(ll src = 1) {
+    fill(all(dist), mod);
     deque<ll> q;
-    q.push_front(1);
-    dist[1] = 0;
+    q.push_front(src);
+    dist[src] = 0;
 
     wqe {
       ll u = q.front();
       q.pop_front();
-      Fo(i,1,k+1) {
+      Fo(i, 1, g[u].sz()) {
         if(u == i)  continue;
-        ll val = mod;
-        ll dx = abs(lit[u].x - lit[i].x);
-        ll dy = abs(lit[u].y - lit[i].y);
-        if(dx+dy == 1) val = 0;
-        else if (dx <= 2 || dy <= 2) val = 1;
 
-        if(val <= 1 && dist[i] > dist[u] + val) {
-          dist[i] = dist[u] + val;
-          if(val == 1) q.push_back(i);
+        if(dist[i] > dist[u] + weightDict[{u,i}]) {
+          dist[i] = dist[u] + weightDict[{u,i}];
+          
+          // process deque in ASC weight order
+          if(weightDict[{u,i}] == 1) q.push_back(i);
           else q.push_front(i);
         }
       }
     }
 
-    if(dis[k] != mod)
-      return dis[k];
-    return -1;
+    return dist;
   }
 
   vt bellmanFord() {
@@ -170,7 +185,7 @@ public:
     // if par[nei] == u, cycle is a bi-directional edge
   void cycleCheck(ll u) {
     dfsNum[u] = EXPLORED;
-    trav(nei, Adj[u])
+    trav(nei, g[u]) {
       if (dfsNum[nei] == UNVISITED) {
         par[nei] = u;
         cycleCheck(nei);
@@ -179,29 +194,52 @@ public:
         else {} // Back Edge
       else if (dfsNum[nei] == VISITED) {} // Forward Edge (rarely useful in CP)
 
-    dfsNum[nei] = VISITED;
+      dfsNum[nei] = VISITED;
+    }
   }
 
-  // O(V^3*K)
-  // todo
   /*
-  T shortestPathWithKEdges(T K) {
-    T dp[n][n][K+1];
-    fo(e, K+1)
-      fo(i, n)
-        fo(j, n) {
+    O(V^3 * K)
+    
+    Use a 3D matrix table to store cost of shortest path.
+    dp[i][j][e] = SP from i to j w/ e edges
+    Base Case: dp[i][j][e] = 0
+
+    If i == j && !e, there's no path so cost is 0.
+    If there's an edge i->j, cost of SP is cost of i->j
+  */
+  T minCostPathWithKEdges(T u, T v, T k) {
+    T dp[n+1][n+1][k+1];
+    vvt G(n + 1, vt(n + 1)); // 1-0 Adj Matrix
+    fo(i,g.sz()) for (auto j: g[i]) G[i][j] = 1;
+    
+    // fo(i, n+1) {puts(G[i]); cnl;}
+
+    fo(e, k+1)
+      fo(i, n+1)
+        fo(j, n+1) {
           dp[i][j][e] = mod;
           if (!e && i == j) dp[i][j][e] = 0;
-          if (e == 1 && g[i][j] != ) // todo
-            dp[i][j][e] = g[i][j];
+          if (e == 1 && weightDict[{i,j}])
+            dp[i][j][e] = weightDict[{i,j}];
           
+      	  // go to adjacent when # edges > 1
           if (e > 1)
-            fo(b, n)
-              if (g[i][b] != mod && i == b) // todo
-                ckmin(dp[i][j][e], dp[b][j][e-1] + g[i][b]);
+            fo(b, n+1)
+              // There should be an edge from i to b.
+              // b should not be same as either i or j.
+              if (
+                weightDict[{i,b}] && 
+                b != i && 
+                b != j && 
+                dp[b][j][e-1] != mod
+              ) {
+                ckmin(dp[i][j][e], dp[b][j][e-1] + weightDict[{i,b}]);
+              }
         }
+
+    return dp[u][v][k];
   }
-  */
 };
 
 template <typename T>
