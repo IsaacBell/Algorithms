@@ -266,6 +266,7 @@ public:
   T dfsCnt;
   T dfsRoot = -1;
   T rootChildren;
+  T m = 0;
 
   undigraph(int _n) : graph<T>(_n) {
     dfsCnt = 0, rootChildren = 0;
@@ -276,11 +277,28 @@ public:
     dfsLow.rsz(_n + 1);
   }
 
+  void read(int m_) {
+    m = m_;
+    fo(i,m_) {
+      ll a, b; rd(a >> b);
+      add(a,b);
+      add(b,a);
+    }
+  }
+  void readWeighted(int m_) {
+    m = m_;
+    fo(i,m_) {
+      ll a, b, c; rd(a >> b >> c);
+      add(a,b,c);
+      add(b,a,c);
+    }
+  }
+
   int add(int from, int to, T cost = 1) {
-    assert(0 <= from && from < n && 0 <= to && to < n);
+    assert(0 <= from && from <= n && 0 <= to && to <= n);
     int id = (int) edges.size();
-    g.from.push_back(id);
-    g[to].push_back(id);
+    g[from].push_back(to);
+    g[to].push_back(from);
     edges.push_back({from, to, cost});
     weightDict[{from, to}] = cost;
     return id;
