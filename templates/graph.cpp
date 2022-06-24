@@ -71,7 +71,7 @@ public:
 
     par.rsz(_n + 1, UNVISITED),
     vis.rsz(_n + 1, UNVISITED),
-    dist.rsz(_n + 1),
+    dist.rsz(_n + 1, mod),
     dfsNum.rsz(_n + 1),
     dfsLow.rsz(_n + 1);
   }
@@ -148,29 +148,43 @@ public:
     return dist;
   }
 
-  vt bellmanFord() {
-    dist[1] = 0;
+  /*
+    Length of shortest paths from vertex v to a target vertex,
+    handling the possibility of negative weight cycles
 
-    fo(j,n-1) {
-      fo(i,m) {
-        T value = dist[edges[i].from] + edges[i].cost;
-        if(dist[edges[i].from] == -mod) value = -mod;
-        if(value > dist[edges[i].to])
-          dist[edges[i].to] = dist[edges[i].from] + edges[i].cost;
+    Prefer Djikstra's when negative elements not present
+    
+    Use the dist[] array to see results for every other vertex
+
+    auto [distance, path] = G.bellmanFord(1, n);
+  */
+  pair<T, vt> bellmanFord(ll v, ll t) {
+    fill(all(dist), mod);
+    dist[v] = 0;
+
+    for (;;) {
+      bool any = false;
+      fo(j,m) {
+        if (dist[edges[j].from] < mod) {
+          if (dist[edges[j].to] > dist[edges[j].from] + edges[j].cost) {
+            dist[edges[j].to] = dist[edges[j].from] + edges[j].cost;
+            par[edges[j].to] = edges[j].from;
+            any = true;
+          }
+        }
       }
+      if (!any)  break;
     }
+    puts(dist);
 
-    fo(j,n-1) {
-      fo(i,m) {
-        T value = dist[edges[i].from] + edges[i].cost;
-        if(dist[edges[i].from] == -mod) value = -mod;
-        if(value > dist[edges[i].to])
-          dist[edges[i].to] = mod;
-      }
-    }
-
-    if(dist[n] == mod) put(-1);
-    else return dist;
+    if (dist[t] == mod)
+      return {-1, {}};
+    
+    vt path;
+    for (auto cur = t; cur != -1; cur = par[cur])
+      path.pb(cur);
+    std::reverse(all(path));
+    return {dist[t], path};
   }
 
   T dfsMaxSumPath(ll i = 0, ll tar = -1e18, ll o = 0) {
