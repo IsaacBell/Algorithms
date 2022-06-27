@@ -194,6 +194,16 @@ public:
     return "(" + bracket_seq + ")";
   }
 
+  /*
+    Maximal Independent Set rooted at given vertex
+
+    rd(n);
+    Tree<ll> tree(n);
+    tree.readABInput();
+    put(tree.MIS());
+  */
+  T MIS(ll i = 1) { dfsMIS(i); ret f[i]; }
+
 private:
   vvt buildAdj(T mm = -1e9) {
     if (mm = -1e9) mm = n-1;
@@ -231,6 +241,23 @@ private:
 			szz[i] += szz[nei];
 		}
 	}
+
+  // maxIndependentSet()
+  void dfsMIS(T i = 1, T p = -1) {
+    if (vis[i]) ret;
+    vis[i] = 1;
+    szz[i] = 1;
+    f[i] = 1;
+    g[i] = 0;
+
+    trav(ch, Ch[i]) {
+      if (ch == p) continue;
+      dfsMIS(ch, i);
+      szz[i] += szz[ch];
+      g[i] += f[ch];
+      f[i] += g[ch];
+    }
+  }
 
   // Used in distance_sums()
   void dfsDP(T i, T p) {
