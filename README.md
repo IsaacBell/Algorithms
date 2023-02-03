@@ -29,11 +29,15 @@ Study notes are listed under `_notes.md` in their respective folders.
 
 https://github.com/IsaacBell/Algorithms/tree/master/cses
 
+About 2/3 completed
+
 # AtCoder DP Contest
 
 https://github.com/IsaacBell/Algorithms/tree/master/atcoder/dp
 
 Several problems left unsolved as of March 24, 2022.
+
+Effort is back underway of Feb 2023!
 
 # Daily Notes
 
@@ -44,3 +48,16 @@ Start w/ Red vs. Blue: https://codeforces.com/blog/entry/100938
 * Study different binary search constructions
 
 Review Fault-Tolerant Network: https://codeforces.com/contest/1651/problem/C
+
+# Great Books
+
+- "Introduction to Algorithms" by Cormen, Leiserson, Rivest, and Stein
+- "Algorithms" by Sanjoy Dasgupta, Christos H. Papadimitriou, and Umesh Vazirani
+- "The Art of Computer Programming" by Donald E. Knuth
+- "Competitive Programmer's Handbook" by Antti Laaksonen
+- "Algorithm Design Manual" by Steven S. Skiena
+- "Dynamic Programming for Coding Interviews" by Meenakshi and Kamal Rawat
+- "Graph Algorithms" by Robert Sedgewick and Kevin Wayne
+- "Data Structures and Algorithms in Python" by Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser
+- "Cracking the Coding Interview" by Gayle McDowell
+- "Programming Challenges: The Programming Contest Training Manual" by Steven S. Skiena and Miguel A. Revilla
