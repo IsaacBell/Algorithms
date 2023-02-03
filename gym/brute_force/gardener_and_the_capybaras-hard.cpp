@@ -383,33 +383,28 @@ string s, t;
 
 void solution()
 {
-  rd(n >> m >> k);
-  vl A(n), B(m);
-  readall(A);
-  readall(B);
-  sortall(A);
-  sortall(B);
-
-  ll i = 0, j = 0;
-  oo0;
-
-  while (i < n && j < m)
+  rd(s);
+  szn(n, s);
+  string x, y, z;
+  mpq<pair<char, int>> q;
+  fo(i, n) qp({s[i], i});
+  wqe
   {
-    // deb2(i,j);
-    //   deb2(A[i], B[j]);
-    if (abs(A[i] - B[j]) <= k)
+    qt(ch, i);
+    if (q.sz())
     {
-      o++;
-      i++;
-      j++;
-    }
-    else if (A[i]<B[j]> k)
-      i++;
-    else
-      j++;
-  }
+      auto [ch2, j] = q.top();
+      x = s.substr(0, i),
+      y = s.substr(i, j - 1),
+      z = s.substr(j, n);
 
-  put(o);
+      if (z.size() && ((y <= x && y <= z) || (y >= x && y >= z)))
+      {
+        print(x << " " << y << " " << z << nl);
+        return;
+      }
+    }
+  }
 }
 
 int main()
@@ -417,7 +412,7 @@ int main()
   ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   srand(chrono::high_resolution_clock::now().time_since_epoch().count());
   ll t = 1;
-  // rd(t);
+  rd(t);
 
   while (t--)
     solution();
