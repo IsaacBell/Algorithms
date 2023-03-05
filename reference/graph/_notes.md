@@ -1,3 +1,13 @@
+# # of Ways to Color a Graph
+
+Welsh-Powell's algorithm. Repeatedly find the uncolored vertex with the maximum degree and assign it a color based on the colors of its neighbors.
+
+The algorithm starts by sorting the vertices in descending order according to their degree (number of edges connected to them).
+
+First, the highest degree vertex is colored with the first color, then the second highest degree vertex is colored with the second color and so on until all vertices have been colored.
+
+After the first iteration, if there are any uncolored vertices, the algorithm continues to color the remaining vertices with the lowest available color. The algorithm runs in O(n^2) time.
+
 # Games on Graphs
 
 ```
