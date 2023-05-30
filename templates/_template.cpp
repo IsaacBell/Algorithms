@@ -384,6 +384,46 @@ ll msb(ll n)
 // least significant bit
 ll lsb(ll n) { return n & (-n); }
 
+ll digit_dp(string ss) {
+  szn(n, ss);
+  
+  /*
+    20 →
+  maximum number of digits that our dp will support (18 to be precise)
+    2 →
+  tight condition: 
+  bool that tells us if we're still following the given number exactly, 
+  or if we've started considering numbers that are less than the given #
+    200 →
+  maximum possible sum of digits of a number
+  */
+  vector<vvl> dp(20, vvl(2, vl(200)));
+ 
+  //empty suffixes having sum=0
+  dp[n][0][0] = 1;
+  dp[n][1][0] = 1;
+ 
+  ford(i, n)
+    fo(tight, 2)
+      fo(sum, 200)
+        if(tight)
+          fo(d, ss[i] - '0' + 1)
+            dp[i][1][sum] += (d == ss[i]-'0') ? dp[i+1][1][sum-d] : dp[i+1][0][sum-d];
+        else
+          fo(d, 10)
+            dp[i][0][sum] += dp[i+1][0][sum-d];
+
+    ll ans = 0;
+
+    throw("Replace the ok() placeholder fn with a real check");
+    auto ok = [](ll i) { ret true; };
+    fo(i, 200)
+      if(ok(i))
+        ans += dp[0][1][i];
+    ret ans;
+}
+
+
 /* Solution starts here */
 
 // vl v(N);
