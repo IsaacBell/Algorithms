@@ -32,6 +32,7 @@
 
 using namespace std;
 
+// shortcuts
 #define nl "\n"
 #define cnl cout << nl
 #define NL cnl
@@ -109,12 +110,16 @@ using namespace std;
     v.erase(unique(all(v)), v.end()); \
   }
 #define nextgreateridx(A, val) lower_bound(all(A), val)) - A.begin()
+
+// output
 #define putNo \
   put("NO");  \
   ret
 #define putYes \
   put("YES");  \
   ret
+
+// definitions
 #define oo0 ll o = 0
 #define oomx ll o = mod
 #define oomn ll o = -mod
@@ -126,6 +131,13 @@ using namespace std;
 #define osz o.sz()
 #define posz put(o.sz())
 
+// bit ops
+#define is_bit_set(mask, i) ((mask) & (1 << (i)))
+#define set_bit(mask, i) ((mask) | (1 << (i)))
+#define clear_bit(mask, i) ((mask) & ~(1 << (i)))
+#define toggle_bit(mask, i) ((mask) ^ (1 << (i)))
+
+// types
 typedef long double ld;
 typedef complex<ld> cd;
 typedef pair<int, int> pii;
@@ -152,6 +164,7 @@ typedef map<ll, ll> mll;
 typedef map<ll, string> mls;
 typedef map<string, ll> msl;
 
+// time
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
 int rng(int lim)
 {
@@ -159,9 +172,11 @@ int rng(int lim)
   return uid(rang);
 }
 
+// constants
 const ll mod = 1e9 + 7;
 const ll N = 3e5;
 
+// generic types
 template <typename T = ll>
 using ql = queue<ll>;
 template <typename T = ll>
@@ -313,7 +328,7 @@ T binpowmod(T a, T b, T modd = mod)
 
 const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
 bool is_in_bounds(int n, int m, int x, int y) { return x >= 0 && y >= 0 && x < n && y < m; }
-/* Grid traversal
+/* Grid traversal:
 fo(i,4) {
   newX = x + dx[i]; newY = y + dy[i];
   if (ok(n, m, newX, newY)) ...
