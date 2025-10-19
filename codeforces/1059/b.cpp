@@ -438,6 +438,19 @@ ll digit_dp(string ss) {
     ret ans;
 }
 
+/*
+
+https://codeforces.com/contest/2162/problem/B
+
+Find any subsequence† 𝑝 of 𝑠 such that:
+
+1. The subsequence 𝑝 is non-decreasing.
+2. After removing all characters of 𝑝 from 𝑠, s is a palindrome.
+---
+Intuition
+
+if we choose 𝑝 to consist of all the 0 's in 𝑠 , then 𝑥 will contain only 1's, which always forms a palindrome. Similarly, if we take 𝑝 as all the 1 's, then 𝑥 will contain only 0 's, which is also a palindrome.
+*/
 
 /* Solution starts here */
 

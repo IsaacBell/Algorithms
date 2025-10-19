@@ -438,6 +438,19 @@ ll digit_dp(string ss) {
     ret ans;
 }
 
+/*
+
+https://codeforces.com/contest/2162/problem/A
+
+You are given an array 𝑎 of length 𝑛.
+
+Your task is to find the maximum possible average value of any subarray of the array 𝑎.
+---
+Intuition
+
+The maximum average subarray is formed by taking the maximum element, since including anything smaller would only lower the average.
+*/
+
 
 /* Solution starts here */
 

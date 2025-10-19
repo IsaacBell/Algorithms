@@ -438,6 +438,29 @@ ll digit_dp(string ss) {
     ret ans;
 }
 
+/*
+
+https://codeforces.com/contest/2162/problem/C
+
+You are given two integers 𝑎 and 𝑏.
+
+You are allowed to perform the following operation any number of times (including zero):
+
+1. choose any integer 𝑥 such that 0≤𝑥≤𝑎 (the current value of 𝑎 , not initial),
+2. set 𝑎:=𝑎⊕𝑥 . Here, ⊕ represents the bitwise XOR operator.
+
+After performing a sequence of operations, you want the value of 𝑎 to become exactly 𝑏.
+
+Find a sequence of at most 100 operations (values of 𝑥 used in each operation) that transforms 𝑎 into 𝑏 , or report that it is impossible.
+---
+Intuition
+
+Iterate through the bits in a, flipping the 1s to 0s.
+Then iterate through the bits in b; where there is a 1 in b, we need to flip the same digit in a.
+
+Track the steps using an output array.
+*/
+
 
 /* Solution starts here */
 
@@ -463,13 +486,13 @@ void solution()
   if (a < b && x > a) { put(-1); ret; }   // any 0-bit of a must stay 0 in b
 
   vl mask;
-  for (ll bit = 30; bit >= 0; bit--) {
+  for (ll bit = 30; bit >= 0; bit--) { // flipping 1s to 0s in a
     if ( ((1 << bit) <= a) && !(a >> bit & 1)) {
       a ^= (1 << bit);
       mask.pb(1 << bit);
     }
   }
-  for (ll bit = 30; bit >= 0; bit--) {
+  for (ll bit = 30; bit >= 0; bit--) { // flipping the relevant 0s in a to match the 1s in b
     if ((a >> bit & 1) && !(b >> bit & 1)) {
       mask.pb(1 << bit);
     }
