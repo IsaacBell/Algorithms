@@ -401,23 +401,23 @@ ll lsb(ll n) { return n & (-n); }
 
 ll digit_dp(string ss) {
   szn(n, ss);
-  
+
   /*
     20 →
   maximum number of digits that our dp will support (18 to be precise)
     2 →
-  tight condition: 
-  bool that tells us if we're still following the given number exactly, 
+  tight condition:
+  bool that tells us if we're still following the given number exactly,
   or if we've started considering numbers that are less than the given #
     200 →
   maximum possible sum of digits of a number
   */
   vector<vvl> dp(20, vvl(2, vl(200)));
- 
+
   //empty suffixes having sum=0
   dp[n][0][0] = 1;
   dp[n][1][0] = 1;
- 
+
   ford(i, n)
     fo(tight, 2)
       fo(sum, 200)
@@ -436,6 +436,28 @@ ll digit_dp(string ss) {
       if(ok(i))
         ans += dp[0][1][i];
     ret ans;
+}
+
+template<typename T = ll>
+T numBits(ll x) {
+  T numBits = 0;
+  T temp = x;
+  while (temp > 0) {
+      numBits++;
+      temp >>= 1;
+  }
+
+  return numBits;
+}
+
+template<typename T = ll>
+vb numToBitVec(T x) {
+  auto bitCnt = numBits(x);
+  vb bits(bitCnt);
+  fo(i, bitCnt) {
+    bits[i] = (x >> (bitCnt - 1 - i)) & 1;
+  }
+  ret bits;
 }
 
 
